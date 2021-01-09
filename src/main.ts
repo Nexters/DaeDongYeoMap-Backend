@@ -2,10 +2,11 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 
 const appPort: number = 8000;
-
-(async function () {
+async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(appPort);
-})();
+  // app.useGlobalPipes(new ValidationPipe());
 
-console.info(`server is running at http://localhost:${appPort}`);
+  await app.listen(appPort);
+  console.log(`Application is running on: ${await app.getUrl()}`);
+}
+bootstrap();
