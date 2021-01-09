@@ -1,18 +1,34 @@
-import { HttpModule, Module } from "@nestjs/common";
+import { HttpModule, HttpService, Module, OnModuleInit } from "@nestjs/common";
 import { PlaceService } from "./place.service";
-import { PlaceController } from './place.controller';
+import { PlaceController } from "./place.controller";
 
 @Module({
   imports: [
     HttpModule.register({
       baseURL: `${process.env.NAVER_SEARCH_HOST}/${process.env.NAVER_SEARCH_FORMAT}`,
-      params: {
-        NAVER_SEARCH_CLIENT_ID: process.env.NAVER_SEARCH_CLIENT_ID,
-        NAVER_SEARCH_CLIENT_SECRET: process.env.NAVER_SEARCH_CLIENT_SECRET,
+      headers: {
+        "X-Naver-Client-Id": `${process.env.NAVER_SEARCH_CLIENT_ID}`,
+        "X-Naver-Client-Secret": `${process.env.NAVER_SEARCH_CLIENT_SECRET}`,
       },
     }),
   ],
   providers: [PlaceService],
   controllers: [PlaceController],
 })
-export class PlaceModule {}
+export class PlaceModule implements OnModuleInit {
+  constructor(private httpService: HttpService) {}
+
+  public onModuleInit() {
+    this.httpService.axiosRef.interceptors.request.use((req) => {
+      console.log("request", req);
+
+      return req;
+    });
+
+    this.httpService.axiosRef.interceptors.response.use((response) => {
+      console.log("response", response);
+
+      return response;
+    });
+  }
+}

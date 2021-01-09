@@ -8,7 +8,6 @@ import { PlaceModule } from "./place/place.module";
 import { UserModule } from "./user/user.module";
 // import { GraphQLModule } from "@nestjs/graphql";
 import { ConfigModule } from "@nestjs/config";
-import { PlacaeService } from './placae/placae.service';
 
 @Module({
   imports: [
@@ -24,6 +23,6 @@ import { PlacaeService } from './placae/placae.service';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, PlacaeService],
+  providers: [AppService],
 })
 export class AppModule {}
