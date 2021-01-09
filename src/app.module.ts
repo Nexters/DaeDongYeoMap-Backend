@@ -6,8 +6,9 @@ import { CommentModule } from "./comment/comment.module";
 import { SpotModule } from "./spot/spot.module";
 import { PlaceModule } from "./place/place.module";
 import { UserModule } from "./user/user.module";
-import { GraphQLModule } from "@nestjs/graphql";
+// import { GraphQLModule } from "@nestjs/graphql";
 import { ConfigModule } from "@nestjs/config";
+import { PlacaeService } from './placae/placae.service';
 
 @Module({
   imports: [
@@ -16,12 +17,13 @@ import { ConfigModule } from "@nestjs/config";
     SpotModule,
     PlaceModule,
     UserModule,
-    GraphQLModule.forRoot(),
+    // GraphQLModule.forRoot(),
     ConfigModule.forRoot({
+      isGlobal: true,
       envFilePath: ".env.dev",
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PlacaeService],
 })
 export class AppModule {}
