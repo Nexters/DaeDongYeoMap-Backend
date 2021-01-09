@@ -109,3 +109,5 @@ cd src && mkdir shared
   - 기본적으로 `place/`데이터는 캐시는 되어도, db에 저장되지 않기 때문에, 상태를 가지게 되면 spot이라는 entity를 활용해 db에 저장시킵니다.
 - `user`
   - 사용자 도메인
+
+slack 테스트
