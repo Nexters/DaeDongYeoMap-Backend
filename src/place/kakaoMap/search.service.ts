@@ -5,7 +5,7 @@ import { ConfigService } from "../../config/config.service";
 import { KeywordSearchDto } from "./search.dto";
 
 @Injectable()
-export class PlaceService {
+export class SearchService {
   constructor(private readonly configService: ConfigService) {}
 
   // https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword
