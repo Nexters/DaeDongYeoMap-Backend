@@ -87,7 +87,7 @@ nest g mo emoji
 nest g mo comment
 nest g mo spot
 nest g mo place
-cd src && mkdir shared
+cd src && mkdir shared && mkdir config
 ```
 
 ## 4. 프로젝트 구조
@@ -100,6 +100,7 @@ cd src && mkdir shared
 │   ├── shared
 │   ├── spot
 │   └── user
+│   └── config
 ```
 
 기본적으로 모듈 폴더가 각 도메인(entity)을 담당합니다.
@@ -119,6 +120,8 @@ cd src && mkdir shared
   - 기본적으로 `place/`데이터는 캐시는 되어도, db에 저장되지 않기 때문에, 상태를 가지게 되면 spot이라는 entity를 활용해 db에 저장시킵니다.
 - `user`
   - 사용자 도메인
+- `config`
+  - env 환경값 관리 모듈(database, 3rd-party api)
 
 ## API
 
