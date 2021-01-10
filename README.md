@@ -72,8 +72,8 @@ npm i @types/express
 # https://docs.nestjs.com/graphql/quick-start
 npm i @nestjs/graphql graphql-tools graphql apollo-server-express
 
-# https://docs.nestjs.com/techniques/configuration
-npm i --save @nestjs/config
+# https://dev.to/kop7/how-to-build-autocomplete-search-with-nestjs-elasticsearch-and-vue-12h8
+npm i dotenv
 
 ```
 
@@ -131,3 +131,4 @@ cd src && mkdir shared
 ## LINKS
 
 - [이슈: 네이버 지도에 네이버 검색 결과를 같이 띄울 수 없을까?](https://github.com/navermaps/maps.js/issues/193)
+- [configService 의존성 주입](https://dev.to/kop7/how-to-build-autocomplete-search-with-nestjs-elasticsearch-and-vue-12h8)

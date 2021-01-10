@@ -1,12 +1,17 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
+import { ConfigService } from "./config/config.service";
 
-const appPort: number = 8000;
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  // app.useGlobalPipes(new ValidationPipe());
+  const app = await NestFactory.create(AppModule, {
+    logger: ["error", "warn"],
+  });
+  const configService = new ConfigService(".env.dev");
 
-  await app.listen(appPort);
+  app.enableCors();
+  // app.setGlobalPrefix(configService.get("NODE_ENV"));
+
+  await app.listen(configService.get("NODE_PORT"));
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 
