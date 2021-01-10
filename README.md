@@ -125,11 +125,17 @@ cd src && mkdir shared && mkdir config
 
 ## API
 
-- [네이버 검색(지역)](https://developers.naver.com/docs/search/local/): 식당, 정보를 검색하면 매칭되는 place object를 넘겨준다.
-- [네이버 지도](https://www.ncloud.com/product/applicationService/maps): 지도를 그려준다.
-  - [좌표계 변환 이슈](https://github.com/navermaps/maps.js/issues/285)
-  - [길찾기 api](https://apidocs.ncloud.com/ko/ai-naver/maps_directions/)
-    - 주의사항으로 jdk 제공 되지 않는 듯하다.
+- 카카오
+  - [지역 REST api](https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword)
+  - [지도 jdk](https://apis.map.kakao.com/web/guide/)
+    - 지역 검색 가능
+    - 라이브러리를 사용하면, 마크, 클러스터링 등 다양한 서비스도 사용가능
+- 네이버(depreacted): 20.07 기준 검색 max 5개로 실사용 불가능
+  - [네이버 검색(지역)](https://developers.naver.com/docs/search/local/): 식당, 정보를 검색하면 매칭되는 place object를 넘겨준다.
+  - [네이버 지도](https://www.ncloud.com/product/applicationService/maps): 지도를 그려준다.
+    - [좌표계 변환 이슈](https://github.com/navermaps/maps.js/issues/285)
+    - [길찾기 api](https://apidocs.ncloud.com/ko/ai-naver/maps_directions/)
+      - 주의사항으로 jdk 제공 되지 않는 듯하다.
 
 ## LINKS
 
