@@ -1,8 +1,8 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 
 import { Place } from "./place.model";
-import { SearchService } from "./kakaoMap/search.service";
-import { KeywordSearchDto } from "./kakaoMap/search.dto";
+import { SearchService } from "./kakaoMapSearch/search.service";
+import { KeywordSearchDto } from "./kakaoMapSearch/search.dto";
 
 @Resolver(() => Place)
 export class PlaceResolver {

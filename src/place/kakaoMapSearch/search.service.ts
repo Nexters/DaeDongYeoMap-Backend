@@ -11,8 +11,7 @@ export class SearchService {
   // https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword
   async searchByKeyworld(
     keywordSearchDto: KeywordSearchDto
-    //): Promise<AxiosResponse<object>> {
-  ): Promise<object> {
+  ): Promise<AxiosResponse<object>> {
     const baseUrl = this.configService.get("KAKAO_DEV_HOST");
     const { documents } = await Axios.get(baseUrl, {
       headers: {
