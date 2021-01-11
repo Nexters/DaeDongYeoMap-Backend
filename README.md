@@ -127,7 +127,7 @@ cd src && mkdir shared && mkdir config
 
 ## 5. Playground
 
-![](./images/playground.png)
+![](./images/search_playground.png)
 
 ```bash
 $ npm run start:dev
