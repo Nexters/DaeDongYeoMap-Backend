@@ -11,10 +11,10 @@ export class SearchService {
   // https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword
   async searchByKeyworld(
     keywordSearchDto: KeywordSearchDto
-  ): Promise<AxiosResponse<object>> {
+    //): Promise<AxiosResponse<object>> {
+  ): Promise<object> {
     const baseUrl = this.configService.get("KAKAO_DEV_HOST");
-
-    return Axios.get(baseUrl, {
+    const { documents } = await Axios.get(baseUrl, {
       headers: {
         Authorization: `KakaoAK ${this.configService.get(
           "KAKAO_DEV_REST_API_KEY"
@@ -23,6 +23,10 @@ export class SearchService {
       params: {
         ...keywordSearchDto,
       },
-    });
+    })
+      .then((response) => response.data)
+      .catch((err) => console.error(err));
+
+    return documents;
   }
 }
