@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "./config/config.module";
+import { join } from "path";
 
 import { GraphQLModule } from "@nestjs/graphql";
 import { AppController } from "./app.controller";
@@ -18,10 +19,11 @@ import { UserModule } from "./user/user.module";
     SpotModule,
     PlaceModule,
     UserModule,
-    // GraphQLModule.forRoot({
-    //   imports: [ConfigModule],
-    //   inject: [ConfigService],
-    // }),
+    GraphQLModule.forRoot({
+      autoSchemaFile: join(process.cwd(), "src/schema.gql"),
+      debug: false,
+      playground: true,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
