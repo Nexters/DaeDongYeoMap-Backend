@@ -31,8 +31,9 @@
   - [2. 의존성 세팅](#2-의존성-세팅)
   - [3. 프로젝트 세팅](#3-프로젝트-세팅)
   - [4. 프로젝트 구조](#4-프로젝트-구조)
-  - [API](#api)
-  - [LINKS](#links)
+  - [5. Playground](#5-playground)
+  - [6. API](#6-api)
+  - [7. LINKS](#7-links)
 
 <!-- /TOC -->
 
@@ -74,6 +75,7 @@ npm i @nestjs/graphql graphql-tools graphql apollo-server-express
 
 # https://dev.to/kop7/how-to-build-autocomplete-search-with-nestjs-elasticsearch-and-vue-12h8
 npm i dotenv
+
 
 ```
 
@@ -123,7 +125,35 @@ cd src && mkdir shared && mkdir config
 - `config`
   - env 환경값 관리 모듈(database, 3rd-party api)
 
-## API
+## 5. Playground
+
+![](./images/playground.png)
+
+```bash
+$ npm run start:dev
+# open http://[::1]:8000/graphql
+```
+
+- 지역검색 query 예시
+  - **sort를 distance로 하게되면 x,y는 필수로 넣어주어야 합니다.**
+
+```json
+{
+  placesByKeyworld(filters: {
+    query: "돈가스"
+    sort: distance
+    x:126.40716457908
+    y:33.2588962209144
+  }){
+    id
+    place_name
+    x
+    y
+  }
+}
+```
+
+## 6. API
 
 - 카카오
   - [지역 REST api](https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword)
@@ -137,7 +167,7 @@ cd src && mkdir shared && mkdir config
     - [길찾기 api](https://apidocs.ncloud.com/ko/ai-naver/maps_directions/)
       - 주의사항으로 jdk 제공 되지 않는 듯하다.
 
-## LINKS
+## 7. LINKS
 
 - [이슈: 네이버 지도에 네이버 검색 결과를 같이 띄울 수 없을까?](https://github.com/navermaps/maps.js/issues/193)
 - [configService 의존성 주입](https://dev.to/kop7/how-to-build-autocomplete-search-with-nestjs-elasticsearch-and-vue-12h8)
