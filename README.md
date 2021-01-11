@@ -137,7 +137,7 @@ $ npm run start:dev
 - 지역검색 query 예시
   - **sort를 distance로 하게되면 x,y는 필수로 넣어주어야 합니다.**
 
-```json
+```
 {
   placesByKeyworld(filters: {
     query: "돈가스"
