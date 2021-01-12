@@ -38,7 +38,7 @@ export class SearchService {
   async cachePlaces(
     place: AxiosResponse<Place>,
     dueHour: Number
-  ): Promise<AxiosResponse<Place[]>> {
+  ):  {
     if (mongoRes && mongoRes.expirationDate.getTime() > new Date().getTime()) {
       return places;
     }

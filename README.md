@@ -69,6 +69,15 @@ npm i class-transformer
 # import { Request } from 'express';
 # Request object를 세부적으로 다루기 위해 필요
 npm i @types/express
+
+# nestjs graphql dep
+# https://docs.nestjs.com/graphql/quick-start
+npm i @nestjs/graphql graphql-tools graphql apollo-server-express
+
+# https://dev.to/kop7/how-to-build-autocomplete-search-with-nestjs-elasticsearch-and-vue-12h8
+npm i dotenv
+
+
 ```
 
 ## 3. 프로젝트 세팅
@@ -81,7 +90,7 @@ nest g mo emoji
 nest g mo comment
 nest g mo spot
 nest g mo place
-cd src && mkdir shared
+cd src && mkdir shared && mkdir config
 ```
 
 ## 4. 프로젝트 구조
@@ -94,6 +103,7 @@ cd src && mkdir shared
 │   ├── shared
 │   ├── spot
 │   └── user
+│   └── config
 ```
 
 기본적으로 모듈 폴더가 각 도메인(entity)을 담당합니다.
@@ -104,7 +114,7 @@ cd src && mkdir shared
   - 지도에 보여질 emoji 스티커
   - `spot`에 대한 emoticon 스티커 개념
 - `place/`
-  - `네이버 API`를 통해 받아올 장소에 대한 정보
+  - `카카오 지역검색 API`를 통해 받아올 장소에 대한 정보
   - 매번 유저가 쿼리를 보낼 때마다, api로 장소 데이터를 받아오는게 비효율적이라면, 한번 요청된 데이터는 캐싱한다. (mongo 재활용 또는 redis 사용)
 - `shared/`
   - 각 domain들이 공통으로 사용할 util
