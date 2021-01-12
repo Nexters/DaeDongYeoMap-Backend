@@ -1,4 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Module } from "@nestjs/common";
+import { ConfigModule } from "../config/config.module";
 
-@Module({})
+import { SearchService } from "./kakaoMapSearch/search.service";
+import { PlaceResolver } from "./place.resolver";
+
+@Module({
+  imports: [ConfigModule],
+  providers: [SearchService, PlaceResolver],
+})
 export class PlaceModule {}

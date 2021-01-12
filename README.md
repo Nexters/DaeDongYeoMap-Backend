@@ -31,6 +31,9 @@
   - [2. 의존성 세팅](#2-의존성-세팅)
   - [3. 프로젝트 세팅](#3-프로젝트-세팅)
   - [4. 프로젝트 구조](#4-프로젝트-구조)
+  - [5. Playground](#5-playground)
+  - [6. API](#6-api)
+  - [7. LINKS](#7-links)
 
 <!-- /TOC -->
 
@@ -65,6 +68,15 @@ npm i class-transformer
 # import { Request } from 'express';
 # Request object를 세부적으로 다루기 위해 필요
 npm i @types/express
+
+# nestjs graphql dep
+# https://docs.nestjs.com/graphql/quick-start
+npm i @nestjs/graphql graphql-tools graphql apollo-server-express
+
+# https://dev.to/kop7/how-to-build-autocomplete-search-with-nestjs-elasticsearch-and-vue-12h8
+npm i dotenv
+
+
 ```
 
 ## 3. 프로젝트 세팅
@@ -77,7 +89,7 @@ nest g mo emoji
 nest g mo comment
 nest g mo spot
 nest g mo place
-cd src && mkdir shared
+cd src && mkdir shared && mkdir config
 ```
 
 ## 4. 프로젝트 구조
@@ -90,6 +102,7 @@ cd src && mkdir shared
 │   ├── shared
 │   ├── spot
 │   └── user
+│   └── config
 ```
 
 기본적으로 모듈 폴더가 각 도메인(entity)을 담당합니다.
@@ -100,7 +113,7 @@ cd src && mkdir shared
   - 지도에 보여질 emoji 스티커
   - `spot`에 대한 emoticon 스티커 개념
 - `place/`
-  - `네이버 API`를 통해 받아올 장소에 대한 정보
+  - `카카오 지역검색 API`를 통해 받아올 장소에 대한 정보
   - 매번 유저가 쿼리를 보낼 때마다, api로 장소 데이터를 받아오는게 비효율적이라면, 한번 요청된 데이터는 캐싱한다. (mongo 재활용 또는 redis 사용)
 - `shared/`
   - 각 domain들이 공통으로 사용할 util
@@ -109,3 +122,52 @@ cd src && mkdir shared
   - 기본적으로 `place/`데이터는 캐시는 되어도, db에 저장되지 않기 때문에, 상태를 가지게 되면 spot이라는 entity를 활용해 db에 저장시킵니다.
 - `user`
   - 사용자 도메인
+- `config`
+  - env 환경값 관리 모듈(database, 3rd-party api)
+
+## 5. Playground
+
+![](./images/search_playground.png)
+
+```bash
+$ npm run start:dev
+# open http://[::1]:8000/graphql
+```
+
+- 지역검색 query 예시
+  - **sort를 distance로 하게되면 x,y는 필수로 넣어주어야 합니다.**
+
+```
+{
+  placesByKeyworld(filters: {
+    query: "돈가스"
+    sort: distance
+    x:126.40716457908
+    y:33.2588962209144
+  }){
+    id
+    place_name
+    x
+    y
+  }
+}
+```
+
+## 6. API
+
+- 카카오
+  - [지역 REST api](https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword)
+  - [지도 jdk](https://apis.map.kakao.com/web/guide/)
+    - 지역 검색 가능
+    - 라이브러리를 사용하면, 마크, 클러스터링 등 다양한 서비스도 사용가능
+- 네이버(depreacted): 20.07 기준 검색 max 5개로 실사용 불가능
+  - [네이버 검색(지역)](https://developers.naver.com/docs/search/local/): 식당, 정보를 검색하면 매칭되는 place object를 넘겨준다.
+  - [네이버 지도](https://www.ncloud.com/product/applicationService/maps): 지도를 그려준다.
+    - [좌표계 변환 이슈](https://github.com/navermaps/maps.js/issues/285)
+    - [길찾기 api](https://apidocs.ncloud.com/ko/ai-naver/maps_directions/)
+      - 주의사항으로 jdk 제공 되지 않는 듯하다.
+
+## 7. LINKS
+
+- [이슈: 네이버 지도에 네이버 검색 결과를 같이 띄울 수 없을까?](https://github.com/navermaps/maps.js/issues/193)
+- [configService 의존성 주입](https://dev.to/kop7/how-to-build-autocomplete-search-with-nestjs-elasticsearch-and-vue-12h8)
