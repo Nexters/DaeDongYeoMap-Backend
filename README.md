@@ -31,6 +31,10 @@
   - [2. 의존성 세팅](#2-의존성-세팅)
   - [3. 프로젝트 세팅](#3-프로젝트-세팅)
   - [4. 프로젝트 구조](#4-프로젝트-구조)
+  - [5. Playground](#5-playground)
+  - [6. infrastructure](#6-infrastructure)
+  - [7. API](#7-api)
+  - [8. LINKS](#8-links)
 
 <!-- /TOC -->
 
@@ -109,3 +113,61 @@ cd src && mkdir shared
   - 기본적으로 `place/`데이터는 캐시는 되어도, db에 저장되지 않기 때문에, 상태를 가지게 되면 spot이라는 entity를 활용해 db에 저장시킵니다.
 - `user`
   - 사용자 도메인
+- `config`
+  - env 환경값 관리 모듈(database, 3rd-party api)
+
+## 5. Playground
+
+![](./images/search_playground.png)
+
+```bash
+$ npm run start:dev
+# open http://[::1]:8000/graphql
+```
+
+- 지역검색 query 예시
+  - **sort를 distance로 하게되면 x,y는 필수로 넣어주어야 합니다.**
+
+```
+{
+  placesByKeyworld(filters: {
+    query: "돈가스"
+    sort: distance
+    x:126.40716457908
+    y:33.2588962209144
+  }){
+    id
+    place_name
+    x
+    y
+  }
+}
+```
+
+## 6. infrastructure
+
+- 로컬 mongodb 세팅
+
+```bash
+docker run --name mongo -p 27017:27017 -d mongo
+
+```
+
+## 7. API
+
+- 카카오
+  - [지역 REST api](https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword)
+  - [지도 jdk](https://apis.map.kakao.com/web/guide/)
+    - 지역 검색 가능
+    - 라이브러리를 사용하면, 마크, 클러스터링 등 다양한 서비스도 사용가능
+- 네이버(depreacted): 20.07 기준 검색 max 5개로 실사용 불가능
+  - [네이버 검색(지역)](https://developers.naver.com/docs/search/local/): 식당, 정보를 검색하면 매칭되는 place object를 넘겨준다.
+  - [네이버 지도](https://www.ncloud.com/product/applicationService/maps): 지도를 그려준다.
+    - [좌표계 변환 이슈](https://github.com/navermaps/maps.js/issues/285)
+    - [길찾기 api](https://apidocs.ncloud.com/ko/ai-naver/maps_directions/)
+      - 주의사항으로 jdk 제공 되지 않는 듯하다.
+
+## 8. LINKS
+
+- [이슈: 네이버 지도에 네이버 검색 결과를 같이 띄울 수 없을까?](https://github.com/navermaps/maps.js/issues/193)
+- [configService 의존성 주입](https://dev.to/kop7/how-to-build-autocomplete-search-with-nestjs-elasticsearch-and-vue-12h8)
