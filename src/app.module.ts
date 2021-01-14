@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { join } from "path";
 import { GraphQLModule } from "@nestjs/graphql";
+import { MongooseModule } from "@nestjs/mongoose";
 
 import { ConfigModule } from "./config/config.module";
 import { AppController } from "./app.controller";
@@ -25,6 +26,7 @@ import { UserModule } from "./user/user.module";
       debug: false,
       playground: true,
     }),
+    MongooseModule.forRoot("mongodb://localhost:27017/mydb"),
   ],
   controllers: [AppController],
   providers: [AppService],
