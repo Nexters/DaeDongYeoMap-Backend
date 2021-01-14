@@ -9,8 +9,8 @@ export class Spot {
   @Field(() => String, { description: "카카오 Place id" })
   _id: string;
 
-  @Field(() => String)
   @Prop({ required: true })
+  @Field(() => String)
   place_name: string;
 
   @Field(() => String, { nullable: true })
@@ -52,6 +52,11 @@ export class Spot {
   @Field((type) => Float, { nullable: true })
   @Prop()
   y?: number;
+
+  // https://github.com/LotfiMEZIANI/Three-in-one-blog-post/blob/8cc58d094bad5c1a3ca0514ec1d6a6282724313b/src/app/person/person.model.ts#L19
+  // @Field(() => [Emoji])
+  // @Prop({ type: [mongoose.Types.ObjectId], ref: Emoji.name })
+  // emojis: mongoose.Types.ObjectId[] | Emoji[];
 }
 
 export type SpotDocument = Spot & mongoose.Document;
