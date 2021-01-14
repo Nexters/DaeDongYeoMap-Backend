@@ -2,6 +2,22 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Spot {
+  """카카오 Place id"""
+  _id: String!
+  place_name: String!
+  category_name: String
+  category_group_code: String
+  category_group_name: String
+  phone: String
+  address_name: String
+  road_address_name: String
+  place_url: String
+  distance: String
+  x: Float
+  y: Float
+}
+
 type Place {
   id: String!
   place_name: String!
@@ -18,7 +34,9 @@ type Place {
 }
 
 type Query {
+  spot(id: Int!): Spot!
   placesByKeyworld(filters: KeywordSearchDto!): [Place!]!
+  getPlace(placeId: String!): Place!
 }
 
 input KeywordSearchDto {
@@ -36,4 +54,42 @@ input KeywordSearchDto {
 enum SortType {
   distance
   accuracy
+}
+
+type Mutation {
+  createSpot(createSpotInput: CreateSpotInput!): Spot!
+  updateSpot(updateSpotInput: UpdateSpotInput!): Spot!
+  removeSpot(id: Int!): Spot!
+}
+
+input CreateSpotInput {
+  """카카오 Place id"""
+  _id: String!
+  place_name: String!
+  x: Float!
+  y: Float!
+  category_name: String
+  category_group_code: String
+  category_group_name: String
+  phone: String
+  address_name: String
+  road_address_name: String
+  place_url: String
+  distance: String
+}
+
+input UpdateSpotInput {
+  """카카오 Place id"""
+  _id: String
+  place_name: String
+  x: Float
+  y: Float
+  category_name: String
+  category_group_code: String
+  category_group_name: String
+  phone: String
+  address_name: String
+  road_address_name: String
+  place_url: String
+  distance: String
 }

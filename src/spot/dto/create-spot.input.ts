@@ -1,14 +1,18 @@
-import { IsNotEmpty } from "class-validator";
-import { Field, Float, ObjectType } from "@nestjs/graphql";
+import { InputType, Int, Float, Field } from "@nestjs/graphql";
 
-// https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword
-@ObjectType()
-export class Place {
-  @Field(() => String)
-  id: string;
+@InputType()
+export class CreateSpotInput {
+  @Field(() => String, { description: "카카오 Place id" })
+  _id: string;
 
   @Field(() => String)
   place_name: string;
+
+  @Field((type) => Float)
+  x: number;
+
+  @Field((type) => Float)
+  y: number;
 
   @Field(() => String, { nullable: true })
   category_name?: string;
@@ -33,10 +37,4 @@ export class Place {
 
   @Field(() => String, { nullable: true })
   distance?: string;
-
-  @Field((type) => Float, { nullable: true })
-  x?: number;
-
-  @Field((type) => Float, { nullable: true })
-  y?: number;
 }

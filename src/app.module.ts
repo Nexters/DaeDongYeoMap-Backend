@@ -1,8 +1,9 @@
 import { Module } from "@nestjs/common";
-import { ConfigModule } from "./config/config.module";
 import { join } from "path";
-
 import { GraphQLModule } from "@nestjs/graphql";
+import { MongooseModule } from "@nestjs/mongoose";
+
+import { ConfigModule } from "./config/config.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { EmojiModule } from "./emoji/emoji.module";
@@ -19,11 +20,13 @@ import { UserModule } from "./user/user.module";
     SpotModule,
     PlaceModule,
     UserModule,
+    SpotModule,
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), "src/schema.gql"),
       debug: false,
       playground: true,
     }),
+    MongooseModule.forRoot("mongodb://localhost:27017/mydb"),
   ],
   controllers: [AppController],
   providers: [AppService],
