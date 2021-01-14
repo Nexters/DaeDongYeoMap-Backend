@@ -35,6 +35,7 @@
   - [6. infrastructure](#6-infrastructure)
   - [7. API](#7-api)
   - [8. LINKS](#8-links)
+  - [9. SCHEMA of GraphQL API](#9-schema-of-graphql-api)
 
 <!-- /TOC -->
 
@@ -77,7 +78,11 @@ npm i @nestjs/graphql graphql-tools graphql apollo-server-express
 # https://dev.to/kop7/how-to-build-autocomplete-search-with-nestjs-elasticsearch-and-vue-12h8
 npm i dotenv
 
-
+# cache
+# https://github.com/BryanDonovan/node-cache-manager#store-engines
+npm install cache-manager
+# https://github.com/v4l3r10/node-cache-manager-mongodb
+npm install cache-manager-mongodb --save
 ```
 
 ## 3. 프로젝트 세팅
@@ -135,7 +140,7 @@ $ npm run start:dev
 # open http://[::1]:8000/graphql
 ```
 
-- 지역검색 query 예시	[// API 스키마 전체 ⬇](#SCHEMA-of-GraphQL-API)
+- 지역검색 query 예시 [// API 스키마 전체 ⬇](#SCHEMA-of-GraphQL-API)
   - **sort를 distance로 하게되면 x,y는 필수로 넣어주어야 합니다.**
 
 ```
@@ -152,6 +157,20 @@ $ npm run start:dev
     y
   }
 }
+
+mutation {
+  createSpot(createSpotInput: {
+    _id: "1890778114"
+    place_name: "연돈"
+    x:126.40716457908
+    y:33.2588962209144
+  }){
+   _id
+    place_name
+    x
+    y
+  }
+}
 ```
 
 ## 6. infrastructure
@@ -159,8 +178,7 @@ $ npm run start:dev
 - 로컬 mongodb 세팅
 
 ```bash
-docker run --name mongo -p 27017:27017 -d mongo
-
+docker run --name mongo -p 0.0.0.0:27017:27017 -d mongo
 ```
 
 ## 7. API
@@ -186,7 +204,7 @@ docker run --name mongo -p 27017:27017 -d mongo
 
 <br/>
 
-### SCHEMA of GraphQL API
+## 9. SCHEMA of GraphQL API
 
 ```
 directive @specifiedBy(url: String!) on SCALAR
