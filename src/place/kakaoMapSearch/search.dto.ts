@@ -5,7 +5,6 @@ import {
   Int,
   registerEnumType,
 } from "@nestjs/graphql";
-import { IsNotEmpty, IsOptional, Length, MaxLength } from "class-validator";
 
 enum SortType {
   distance = "distance",
