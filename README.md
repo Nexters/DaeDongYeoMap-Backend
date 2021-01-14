@@ -135,7 +135,7 @@ $ npm run start:dev
 # open http://[::1]:8000/graphql
 ```
 
-- 지역검색 query 예시
+- 지역검색 query 예시	[// API 스키마 전체 ⬇](#SCHEMA-of-GraphQL-API)
   - **sort를 distance로 하게되면 x,y는 필수로 넣어주어야 합니다.**
 
 ```
@@ -181,3 +181,48 @@ docker run --name mongo -p 27017:27017 -d mongo
 
 - [이슈: 네이버 지도에 네이버 검색 결과를 같이 띄울 수 없을까?](https://github.com/navermaps/maps.js/issues/193)
 - [configService 의존성 주입](https://dev.to/kop7/how-to-build-autocomplete-search-with-nestjs-elasticsearch-and-vue-12h8)
+
+<br/>
+
+<br/>
+
+### SCHEMA of GraphQL API
+
+```
+directive @specifiedBy(url: String!) on SCALAR
+input KeywordSearchDto {
+  query: String!
+  category_group_code: String
+  x: Float
+  y: Float
+  radius: Int
+  rect: String
+  page: Int
+  size: Int
+  sort: SortType
+}
+
+type Place {
+  id: String!
+  place_name: String!
+  category_name: String
+  category_group_code: String
+  category_group_name: String
+  phone: String
+  address_name: String
+  road_address_name: String
+  place_url: String
+  distance: String
+  x: Float
+  y: Float
+}
+
+type Query {
+  placesByKeyworld(filters: KeywordSearchDto!): [Place!]!
+}
+
+enum SortType {
+  distance
+  accuracy
+}
+```
