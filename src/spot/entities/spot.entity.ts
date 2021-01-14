@@ -1,15 +1,13 @@
-import { Field, Float, ObjectType } from "@nestjs/graphql";
+import { ObjectType, Field, Int, Float } from "@nestjs/graphql";
 import * as mongoose from "mongoose";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
-// https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword
 @ObjectType()
-@Schema()
-export class Place {
-  // @Prop({ required: true })
-  @Field(() => String)
+@Schema({ timestamps: true }) // graphql 은 timestamp 삽입 어떻게 할까?
+export class Spot {
   @Prop({ required: true, unique: true })
-  id: string;
+  @Field(() => String, { description: "카카오 Place id" })
+  _id: string;
 
   @Field(() => String)
   @Prop({ required: true })
@@ -54,11 +52,7 @@ export class Place {
   @Field((type) => Float, { nullable: true })
   @Prop()
   y?: number;
-
-  @Prop({ required: true, type: Date })
-  expirationDate: Date;
 }
 
-// for cache
-export type PlaceDocument = Place & mongoose.Document;
-export const PlaceSchema = SchemaFactory.createForClass(Place);
+export type SpotDocument = Spot & mongoose.Document;
+export const SpotSchema = SchemaFactory.createForClass(Spot);
