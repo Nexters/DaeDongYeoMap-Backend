@@ -5,7 +5,7 @@ import { ConfigService } from "./config.service";
   providers: [
     {
       provide: ConfigService,
-      useValue: new ConfigService(".env.dev"),
+      useValue: new ConfigService(".env"),
     },
   ],
   exports: [ConfigService],
