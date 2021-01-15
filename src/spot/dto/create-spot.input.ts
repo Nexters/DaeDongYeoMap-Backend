@@ -14,6 +14,9 @@ export class CreateSpotInput {
   @Field((type) => Float)
   y: number;
 
+  // @Field(() => String, { description: "이모지 id" })
+  // emojis: string;
+
   @Field(() => String, { nullable: true })
   category_name?: string;
 

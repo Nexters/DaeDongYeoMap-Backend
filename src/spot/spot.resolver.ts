@@ -13,9 +13,9 @@ export class SpotResolver {
     return await this.spotService.create(createSpotInput);
   }
 
-  @Query(() => [Spot], { name: "spot" })
-  async findAll() {
-    return this.spotService.findAll();
+  @Query(() => [Spot])
+  async findSpots() {
+    return await this.spotService.findAll();
   }
 
   @Query(() => Spot, { name: "spot" })

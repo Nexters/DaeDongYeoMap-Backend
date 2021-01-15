@@ -34,6 +34,7 @@ type Place {
 }
 
 type Query {
+  findSpots: [Spot!]!
   spot(id: Int!): Spot!
   placesByKeyworld(filters: KeywordSearchDto!): [Place!]!
   getPlace(placeId: String!): Place!

@@ -16,12 +16,12 @@ export class SpotService {
     return createdSpot.save();
   }
 
-  async update(_id: string, updateSpotInput: UpdateSpotInput) {
-    return `This action updates a #${_id} spot`;
+  async update(id: string, updateSpotInput: UpdateSpotInput) {
+    return `This action updates a #${id} spot`;
   }
 
-  async findAll() {
-    return `This action returns all spot`;
+  async findAll(): Promise<Spot[]> {
+    return this.spotModel.find().exec();
   }
 
   async findOne(id: number) {
