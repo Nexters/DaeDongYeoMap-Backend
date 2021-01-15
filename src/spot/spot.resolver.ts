@@ -25,7 +25,7 @@ export class SpotResolver {
 
   @Mutation(() => Spot)
   async updateSpot(@Args("updateSpotInput") updateSpotInput: UpdateSpotInput) {
-    return this.spotService.update(updateSpotInput._id, updateSpotInput);
+    return this.spotService.update(updateSpotInput.id, updateSpotInput);
   }
 
   @Mutation(() => Spot)

@@ -4,7 +4,7 @@
 
 type Spot {
   """카카오 Place id"""
-  _id: String!
+  id: String!
   place_name: String!
   category_name: String
   category_group_code: String
@@ -64,7 +64,7 @@ type Mutation {
 
 input CreateSpotInput {
   """카카오 Place id"""
-  _id: String!
+  id: String!
   place_name: String!
   x: Float!
   y: Float!
@@ -80,7 +80,7 @@ input CreateSpotInput {
 
 input UpdateSpotInput {
   """카카오 Place id"""
-  _id: String
+  id: String
   place_name: String
   x: Float
   y: Float

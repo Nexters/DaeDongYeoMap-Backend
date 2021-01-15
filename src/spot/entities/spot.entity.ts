@@ -7,7 +7,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 export class Spot {
   @Prop({ required: true, unique: true })
   @Field(() => String, { description: "카카오 Place id" })
-  _id: string;
+  id: string;
 
   @Prop({ required: true })
   @Field(() => String)

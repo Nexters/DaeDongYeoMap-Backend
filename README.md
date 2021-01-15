@@ -286,4 +286,6 @@ use <db이름1>
 db.createUser({ user: "<아이디>", pwd: "<비번>", roles: ["readWrite", "dbAdmin" ] })
 use <db이름2>
 db.createUser({ user: "<아이디>", pwd: "<비번>", roles: ["readWrite", "dbAdmin" ] })
+
+db.auth("<아이디>","<비번>")
 ```
