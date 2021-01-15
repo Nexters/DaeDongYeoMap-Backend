@@ -262,15 +262,17 @@ npm i -g heroku-dotenv # heroku가 .env 환경 못읽기 때문
 
 ```bash
 heroku git:remote -a korean-date-map # app name is korean-date-map
-git add .
-git commit -am "heroku deploy"
+git checkout main
 
 heroku config:set NPM_CONFIG_PRODUCTION=false
 heroku config:set NODE_ENV=production
 heroku-dotenv push
 
+npm build
+git add .
+git commit -am "heroku deploy"
 git push heroku main
-
+git push origin main
 ```
 
 - mongodb 세팅
