@@ -9,9 +9,9 @@ export class Spot {
   @Field(() => String, { description: "카카오 Place id" })
   id: string;
 
-  // @Prop({ required: true })
-  // @Field(() => String, { description: "이모지 id" })
-  // emoji_id: string;
+  @Prop({ required: true })
+  @Field((type) => [String], { description: "emoji id list" })
+  emojis: string[];
 
   @Prop({ required: true })
   @Field(() => String)

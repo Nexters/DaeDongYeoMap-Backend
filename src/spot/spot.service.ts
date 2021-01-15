@@ -1,31 +1,50 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
+import { SearchService } from "src/place/kakaoMapSearch/search.service";
 
-import { CreateSpotInput } from "./dto/create-spot.input";
-import { UpdateSpotInput } from "./dto/update-spot.input";
-import { Spot, SpotDocument } from "./entities/spot.entity";
+import { CreateSpotInput } from "src/spot/dto/create-spot.input";
+import { UpdateSpotInput } from "src/spot/dto/update-spot.input";
+import { Spot, SpotDocument } from "src/spot/entities/spot.entity";
 
 @Injectable()
 export class SpotService {
-  constructor(@InjectModel(Spot.name) private spotModel: Model<SpotDocument>) {}
+  constructor(
+    @InjectModel(Spot.name) private spotModel: Model<SpotDocument>,
+    private readonly searchService: SearchService
+  ) {}
 
   async create(createSpotInput: CreateSpotInput) {
-    // TODO: cache find
-    const createdSpot = new this.spotModel(createSpotInput);
+    const place = await this.searchService.getPlaceFromCacheById(
+      createSpotInput.id
+    );
+    console.log("제민욱");
+    console.log(place);
+
+    place.emoji = createSpotInput.emoji;
+    // TODO: cache miss ....
+
+    const createdSpot = new this.spotModel(place);
     return createdSpot.save();
   }
 
-  async update(id: string, updateSpotInput: UpdateSpotInput) {
-    return `This action updates a #${id} spot`;
+  async update(spot: any, emoji: string): Promise<Spot> {
+    spot.emojis.push(emoji);
+    return await spot.save();
+    // const update = { $push: { emojis: emoji } };
+    // return await this.spotModel.findOneAndUpdate(filter, update);
   }
 
   async findAll(): Promise<Spot[]> {
     return this.spotModel.find().exec();
   }
 
-  async findOne(id: number) {
-    return `This action returns a #${id} spot`;
+  async findOne(id: string) {
+    const spot = this.spotModel.findOne({ id: id }).exec();
+    if (spot) {
+      return spot;
+    }
+    return undefined;
   }
 
   async remove(id: number) {

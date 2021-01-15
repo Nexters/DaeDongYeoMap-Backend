@@ -7,7 +7,7 @@ import { ConfigModule } from "../config/config.module";
 import { SearchService } from "./kakaoMapSearch/search.service";
 import { PlaceResolver } from "./place.resolver";
 
-const cacheConfig = {
+export const cacheConfig = {
   imports: [ConfigModule],
   useFactory: (cfs: ConfigService) => ({
     store: mongoStore,
