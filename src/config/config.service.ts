@@ -5,6 +5,8 @@ export class ConfigService {
   private readonly envConfig: { [key: string]: string };
 
   constructor(filePath: string) {
+    console.log(`제민욱${process.env.NODE_ENV}`);
+
     if (process.env.NODE_ENV === "prod") {
       this.envConfig = {
         NODE_ENV: process.env.NODE_ENV,
