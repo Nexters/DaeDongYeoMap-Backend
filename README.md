@@ -272,3 +272,18 @@ heroku-dotenv push
 git push heroku main
 
 ```
+
+- mongodb 세팅
+  - [mongodb 서버 생성](https://docs.ncloud.com/ko/database/database-10-1.html)
+  - [공인 ip 신청](https://docs.ncloud.com/ko/database/database-10-4.html)
+
+```bash
+ssh -p 11111 root@210.89.191.239
+passwd mongodb
+su mongodb
+mongo --port 27017
+use <db이름1>
+db.createUser({ user: "<아이디>", pwd: "<비번>", roles: ["readWrite", "dbAdmin" ] })
+use <db이름2>
+db.createUser({ user: "<아이디>", pwd: "<비번>", roles: ["readWrite", "dbAdmin" ] })
+```
