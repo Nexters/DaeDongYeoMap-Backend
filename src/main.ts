@@ -12,7 +12,7 @@ async function bootstrap() {
   app.enableCors();
   // app.setGlobalPrefix(configService.get("NODE_ENV"));
 
-  await app.listen(configService.get("NODE_PORT"));
+  await app.listen(process.env.PORT || configService.get("NODE_PORT"));
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 
