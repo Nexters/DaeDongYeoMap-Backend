@@ -36,6 +36,7 @@
   - [7. API](#7-api)
   - [8. LINKS](#8-links)
   - [9. SCHEMA of GraphQL API](#9-schema-of-graphql-api)
+- [deploy to heroku](#deploy-to-heroku)
 
 <!-- /TOC -->
 
@@ -243,4 +244,31 @@ enum SortType {
   distance
   accuracy
 }
+```
+
+# deploy to heroku
+
+> [ref](https://www.joshmorony.com/deploying-a-production-nestjs-server-on-heroku/)
+
+- 환경 세팅
+
+```bash
+brew tap heroku/brew && brew install heroku
+heroku login
+npm i -g heroku-dotenv # heroku가 .env 환경 못읽기 때문
+```
+
+- deploy
+
+```bash
+heroku git:remote -a korean-date-map # app name is korean-date-map
+git add .
+git commit -am "heroku deploy"
+
+heroku config:set NPM_CONFIG_PRODUCTION=false
+heroku config:set NODE_ENV=production
+heroku-dotenv push
+
+git push heroku main
+
 ```
