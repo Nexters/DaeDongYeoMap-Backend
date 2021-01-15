@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: ["error", "warn"],
   });
-  const configService = new ConfigService(".env.dev");
+  const configService = new ConfigService(".env");
 
   app.enableCors();
   // app.setGlobalPrefix(configService.get("NODE_ENV"));

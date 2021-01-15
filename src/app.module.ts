@@ -3,6 +3,7 @@ import { join } from "path";
 import { GraphQLModule } from "@nestjs/graphql";
 import { MongooseModule } from "@nestjs/mongoose";
 
+import { ConfigService } from "src/config/config.service";
 import { ConfigModule } from "./config/config.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
@@ -26,7 +27,17 @@ import { UserModule } from "./user/user.module";
       debug: false,
       playground: true,
     }),
-    MongooseModule.forRoot("mongodb://localhost:27017/mydb"),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (cfs: ConfigService) => ({
+        uri: `mongodb://${cfs.get("MONGO_USER")}:${cfs.get(
+          "MONGO_PWD"
+        )}@${cfs.get("MONGO_IP")}:${cfs.get("MONGO_PORT")}/${cfs.get(
+          "MONGO_DB_NAME"
+        )}`,
+      }),
+      inject: [ConfigService],
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

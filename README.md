@@ -36,6 +36,7 @@
   - [7. API](#7-api)
   - [8. LINKS](#8-links)
   - [9. SCHEMA of GraphQL API](#9-schema-of-graphql-api)
+- [deploy to heroku](#deploy-to-heroku)
 
 <!-- /TOC -->
 
@@ -243,4 +244,48 @@ enum SortType {
   distance
   accuracy
 }
+```
+
+# deploy to heroku
+
+> [ref](https://www.joshmorony.com/deploying-a-production-nestjs-server-on-heroku/)
+
+- 환경 세팅
+
+```bash
+brew tap heroku/brew && brew install heroku
+heroku login
+npm i -g heroku-dotenv # heroku가 .env 환경 못읽기 때문
+```
+
+- deploy
+
+```bash
+heroku git:remote -a korean-date-map # app name is korean-date-map
+git add .
+git commit -am "heroku deploy"
+
+heroku config:set NPM_CONFIG_PRODUCTION=false
+heroku config:set NODE_ENV=production
+heroku-dotenv push
+
+git push heroku main
+
+```
+
+- mongodb 세팅
+  - [mongodb 서버 생성](https://docs.ncloud.com/ko/database/database-10-1.html)
+  - [공인 ip 신청](https://docs.ncloud.com/ko/database/database-10-4.html)
+
+```bash
+ssh -p 11111 root@210.89.191.239
+passwd mongodb
+su mongodb
+mongo --port 27017
+use <db이름1>
+db.createUser({ user: "<아이디>", pwd: "<비번>", roles: ["readWrite", "dbAdmin" ] })
+use <db이름2>
+db.createUser({ user: "<아이디>", pwd: "<비번>", roles: ["readWrite", "dbAdmin" ] })
+
+db.auth("<아이디>","<비번>")
 ```
