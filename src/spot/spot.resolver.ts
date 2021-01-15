@@ -3,6 +3,7 @@ import { SpotService } from "src/spot/spot.service";
 import { Spot } from "src/spot/entities/spot.entity";
 import { CreateSpotInput } from "src/spot/dto/create-spot.input";
 import { UpdateSpotInput } from "src/spot/dto/update-spot.input";
+import { DeleteSpotDto } from "src/spot/dto/delete.spot.dto";
 
 @Resolver(() => Spot)
 export class SpotResolver {
@@ -34,8 +35,8 @@ export class SpotResolver {
   //   return this.spotService.update(updateSpotInput.id, updateSpotInput);
   // }
 
-  // @Mutation(() => Spot)
-  // async removeSpot(@Args("id", { type: () => Int }) id: number) {
-  //   return this.spotService.remove(id);
-  // }
+  @Mutation(() => DeleteSpotDto)
+  async removeSpot(@Args("id", { type: () => String }) id: string) {
+    return await this.spotService.remove(id);
+  }
 }

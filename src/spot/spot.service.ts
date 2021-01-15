@@ -18,9 +18,8 @@ export class SpotService {
     const place = await this.searchService.getPlaceFromCacheById(
       createSpotInput.id
     );
-    console.log("제민욱");
-    console.log(place);
 
+    console.log(place);
     place.emoji = createSpotInput.emoji;
     // TODO: cache miss ....
 
@@ -47,7 +46,7 @@ export class SpotService {
     return undefined;
   }
 
-  async remove(id: number) {
-    return `This action removes a #${id} spot`;
+  async remove(id: string) {
+    return this.spotModel.remove({ id: id }).exec();
   }
 }

@@ -36,6 +36,12 @@ type Place {
   y: Float
 }
 
+type DeleteSpotDto {
+  ok: Int!
+  n: Int!
+  deletedCount: Int!
+}
+
 type Query {
   findSpots: [Spot!]!
   placesByKeyworld(filters: KeywordSearchDto!): [Place!]!
@@ -61,6 +67,7 @@ enum SortType {
 
 type Mutation {
   createSpot(createSpotInput: CreateSpotInput!): Spot!
+  removeSpot(id: String!): DeleteSpotDto!
 }
 
 input CreateSpotInput {
