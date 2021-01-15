@@ -30,11 +30,7 @@ import { UserModule } from "./user/user.module";
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (cfs: ConfigService) => ({
-        uri: `mongodb://${cfs.get("MONGO_USER")}:${cfs.get(
-          "MONGO_PWD"
-        )}@${cfs.get("MONGO_IP")}:${cfs.get("MONGO_PORT")}/${cfs.get(
-          "MONGO_DB_NAME"
-        )}`,
+        uri: cfs.getDB(),
       }),
       inject: [ConfigService],
     }),

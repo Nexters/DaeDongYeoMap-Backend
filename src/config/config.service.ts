@@ -36,4 +36,26 @@ export class ConfigService {
     // this is for debugging
     return this.envConfig;
   }
+
+  getDB(): string {
+    if (this.get("NODE_ENV") === "dev") {
+      return `mongodb://localhost:27017/mongo`;
+    }
+    return `mongodb://${this.get("MONGO_USER")}:${this.get(
+      "MONGO_PWD"
+    )}@${this.get("MONGO_IP")}:${this.get("MONGO_PORT")}/${this.get(
+      "MONGO_DB_NAME"
+    )}`;
+  }
+
+  getCacheDB(): string {
+    if (this.get("NODE_ENV") === "dev") {
+      return `mongodb://localhost:27017/nodeCacheDb`;
+    }
+    return `mongodb://${this.get("MONGO_USER")}:${this.get(
+      "MONGO_PWD"
+    )}@${this.get("MONGO_IP")}:${this.get("MONGO_PORT")}/${this.get(
+      "MONGO_CACHE_NAME"
+    )}`;
+  }
 }

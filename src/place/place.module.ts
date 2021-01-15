@@ -11,9 +11,7 @@ const cacheConfig = {
   imports: [ConfigModule],
   useFactory: (cfs: ConfigService) => ({
     store: mongoStore,
-    uri: `mongodb://${cfs.get("MONGO_USER")}:${cfs.get("MONGO_PWD")}@${cfs.get(
-      "MONGO_IP"
-    )}:${cfs.get("MONGO_PORT")}/${cfs.get("MONGO_CACHE_NAME")}`,
+    uri: cfs.getCacheDB(),
     options: {
       collection: "cacheManager",
       compression: false,
