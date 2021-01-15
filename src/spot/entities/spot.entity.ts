@@ -27,7 +27,7 @@ export class Spot {
 
   @Field(() => String, { nullable: true })
   @Prop()
-  category_group_name?: number;
+  category_group_name?: string;
 
   @Field(() => String, { nullable: true })
   @Prop()

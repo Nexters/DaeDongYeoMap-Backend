@@ -16,7 +16,7 @@ export class Place {
   category_group_code?: string;
 
   @Field(() => String, { nullable: true })
-  category_group_name?: number;
+  category_group_name?: string;
 
   @Field(() => String, { nullable: true })
   phone?: string;
