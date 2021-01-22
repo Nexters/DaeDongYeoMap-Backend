@@ -3,9 +3,6 @@
 # ------------------------------------------------------
 
 type Spot {
-  """mongodb default id"""
-  _id: ID!
-
   """kakao place id"""
   id: String!
 
@@ -21,6 +18,8 @@ type Spot {
   place_url: String
   distance: String
   location: String!
+  x: Float
+  y: Float
 }
 
 type Place {
@@ -47,9 +46,8 @@ type DeleteSpotDto {
 
 type Query {
   findSpots: [Spot!]!
-  getSpots(y: Float!, x: Float!): [Spot!]!
-  placesByKeyworld(filters: KeywordSearchDto!): [Place!]!
-  getPlace(placeId: String!): Place!
+  placesByKeyword(filters: KeywordSearchDto!): [Place!]!
+  getPlaceFromCache(placeId: String!): Place!
 }
 
 input KeywordSearchDto {
