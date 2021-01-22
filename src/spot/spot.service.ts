@@ -2,10 +2,12 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { SearchService } from "src/place/kakaoMapSearch/search.service";
+import { SortType } from "src/place/kakaoMapSearch/search.dto";
 
 import { CreateSpotInput } from "src/spot/dto/create-spot.input";
 import { UpdateSpotInput } from "src/spot/dto/update-spot.input";
 import { Spot, SpotDocument } from "src/spot/entities/spot.entity";
+import { Place } from "src/place/place.entity";
 
 @Injectable()
 export class SpotService {
@@ -14,21 +16,42 @@ export class SpotService {
     private readonly searchService: SearchService
   ) {}
 
-  async create(createSpotInput: CreateSpotInput) {
-    const place = await this.searchService.getPlaceFromCacheById(
+  async create(createSpotInput: CreateSpotInput): Promise<Spot> {
+    let place:
+      | Place
+      | undefined = await this.searchService.getPlaceFromCacheById(
       createSpotInput.id
     );
 
-    // place.emoji = createSpotInput.emoji;
-    // TODO: cache miss ....
+    if (place === undefined) {
+      const placeResult = await this.searchService.getIdenticalPlace(
+        createSpotInput
+      );
 
-    const createdSpot = new this.spotModel(place);
+      if (placeResult === undefined) {
+        // TODO: custom place 만들기
+        // pass
+      } else {
+        place = placeResult;
+      }
+    }
+
+    const location = { type: "Point", coordinates: [place.x, place.y] };
+    const createSpotDto = {
+      id: createSpotInput.id,
+      emojis: [createSpotInput.emoji],
+      location,
+      ...place,
+    };
+    const createdSpot = new this.spotModel(createSpotDto);
+    console.log(createdSpot);
+    // TODO: save error handling
     return createdSpot.save();
   }
 
   async update(spot: any, emoji: string): Promise<Spot> {
     spot.emojis.push(emoji);
-    return await spot.save();
+    return spot.save();
     // const update = { $push: { emojis: emoji } };
     // return await this.spotModel.findOneAndUpdate(filter, update);
   }

@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from "@nestjs/graphql";
+import { Resolver, Query, Mutation, Args, Int, Float } from "@nestjs/graphql";
 import { SpotService } from "src/spot/spot.service";
 import { Spot } from "src/spot/entities/spot.entity";
 import { CreateSpotInput } from "src/spot/dto/create-spot.input";
@@ -10,13 +10,15 @@ export class SpotResolver {
   constructor(private readonly spotService: SpotService) {}
 
   @Mutation(() => Spot)
-  async createSpot(@Args("createSpotInput") createSpotInput: CreateSpotInput) {
+  async createSpot(
+    @Args("createSpotInput") createSpotInput: CreateSpotInput
+  ): Promise<Spot> {
     const spot = await this.spotService.findOne(createSpotInput.id);
 
     if (spot === null) {
-      return this.spotService.create(createSpotInput);
+      return await this.spotService.create(createSpotInput);
     } else {
-      return this.spotService.update(spot, createSpotInput.emoji);
+      return await this.spotService.update(spot, createSpotInput.emoji);
     }
   }
 
@@ -24,6 +26,14 @@ export class SpotResolver {
   async findSpots() {
     return await this.spotService.findAll();
   }
+
+  // @Query(() => [Spot])
+  // async getSpots(
+  //   @Args("x", { type: () => Float }) x: number,
+  //   @Args("y", { type: () => Float }) y: number
+  // ) {
+  //   return await this.spotService.getSpot(x, y);
+  // }
 
   // @Query(() => Spot, { name: "spot" })
   // async findOne(@Args("id", { type: () => Int }) id: number) {
