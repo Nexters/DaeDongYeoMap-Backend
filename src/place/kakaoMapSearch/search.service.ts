@@ -61,6 +61,6 @@ export class SearchService {
   }
 
   async getPlaceFromCacheById(id): Promise<Place> {
-    return await this.cacheManager.get(id);
+    return this.cacheManager.get(id);
   }
 }

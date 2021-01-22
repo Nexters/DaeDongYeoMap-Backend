@@ -13,14 +13,13 @@ export class PlaceResolver {
     @Args("filters") filters: KeywordSearchDto
   ): Promise<object> {
     const places: any = await this.searchService.searchByKeyworld(filters);
-    console.log(places);
-
-    for (let p of places) {
-      const isCached = await this.searchService.getPlaceFromCacheById(p.id);
-      if (isCached) continue;
-
-      this.searchService.setPlaceFromCacheById(p.id, p);
-    }
+    places.forEach(async (place) => {
+      const cachedPlace: Place | null = await this.searchService.getPlaceFromCacheById(
+        place.id
+      );
+      const isCached = cachedPlace !== null;
+      isCached || this.searchService.setPlaceFromCacheById(place.id, place);
+    });
     return places;
   }
 
@@ -28,16 +27,16 @@ export class PlaceResolver {
   async getPlace(
     @Args("placeId", { type: () => String }) placeId: string
   ): Promise<Place | HttpException> {
-    const place: Place = await this.searchService.getPlaceFromCacheById(
+    const cachedPlace: Place | null = await this.searchService.getPlaceFromCacheById(
       placeId
     );
 
-    if (place === undefined) {
+    if (cachedPlace === undefined) {
       return new HttpException(
         `There is no cached place with ${placeId}`,
         HttpStatus.BAD_REQUEST
       );
     }
-    return place;
+    return cachedPlace;
   }
 }
