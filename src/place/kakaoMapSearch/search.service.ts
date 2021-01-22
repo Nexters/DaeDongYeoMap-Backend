@@ -1,9 +1,16 @@
 import Axios, { AxiosResponse } from "axios";
-import { Injectable, Inject, CACHE_MANAGER } from "@nestjs/common";
+import {
+  Injectable,
+  Inject,
+  CACHE_MANAGER,
+  HttpException,
+  HttpStatus,
+} from "@nestjs/common";
 import { Cache } from "cache-manager";
 
 import { ConfigService } from "../../config/config.service";
 import { KeywordSearchDto } from "./search.dto";
+import { Place } from "../place.entity";
 
 @Injectable()
 export class SearchService {
@@ -15,7 +22,7 @@ export class SearchService {
   // https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword
   async searchByKeyworld(
     keywordSearchDto: KeywordSearchDto
-  ): Promise<void | AxiosResponse<object>> {
+  ): Promise<HttpException | AxiosResponse<object>> {
     const baseUrl = this.configService.get("KAKAO_DEV_HOST");
     return Axios.get(baseUrl, {
       headers: {
@@ -28,14 +35,32 @@ export class SearchService {
       },
     })
       .then((response) => response.data.documents)
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        if (err.response.status == 400) {
+          console.error(err.response);
+          throw new HttpException("no matched place", HttpStatus.BAD_REQUEST);
+        } else {
+          console.error(err.response);
+          throw new HttpException(
+            "kakao api server error",
+            HttpStatus.INTERNAL_SERVER_ERROR
+          );
+        }
+      });
   }
 
+  // https://github.com/BryanDonovan/node-cache-manager
   async setPlaceFromCacheById(key, value) {
-    return this.cacheManager.set(key, value);
+    this.cacheManager.set(key, value, { ttl: 300 }, function (err) {
+      console.error(err);
+      throw new HttpException(
+        "set place cache error",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    });
   }
 
-  async getPlaceFromCacheById(key) {
-    return this.cacheManager.get(key);
+  async getPlaceFromCacheById(id): Promise<Place> {
+    return await this.cacheManager.get(id);
   }
 }

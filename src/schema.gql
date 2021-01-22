@@ -3,10 +3,13 @@
 # ------------------------------------------------------
 
 type Spot {
-  """카카오 Place id"""
+  """mongodb default id"""
+  _id: ID!
+
+  """kakao place id"""
   id: String!
 
-  """emoji id list"""
+  """list of emoji ids"""
   emojis: [String!]!
   place_name: String!
   category_name: String
@@ -17,11 +20,11 @@ type Spot {
   road_address_name: String
   place_url: String
   distance: String
-  x: Float
-  y: Float
+  location: String!
 }
 
 type Place {
+  """kakao place id"""
   id: String!
   place_name: String!
   category_name: String
@@ -44,6 +47,7 @@ type DeleteSpotDto {
 
 type Query {
   findSpots: [Spot!]!
+  getSpots(y: Float!, x: Float!): [Spot!]!
   placesByKeyworld(filters: KeywordSearchDto!): [Place!]!
   getPlace(placeId: String!): Place!
 }

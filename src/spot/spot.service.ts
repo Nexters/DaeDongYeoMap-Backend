@@ -19,8 +19,7 @@ export class SpotService {
       createSpotInput.id
     );
 
-    console.log(place);
-    place.emoji = createSpotInput.emoji;
+    // place.emoji = createSpotInput.emoji;
     // TODO: cache miss ....
 
     const createdSpot = new this.spotModel(place);
@@ -48,5 +47,9 @@ export class SpotService {
 
   async remove(id: string) {
     return this.spotModel.remove({ id: id }).exec();
+  }
+
+  async getSpot(cx: number, cy: number) {
+    return this.spotModel;
   }
 }
