@@ -4,8 +4,8 @@ import * as fs from "fs";
 export class ConfigService {
   private readonly envConfig: { [key: string]: string };
 
-  constructor(filePath: string) {
-    console.log(`제민욱${process.env.NODE_ENV}`);
+  constructor() {
+    console.log(`${process.env.NODE_ENV}`);
 
     if (process.env.NODE_ENV === "prod") {
       this.envConfig = {
@@ -24,6 +24,7 @@ export class ConfigService {
         MONGO_CACHE_NAME: process.env.MONGO_CACHE_NAME,
       };
     } else {
+      const filePath = ".env.dev";
       this.envConfig = dotenv.parse(fs.readFileSync(filePath));
     }
   }

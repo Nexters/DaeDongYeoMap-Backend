@@ -6,7 +6,7 @@ import {
   registerEnumType,
 } from "@nestjs/graphql";
 
-enum SortType {
+export enum SortType {
   distance = "distance",
   accuracy = "accuracy",
 }

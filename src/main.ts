@@ -7,11 +7,9 @@ async function bootstrap() {
     logger: ["error", "warn"],
   });
 
-  const configService = new ConfigService(".env.dev");
+  const configService = new ConfigService();
 
   app.enableCors();
-  // app.setGlobalPrefix(configService.get("NODE_ENV"));
-
   await app.listen(process.env.PORT || configService.get("NODE_PORT"));
   console.log(`Application is running on: ${await app.getUrl()}`);
 }

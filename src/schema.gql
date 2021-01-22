@@ -3,10 +3,10 @@
 # ------------------------------------------------------
 
 type Spot {
-  """카카오 Place id"""
+  """kakao place id"""
   id: String!
 
-  """emoji id list"""
+  """list of emoji ids"""
   emojis: [String!]!
   place_name: String!
   category_name: String
@@ -17,11 +17,13 @@ type Spot {
   road_address_name: String
   place_url: String
   distance: String
+  location: String!
   x: Float
   y: Float
 }
 
 type Place {
+  """kakao place id"""
   id: String!
   place_name: String!
   category_name: String
@@ -44,8 +46,8 @@ type DeleteSpotDto {
 
 type Query {
   findSpots: [Spot!]!
-  placesByKeyworld(filters: KeywordSearchDto!): [Place!]!
-  getPlace(placeId: String!): Place!
+  placesByKeyword(filters: KeywordSearchDto!): [Place!]!
+  getPlaceFromCache(placeId: String!): Place!
 }
 
 input KeywordSearchDto {

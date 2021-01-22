@@ -3,7 +3,7 @@ import { Field, ObjectType, Float } from "@nestjs/graphql";
 // https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword
 @ObjectType()
 export class Place {
-  @Field(() => String)
+  @Field(() => String, { description: "kakao place id" })
   id: string;
 
   @Field(() => String)

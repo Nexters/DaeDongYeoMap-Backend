@@ -1,5 +1,5 @@
 import { Args, Query, Resolver } from "@nestjs/graphql";
-
+import { HttpException, HttpStatus } from "@nestjs/common";
 import { Place } from "./place.entity";
 import { SearchService } from "./kakaoMapSearch/search.service";
 import { KeywordSearchDto } from "./kakaoMapSearch/search.dto";
@@ -9,25 +9,34 @@ export class PlaceResolver {
   constructor(private readonly searchService: SearchService) {}
 
   @Query(() => [Place])
-  async placesByKeyworld(
+  async placesByKeyword(
     @Args("filters") filters: KeywordSearchDto
   ): Promise<object> {
-    const places: any = await this.searchService.searchByKeyworld(filters);
-
-    for await (let p of places) {
-      const isCached = await this.searchService.getPlaceFromCacheById(p.id);
-      console.log(isCached);
-      if (isCached) continue;
-      this.searchService.setPlaceFromCacheById(p.id, p);
-    }
+    const places: Place[] = await this.searchService.searchByKeyword(filters);
+    places.forEach(async (place) => {
+      const cachedPlace: Place | null = await this.searchService.getPlaceFromCacheById(
+        place.id
+      );
+      const isCached = cachedPlace !== null;
+      isCached || this.searchService.setPlaceFromCacheById(place.id, place);
+    });
     return places;
   }
 
-  // get place from cache (for test)
   @Query(() => Place)
-  async getPlace(
+  async getPlaceFromCache(
     @Args("placeId", { type: () => String }) placeId: string
-  ): Promise<Place | void> {
-    return await this.searchService.getPlaceFromCacheById(placeId);
+  ): Promise<Place | HttpException> {
+    const cachedPlace: Place | null = await this.searchService.getPlaceFromCacheById(
+      placeId
+    );
+
+    if (cachedPlace === undefined) {
+      return new HttpException(
+        `There is no cached place with ${placeId}`,
+        HttpStatus.BAD_REQUEST
+      );
+    }
+    return cachedPlace;
   }
 }

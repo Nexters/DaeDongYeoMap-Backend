@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int, Float } from "@nestjs/graphql";
+import { ObjectType, Field, ID, Int, Float } from "@nestjs/graphql";
 import * as mongoose from "mongoose";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
@@ -6,11 +6,11 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 @Schema({ timestamps: true }) // graphql 은 timestamp 삽입 어떻게 할까?
 export class Spot {
   @Prop({ required: true, unique: true })
-  @Field(() => String, { description: "카카오 Place id" })
+  @Field(() => String, { description: "kakao place id" })
   id: string;
 
   @Prop({ required: true })
-  @Field((type) => [String], { description: "emoji id list" })
+  @Field((type) => [String], { description: "list of emoji ids" })
   emojis: string[];
 
   @Prop({ required: true })
@@ -49,6 +49,23 @@ export class Spot {
   @Prop()
   distance?: string;
 
+  @Field(() => String)
+  @Prop({
+    type: {
+      type: String,
+      enum: ["Point"],
+      default: "Point",
+      required: true,
+    },
+    coordinates: {
+      type: [Number],
+      required: true,
+      index: "2dsphere",
+      default: [0, 0],
+    },
+  })
+  location: string;
+
   @Field((type) => Float, { nullable: true })
   @Prop()
   x?: number;
@@ -56,11 +73,6 @@ export class Spot {
   @Field((type) => Float, { nullable: true })
   @Prop()
   y?: number;
-
-  // https://github.com/LotfiMEZIANI/Three-in-one-blog-post/blob/8cc58d094bad5c1a3ca0514ec1d6a6282724313b/src/app/person/person.model.ts#L19
-  // @Field(() => [Emoji])
-  // @Prop({ type: [mongoose.Types.ObjectId], ref: Emoji.name })
-  // emojis: mongoose.Types.ObjectId[] | Emoji[];
 }
 
 export type SpotDocument = Spot & mongoose.Document;
