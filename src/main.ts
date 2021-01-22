@@ -7,7 +7,7 @@ async function bootstrap() {
     logger: ["error", "warn"],
   });
 
-  const configService = new ConfigService(".env");
+  const configService = new ConfigService(".env.dev");
 
   app.enableCors();
   // app.setGlobalPrefix(configService.get("NODE_ENV"));
