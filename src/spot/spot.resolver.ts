@@ -9,7 +9,10 @@ import { DeleteSpotDto } from "src/spot/dto/delete.spot.dto";
 export class SpotResolver {
   constructor(private readonly spotService: SpotService) {}
 
-  @Mutation(() => Spot)
+  @Mutation(() => Spot, {
+    description:
+      "스팟을 생성/업데이트합니다.\n기존에 누군가에 의해서 만들어졌다면 update됩니다.",
+  })
   async createSpot(
     @Args("createSpotInput") createSpotInput: CreateSpotInput
   ): Promise<Spot> {
@@ -22,31 +25,39 @@ export class SpotResolver {
     }
   }
 
-  @Query(() => [Spot])
-  async findSpots() {
+  @Query(() => [Spot], {
+    description: "(For Debugging) mongoDB에 저장된 모든 스팟 반환",
+  })
+  async getAllSpots(): Promise<Spot[]> {
     return await this.spotService.findAll();
   }
-
-  // @Query(() => [Spot])
-  // async getSpots(
-  //   @Args("x", { type: () => Float }) x: number,
-  //   @Args("y", { type: () => Float }) y: number
-  // ) {
-  //   return await this.spotService.getSpot(x, y);
-  // }
-
-  // @Query(() => Spot, { name: "spot" })
-  // async findOne(@Args("id", { type: () => Int }) id: number) {
-  //   return this.spotService.findOne(id);
-  // }
 
   // @Mutation(() => Spot)
   // async updateSpot(@Args("updateSpotInput") updateSpotInput: UpdateSpotInput) {
   //   return this.spotService.update(updateSpotInput.id, updateSpotInput);
   // }
 
-  @Mutation(() => DeleteSpotDto)
+  @Mutation(() => DeleteSpotDto, {
+    description: "(For Debugging) 스팟 하나 삭제",
+  })
   async removeSpot(@Args("id", { type: () => String }) id: string) {
     return await this.spotService.remove(id);
   }
+
+  @Mutation(() => DeleteSpotDto, {
+    description: "(For Debugging) 스팟 모두 삭제",
+  })
+  async removeAllSpots(): Promise<void> {
+    await this.spotService.removeAll();
+  }
+
+  @Query(() => [Spot], { description: "검색 키워드와 매칭되는 스팟들을 반환" })
+  async getSpotsByKeyword(@Args("keyword") keyword: string): Promise<Spot[]> {
+    return await this.spotService.getByKeyword(keyword);
+  }
+
+  // @Query(() => Spot, { name: "spot" })
+  // async findOne(@Args("id", { type: () => Int }) id: number) {
+  //   return this.spotService.findOne(id);
+  // }
 }
