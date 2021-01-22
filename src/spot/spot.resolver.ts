@@ -23,23 +23,9 @@ export class SpotResolver {
   }
 
   @Query(() => [Spot])
-  async findSpots() {
+  async getAllSpots(): Promise<Spot[]> {
     return await this.spotService.findAll();
   }
-
-  // @Query(() => [Spot])
-  // async getSpots(
-  //   @Args("x", { type: () => Float }) x: number,
-  //   @Args("y", { type: () => Float }) y: number
-  // ) {
-  //   return await this.spotService.getSpot(x, y);
-  // }
-
-  // @Query(() => Spot, { name: "spot" })
-  // async findOne(@Args("id", { type: () => Int }) id: number) {
-  //   return this.spotService.findOne(id);
-  // }
-
   // @Mutation(() => Spot)
   // async updateSpot(@Args("updateSpotInput") updateSpotInput: UpdateSpotInput) {
   //   return this.spotService.update(updateSpotInput.id, updateSpotInput);
@@ -49,4 +35,14 @@ export class SpotResolver {
   async removeSpot(@Args("id", { type: () => String }) id: string) {
     return await this.spotService.remove(id);
   }
+
+  @Query(() => [Spot])
+  async getSpotsByKeyword(@Args("keyword") keyword: string): Promise<Spot[]> {
+    return await this.spotService.getByKeyword(keyword);
+  }
+
+  // @Query(() => Spot, { name: "spot" })
+  // async findOne(@Args("id", { type: () => Int }) id: number) {
+  //   return this.spotService.findOne(id);
+  // }
 }

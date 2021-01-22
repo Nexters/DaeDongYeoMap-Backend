@@ -9,7 +9,7 @@ export class PlaceResolver {
   constructor(private readonly searchService: SearchService) {}
 
   @Query(() => [Place])
-  async placesByKeyword(
+  async getPlacesByKeyword(
     @Args("filters") filters: KeywordSearchDto
   ): Promise<object> {
     const places: Place[] = await this.searchService.searchByKeyword(filters);

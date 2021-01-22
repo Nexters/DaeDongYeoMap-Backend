@@ -45,8 +45,9 @@ type DeleteSpotDto {
 }
 
 type Query {
-  findSpots: [Spot!]!
-  placesByKeyword(filters: KeywordSearchDto!): [Place!]!
+  getAllSpots: [Spot!]!
+  getSpotsByKeyword(keyword: String!): [Spot!]!
+  getPlacesByKeyword(filters: KeywordSearchDto!): [Place!]!
   getPlaceFromCache(placeId: String!): Place!
 }
 
