@@ -49,7 +49,6 @@ export class Spot {
   @Prop()
   distance?: string;
 
-  @Field(() => String)
   @Prop({
     type: {
       type: String,

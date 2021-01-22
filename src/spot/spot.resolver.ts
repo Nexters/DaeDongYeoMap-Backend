@@ -26,6 +26,7 @@ export class SpotResolver {
   async getAllSpots(): Promise<Spot[]> {
     return await this.spotService.findAll();
   }
+
   // @Mutation(() => Spot)
   // async updateSpot(@Args("updateSpotInput") updateSpotInput: UpdateSpotInput) {
   //   return this.spotService.update(updateSpotInput.id, updateSpotInput);
@@ -34,6 +35,11 @@ export class SpotResolver {
   @Mutation(() => DeleteSpotDto)
   async removeSpot(@Args("id", { type: () => String }) id: string) {
     return await this.spotService.remove(id);
+  }
+
+  @Mutation(() => DeleteSpotDto)
+  async removeAllSpots(): Promise<void> {
+    await this.spotService.removeAll();
   }
 
   @Query(() => [Spot])

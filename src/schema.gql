@@ -17,7 +17,6 @@ type Spot {
   road_address_name: String
   place_url: String
   distance: String
-  location: String!
   x: Float
   y: Float
 }
@@ -71,6 +70,7 @@ enum SortType {
 type Mutation {
   createSpot(createSpotInput: CreateSpotInput!): Spot!
   removeSpot(id: String!): DeleteSpotDto!
+  removeAllSpots: DeleteSpotDto!
 }
 
 input CreateSpotInput {

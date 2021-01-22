@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { SearchService } from "src/place/kakaoMapSearch/search.service";
@@ -57,7 +57,13 @@ export class SpotService {
   }
 
   async findAll(): Promise<Spot[]> {
-    return this.spotModel.find().exec();
+    return this.spotModel
+      .find()
+      .exec()
+      .catch((err) => {
+        console.error(err);
+        throw new HttpException("bad request", HttpStatus.BAD_REQUEST);
+      });
   }
 
   async findOne(id: string) {
@@ -78,6 +84,19 @@ export class SpotService {
     - https://ip99202.github.io/posts/nodejs,-mongodb-%EA%B2%8C%EC%8B%9C%ED%8C%90-%EA%B2%80%EC%83%89-%EA%B8%B0%EB%8A%A5/
     - https://github.com/Tekiter/EZSET/blob/master/backend/src/api/v1/simple.route.js
     */
-    return this.spotModel.find({ place_name: new RegExp(keyword) }).exec();
+    return this.spotModel
+      .find({ place_name: new RegExp(keyword) })
+      .exec()
+      .catch((err) => {
+        console.error(err);
+        throw new HttpException(
+          "There are no spots that matched with keyword.",
+          HttpStatus.BAD_REQUEST
+        );
+      });
+  }
+
+  async removeAll() {
+    // remove all spots for cleanup
   }
 }
