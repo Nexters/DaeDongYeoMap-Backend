@@ -24,7 +24,6 @@ export const cacheConfig = {
 
 @Module({
   imports: [ConfigModule, CacheModule.registerAsync(cacheConfig)],
-
   providers: [SearchService, PlaceResolver],
 })
 export class PlaceModule {}

@@ -1,8 +1,9 @@
-import { CreateCourseInput } from './create-course.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { CreateCourseInput } from "./create-course.input";
+import * as mongoose from "mongoose";
+import { InputType, Field, Int, PartialType } from "@nestjs/graphql";
 
 @InputType()
 export class UpdateCourseInput extends PartialType(CreateCourseInput) {
-  @Field(() => Int)
-  id: number;
+  @Field(() => String, { description: "Course id" })
+  _id: mongoose.Types.ObjectId;
 }
