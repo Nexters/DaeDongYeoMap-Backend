@@ -5,7 +5,7 @@ import { Spot } from "src/spot/entities/spot.entity";
 
 @InputType()
 export class CreateCourseInput {
-  @Field(() => [Spot], {
+  @Field(() => [String], {
     description: "스팟들의 ID를 담고 있는 리스트(순서 포함)",
   })
   spots: mongoose.Types.ObjectId[];

@@ -48,6 +48,17 @@ type DeleteSpotDto {
   deletedCount: Int!
 }
 
+"""Spot들을 순서대로 저장하고 있는 데이터 코스 정보"""
+type Course {
+  """Course id"""
+  _id: String!
+
+  """스팟들의 ID를 담고 있는 리스트(순서 포함)"""
+  spots: [Spot!]!
+  title: String!
+  isPrivate: String!
+}
+
 type Query {
   """(For Debugging) mongoDB에 저장된 모든 스팟 반환"""
   getAllSpots: [Spot!]!
@@ -93,6 +104,9 @@ type Mutation {
 
   """(For Debugging) 스팟 하나 삭제"""
   removeSpot(id: String!): DeleteSpotDto!
+
+  """코스를 생성합니다. 이때 스팟의 순서는 전달된 스팟 아이디의 index로 처리됩니다."""
+  createCourse(createCourseInput: CreateCourseInput!): Course!
 }
 
 input CreateSpotInput {
@@ -112,4 +126,11 @@ input CreateSpotInput {
   road_address_name: String
   place_url: String
   distance: String
+}
+
+input CreateCourseInput {
+  """스팟들의 ID를 담고 있는 리스트(순서 포함)"""
+  spots: [String!]!
+  title: String!
+  isPrivate: String!
 }

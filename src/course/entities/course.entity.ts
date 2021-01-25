@@ -25,7 +25,7 @@ export class Course {
   @Prop({ default: true })
   isPrivate: boolean;
 
-  // users: User[]
+  // user: User
 }
 
 export type CourseDocument = Course & mongoose.Document;
