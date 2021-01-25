@@ -12,6 +12,7 @@ import { CommentModule } from "./comment/comment.module";
 import { SpotModule } from "./spot/spot.module";
 import { PlaceModule } from "./place/place.module";
 import { UserModule } from "./user/user.module";
+import { CourseModule } from './course/course.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { UserModule } from "./user/user.module";
       }),
       inject: [ConfigService],
     }),
+    CourseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
