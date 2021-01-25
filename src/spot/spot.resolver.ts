@@ -16,7 +16,7 @@ export class SpotResolver {
   async createSpot(
     @Args("createSpotInput") createSpotInput: CreateSpotInput
   ): Promise<Spot> {
-    const spot = await this.spotService.findOne(createSpotInput.id);
+    const spot = await this.spotService.findOneByKakaoId(createSpotInput.id);
 
     if (spot === null) {
       return await this.spotService.create(createSpotInput);
@@ -56,8 +56,11 @@ export class SpotResolver {
     return await this.spotService.getByKeyword(keyword);
   }
 
-  // @Query(() => Spot, { name: "spot" })
-  // async findOne(@Args("id", { type: () => Int }) id: number) {
-  //   return this.spotService.findOne(id);
-  // }
+  @Query(() => Spot, {
+    name: "spot",
+    description: "(For Debugging) 카카오 id로 스팟 검색",
+  })
+  async findOne(@Args("id", { type: () => String }) id: string) {
+    const result = await this.spotService.findOneByKakaoId(id);
+  }
 }
