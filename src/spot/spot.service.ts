@@ -20,7 +20,7 @@ export class SpotService {
     let place:
       | Place
       | undefined = await this.searchService.getPlaceFromCacheById(
-      createSpotInput.id
+      createSpotInput.placeId
     );
 
     if (place === undefined) {
@@ -38,11 +38,12 @@ export class SpotService {
 
     const location = { type: "Point", coordinates: [place.x, place.y] };
     const createSpotDto = {
-      id: createSpotInput.id,
+      placeId: place.id,
       emojis: [createSpotInput.emoji],
       location,
       ...place,
     };
+    console.log(createSpotDto);
     const createdSpot = new this.spotModel(createSpotDto);
     return createdSpot.save().catch((error) => {
       console.error(error);
@@ -53,10 +54,17 @@ export class SpotService {
     });
   }
 
-  async update(spot: any, emoji: string): Promise<Spot> {
-    spot.emojis.push(emoji);
-    return spot.save();
-    // const update = { $push: { emojis: emoji } };
+  async update(_id: Types.ObjectId, emoji: string): Promise<Spot> {
+    return this.spotModel
+      .findOneAndUpdate({ _id }, { $push: { emojis: emoji } })
+      .catch((err) => {
+        console.error(err);
+        throw new HttpException(
+          `cannot update spot cause of ${err.message}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
+    // const update = ;
     // return await this.spotModel.findOneAndUpdate(filter, update);
   }
 
@@ -70,23 +78,12 @@ export class SpotService {
       });
   }
 
-  async findOneByKakaoId(kakaoId: string) {
-    return this.spotModel
-      .findOne({ id: kakaoId })
-      .exec()
-      .then((response) => {
-        if (!response) {
-          throw new Error("There is no spots that matched by kakao id.");
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
-      });
+  async findOneByPlaceId(placeId: string): Promise<Spot> {
+    return this.spotModel.findOne({ placeId }).exec();
   }
 
-  async remove(id: string) {
-    return this.spotModel.remove({ id: id }).exec();
+  async remove(placeId: string) {
+    return this.spotModel.remove({ placeId }).exec();
   }
 
   async getByKeyword(keyword: string): Promise<Spot[]> {
@@ -107,7 +104,7 @@ export class SpotService {
       });
   }
 
-  async removeAll() {
-    // remove all spots for cleanup
-  }
+  // async removeAll() {
+  // remove all spots for cleanup
+  // }
 }

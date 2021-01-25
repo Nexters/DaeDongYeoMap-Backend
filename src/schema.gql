@@ -4,8 +4,11 @@
 
 """Emoji를 포함한 유저데이터를 포함하여, mongodb에 저장시킬 장소 데이터"""
 type Spot {
+  """Spot id"""
+  _id: String!
+
   """kakao place id"""
-  id: String!
+  placeId: String!
 
   """list of emoji ids"""
   emojis: [String!]!
@@ -45,14 +48,6 @@ type DeleteSpotDto {
   deletedCount: Int!
 }
 
-"""Spot들을 순서대로 저장하고 있는 데이터 코스 정보"""
-type Course {
-  """순서를 가진 스팟id를 담고 있는 리스트"""
-  spots: [Spot!]!
-  title: String!
-  isPrivate: String!
-}
-
 type Query {
   """(For Debugging) mongoDB에 저장된 모든 스팟 반환"""
   getAllSpots: [Spot!]!
@@ -60,8 +55,8 @@ type Query {
   """검색 키워드와 매칭되는 스팟들을 반환"""
   getSpotsByKeyword(keyword: String!): [Spot!]!
 
-  """(For Debugging) 카카오 id로 스팟 검색"""
-  spot(id: String!): Spot!
+  """(For Debugging) 카카오 place id로 스팟 검색"""
+  spot(placeId: String!): Spot!
 
   """
   키워드로 위치 정보를 확인합니다. 
@@ -69,7 +64,6 @@ type Query {
   """
   getPlacesByKeyword(filters: KeywordSearchDto!): [Place!]!
   getPlaceFromCache(placeId: String!): Place!
-  course(id: Int!): Course!
 }
 
 """SortType은 정확도(accuracy)가 기본이며, 거리순(distance) 정렬을 원할 경우 x,y는 필수 입니다."""
@@ -93,23 +87,17 @@ enum SortType {
 type Mutation {
   """
   스팟을 생성/업데이트합니다.
-  기존에 누군가에 의해서 만들어졌다면 update됩니다.
+  이미 기존에 스팟이 생성되었다면 자동으로 update처리 됩니다.
   """
-  createSpot(createSpotInput: CreateSpotInput!): Spot!
+  createOrUpdateSpot(createSpotInput: CreateSpotInput!): Spot!
 
   """(For Debugging) 스팟 하나 삭제"""
   removeSpot(id: String!): DeleteSpotDto!
-
-  """(For Debugging) 스팟 모두 삭제"""
-  removeAllSpots: DeleteSpotDto!
-  createCourse(createCourseInput: CreateCourseInput!): Course!
-  updateCourse(updateCourseInput: UpdateCourseInput!): Course!
-  removeCourse(id: Int!): Course!
 }
 
 input CreateSpotInput {
   """카카오 Place id"""
-  id: String!
+  placeId: String!
   place_name: String!
   x: Float!
   y: Float!
@@ -124,15 +112,4 @@ input CreateSpotInput {
   road_address_name: String
   place_url: String
   distance: String
-}
-
-input CreateCourseInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateCourseInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
 }
