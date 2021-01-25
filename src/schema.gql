@@ -22,7 +22,7 @@ type Spot {
   y: Float
 }
 
-"""카카오 지도 api로 부터 받은 위치 정보로 (TTL 300 cache)"""
+"""카카오 지도 api로 부터 받은 위치 정보로 TTL 300 캐싱됩니다."""
 type Place {
   """kakao place id"""
   id: String!
@@ -45,6 +45,14 @@ type DeleteSpotDto {
   deletedCount: Int!
 }
 
+"""Spot들을 순서대로 저장하고 있는 데이터 코스 정보"""
+type Course {
+  """순서를 가진 스팟id를 담고 있는 리스트"""
+  spots: [Spot!]!
+  title: String!
+  isPrivate: String!
+}
+
 type Query {
   """(For Debugging) mongoDB에 저장된 모든 스팟 반환"""
   getAllSpots: [Spot!]!
@@ -52,12 +60,16 @@ type Query {
   """검색 키워드와 매칭되는 스팟들을 반환"""
   getSpotsByKeyword(keyword: String!): [Spot!]!
 
+  """(For Debugging) 카카오 id로 스팟 검색"""
+  spot(id: String!): Spot!
+
   """
   키워드로 위치 정보를 확인합니다. 
   내부적으로 카카오 API를 요청합니다.
   """
   getPlacesByKeyword(filters: KeywordSearchDto!): [Place!]!
   getPlaceFromCache(placeId: String!): Place!
+  course(id: Int!): Course!
 }
 
 """SortType은 정확도(accuracy)가 기본이며, 거리순(distance) 정렬을 원할 경우 x,y는 필수 입니다."""
@@ -90,6 +102,9 @@ type Mutation {
 
   """(For Debugging) 스팟 모두 삭제"""
   removeAllSpots: DeleteSpotDto!
+  createCourse(createCourseInput: CreateCourseInput!): Course!
+  updateCourse(updateCourseInput: UpdateCourseInput!): Course!
+  removeCourse(id: Int!): Course!
 }
 
 input CreateSpotInput {
@@ -109,4 +124,15 @@ input CreateSpotInput {
   road_address_name: String
   place_url: String
   distance: String
+}
+
+input CreateCourseInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCourseInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }

@@ -44,9 +44,13 @@ export class SpotService {
       ...place,
     };
     const createdSpot = new this.spotModel(createSpotDto);
-    console.log(createdSpot);
-    // TODO: save error handling
-    return createdSpot.save();
+    return createdSpot.save().catch((error) => {
+      console.error(error);
+      throw new HttpException(
+        `cannot save a spot cause of ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    });
   }
 
   async update(spot: any, emoji: string): Promise<Spot> {
@@ -66,12 +70,19 @@ export class SpotService {
       });
   }
 
-  async findOne(id: string) {
-    const spot = this.spotModel.findOne({ id: id }).exec();
-    if (spot) {
-      return spot;
-    }
-    return undefined;
+  async findOneByKakaoId(kakaoId: string) {
+    return this.spotModel
+      .findOne({ id: kakaoId })
+      .exec()
+      .then((response) => {
+        if (!response) {
+          throw new Error("There is no spots that matched by kakao id.");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+      });
   }
 
   async remove(id: string) {
@@ -90,7 +101,7 @@ export class SpotService {
       .catch((err) => {
         console.error(err);
         throw new HttpException(
-          "There are no spots that matched with keyword.",
+          "There is no spots that matched by keyword.",
           HttpStatus.BAD_REQUEST
         );
       });
