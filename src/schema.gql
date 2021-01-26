@@ -4,8 +4,11 @@
 
 """Emoji를 포함한 유저데이터를 포함하여, mongodb에 저장시킬 장소 데이터"""
 type Spot {
+  """Spot id"""
+  _id: String!
+
   """kakao place id"""
-  id: String!
+  placeId: String!
 
   """list of emoji ids"""
   emojis: [String!]!
@@ -22,7 +25,7 @@ type Spot {
   y: Float
 }
 
-"""카카오 지도 api로 부터 받은 위치 정보로 (TTL 300 cache)"""
+"""카카오 지도 api로 부터 받은 위치 정보로 TTL 300 캐싱됩니다."""
 type Place {
   """kakao place id"""
   id: String!
@@ -45,12 +48,26 @@ type DeleteSpotDto {
   deletedCount: Int!
 }
 
+"""Spot들을 순서대로 저장하고 있는 데이터 코스 정보"""
+type Course {
+  """Course id"""
+  _id: String!
+
+  """스팟들의 ID를 담고 있는 리스트(순서 포함)"""
+  spots: [Spot!]!
+  title: String!
+  isPrivate: String!
+}
+
 type Query {
   """(For Debugging) mongoDB에 저장된 모든 스팟 반환"""
   getAllSpots: [Spot!]!
 
   """검색 키워드와 매칭되는 스팟들을 반환"""
   getSpotsByKeyword(keyword: String!): [Spot!]!
+
+  """(For Debugging) 카카오 place id로 스팟 검색"""
+  spot(placeId: String!): Spot!
 
   """
   키워드로 위치 정보를 확인합니다. 
@@ -81,20 +98,20 @@ enum SortType {
 type Mutation {
   """
   스팟을 생성/업데이트합니다.
-  기존에 누군가에 의해서 만들어졌다면 update됩니다.
+  이미 기존에 스팟이 생성되었다면 자동으로 update처리 됩니다.
   """
-  createSpot(createSpotInput: CreateSpotInput!): Spot!
+  createOrUpdateSpot(createSpotInput: CreateSpotInput!): Spot!
 
   """(For Debugging) 스팟 하나 삭제"""
   removeSpot(id: String!): DeleteSpotDto!
 
-  """(For Debugging) 스팟 모두 삭제"""
-  removeAllSpots: DeleteSpotDto!
+  """코스를 생성합니다. 이때 스팟의 순서는 전달된 스팟 아이디의 index로 처리됩니다."""
+  createCourse(createCourseInput: CreateCourseInput!): Course!
 }
 
 input CreateSpotInput {
   """카카오 Place id"""
-  id: String!
+  placeId: String!
   place_name: String!
   x: Float!
   y: Float!
@@ -109,4 +126,11 @@ input CreateSpotInput {
   road_address_name: String
   place_url: String
   distance: String
+}
+
+input CreateCourseInput {
+  """스팟들의 ID를 담고 있는 리스트(순서 포함)"""
+  spots: [String!]!
+  title: String!
+  isPrivate: String!
 }

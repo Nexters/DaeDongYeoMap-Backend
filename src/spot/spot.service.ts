@@ -20,7 +20,7 @@ export class SpotService {
     let place:
       | Place
       | undefined = await this.searchService.getPlaceFromCacheById(
-      createSpotInput.id
+      createSpotInput.placeId
     );
 
     if (place === undefined) {
@@ -38,21 +38,33 @@ export class SpotService {
 
     const location = { type: "Point", coordinates: [place.x, place.y] };
     const createSpotDto = {
-      id: createSpotInput.id,
+      placeId: place.id,
       emojis: [createSpotInput.emoji],
       location,
       ...place,
     };
+    console.log(createSpotDto);
     const createdSpot = new this.spotModel(createSpotDto);
-    console.log(createdSpot);
-    // TODO: save error handling
-    return createdSpot.save();
+    return createdSpot.save().catch((error) => {
+      console.error(error);
+      throw new HttpException(
+        `cannot save a spot cause of ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    });
   }
 
-  async update(spot: any, emoji: string): Promise<Spot> {
-    spot.emojis.push(emoji);
-    return spot.save();
-    // const update = { $push: { emojis: emoji } };
+  async update(_id: Types.ObjectId, emoji: string): Promise<Spot> {
+    return this.spotModel
+      .findOneAndUpdate({ _id }, { $push: { emojis: emoji } })
+      .catch((err) => {
+        console.error(err);
+        throw new HttpException(
+          `cannot update spot cause of ${err.message}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
+    // const update = ;
     // return await this.spotModel.findOneAndUpdate(filter, update);
   }
 
@@ -66,16 +78,12 @@ export class SpotService {
       });
   }
 
-  async findOne(id: string) {
-    const spot = this.spotModel.findOne({ id: id }).exec();
-    if (spot) {
-      return spot;
-    }
-    return undefined;
+  async findOneByPlaceId(placeId: string): Promise<Spot> {
+    return this.spotModel.findOne({ placeId }).exec();
   }
 
-  async remove(id: string) {
-    return this.spotModel.remove({ id: id }).exec();
+  async remove(placeId: string) {
+    return this.spotModel.remove({ placeId }).exec();
   }
 
   async getByKeyword(keyword: string): Promise<Spot[]> {
@@ -90,13 +98,13 @@ export class SpotService {
       .catch((err) => {
         console.error(err);
         throw new HttpException(
-          "There are no spots that matched with keyword.",
+          "There is no spots that matched by keyword.",
           HttpStatus.BAD_REQUEST
         );
       });
   }
 
-  async removeAll() {
-    // remove all spots for cleanup
-  }
+  // async removeAll() {
+  // remove all spots for cleanup
+  // }
 }

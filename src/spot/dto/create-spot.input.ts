@@ -3,7 +3,7 @@ import { InputType, Int, Float, Field } from "@nestjs/graphql";
 @InputType()
 export class CreateSpotInput {
   @Field(() => String, { description: "카카오 Place id" })
-  id: string;
+  placeId: string;
 
   @Field(() => String)
   place_name: string;
