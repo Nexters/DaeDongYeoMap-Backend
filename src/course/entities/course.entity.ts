@@ -21,7 +21,7 @@ export class Course {
   @Prop()
   title: string;
 
-  @Field(() => String)
+  @Field(() => Boolean)
   @Prop({ default: true })
   isPrivate: boolean;
 
