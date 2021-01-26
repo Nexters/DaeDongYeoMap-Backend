@@ -13,6 +13,7 @@ import { SpotModule } from "./spot/spot.module";
 import { PlaceModule } from "./place/place.module";
 import { UserModule } from "./user/user.module";
 import { CourseModule } from './course/course.module';
+import { StickerModule } from './sticker/sticker.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { CourseModule } from './course/course.module';
       inject: [ConfigService],
     }),
     CourseModule,
+    StickerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
