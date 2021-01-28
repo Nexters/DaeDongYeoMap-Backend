@@ -24,8 +24,12 @@ export class Sticker {
   // @Prop({ type: mongoose.Types.ObjectId, ref: User })
   // partners: mongoose.Types.ObjectId[];
 
-  @Field(() => String, { description: "Sticker name" })
-  name: string;
+  // @TODO: 추후 enum으로 변경
+  @Field(() => String, {
+    description: "Sticker category로 스티커 이름정도 주면 적당할 듯",
+  })
+  @Prop({ required: true })
+  category: string;
 
   @Field(() => Boolean, { description: "Sticker가 코스 생성에 사용여부" })
   @Prop({ default: false })
