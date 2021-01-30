@@ -1,15 +1,21 @@
-import { Field, ObjectType, Float } from "@nestjs/graphql";
+import { InputType, Int, Float, Field } from "@nestjs/graphql";
 
-// https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword
-@ObjectType({
-  description: "카카오 지도 api로 부터 받은 위치 정보로 (TTL 300 cache)",
-})
-export class Place {
-  @Field(() => String, { description: "kakao place id" })
+@InputType()
+export class CreateSpotInput {
+  @Field(() => String, { description: "카카오 Place id" })
   id: string;
 
   @Field(() => String)
   place_name: string;
+
+  @Field((type) => Float)
+  x: number;
+
+  @Field((type) => Float)
+  y: number;
+
+  @Field(() => String, { description: "이모지 id" })
+  emoji: string;
 
   @Field(() => String, { nullable: true })
   category_name?: string;
@@ -34,10 +40,4 @@ export class Place {
 
   @Field(() => String, { nullable: true })
   distance?: string;
-
-  @Field((type) => Float, { nullable: true })
-  x?: number;
-
-  @Field((type) => Float, { nullable: true })
-  y?: number;
 }

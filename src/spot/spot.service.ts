@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { SearchService } from "src/place/kakaoMapSearch/search.service";
@@ -57,7 +57,13 @@ export class SpotService {
   }
 
   async findAll(): Promise<Spot[]> {
-    return this.spotModel.find().exec();
+    return this.spotModel
+      .find()
+      .exec()
+      .catch((err) => {
+        console.error(err);
+        throw new HttpException("bad request", HttpStatus.BAD_REQUEST);
+      });
   }
 
   async findOne(id: string) {
@@ -70,9 +76,5 @@ export class SpotService {
 
   async remove(id: string) {
     return this.spotModel.remove({ id: id }).exec();
-  }
-
-  async getSpot(cx: number, cy: number) {
-    return this.spotModel;
   }
 }

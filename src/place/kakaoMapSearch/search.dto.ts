@@ -16,7 +16,10 @@ registerEnumType(SortType, {
 });
 
 // https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword
-@InputType()
+@InputType({
+  description:
+    "SortType은 정확도(accuracy)가 기본이며, 거리순(distance) 정렬을 원할 경우 x,y는 필수 입니다.",
+})
 export class KeywordSearchDto {
   @Field(() => String)
   query: string;
