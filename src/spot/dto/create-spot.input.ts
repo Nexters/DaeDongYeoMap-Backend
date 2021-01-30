@@ -1,6 +1,6 @@
 import { InputType, Int, Float, Field } from "@nestjs/graphql";
 
-@InputType()
+@InputType({ description: "스팟 생성" })
 export class CreateSpotInput {
   @Field(() => String, { description: "카카오 Place id" })
   placeId: string;
@@ -13,9 +13,6 @@ export class CreateSpotInput {
 
   @Field((type) => Float)
   y: number;
-
-  @Field(() => String, { description: "이모지 id" })
-  emoji: string;
 
   @Field(() => String, { nullable: true })
   category_name?: string;

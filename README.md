@@ -36,7 +36,7 @@
   - [7. API](#7-api)
   - [8. LINKS](#8-links)
   - [9. SCHEMA of GraphQL API](#9-schema-of-graphql-api)
-- [deploy to heroku](#deploy-to-heroku)
+  - [10. deploy to heroku](#10-deploy-to-heroku)
 
 <!-- /TOC -->
 
@@ -104,10 +104,11 @@ cd src && mkdir shared && mkdir config
 ```bash
 ├── src
 │   ├── comment
-│   ├── emoji
+│   ├── sticker
 │   ├── place
 │   ├── shared
 │   ├── spot
+│   ├── course
 │   └── user
 │   └── config
 ```
@@ -116,9 +117,10 @@ cd src && mkdir shared && mkdir config
 
 - `comment/`
   - `spot`에 대한 댓글
-- `emoji/`
-  - 지도에 보여질 emoji 스티커
-  - `spot`에 대한 emoticon 스티커 개념
+- `sticker/`
+  - 지도에 보여질 스티커
+  - 코스 생성에 필요한 기본 단위로 위치정보를 가지는 spot을 ref로 지닌다.
+  - 사용자가 `sticker`를 생성하게 되면, 해당 위치에 spot이 자동으로 생성 또는 업데이트 된다.
 - `place/`
   - `카카오 지역검색 API`를 통해 받아올 장소에 대한 정보
   - 매번 유저가 쿼리를 보낼 때마다, api로 장소 데이터를 받아오는게 비효율적이라면, 한번 요청된 데이터는 캐싱한다. (mongo 재활용 또는 redis 사용)
@@ -127,6 +129,12 @@ cd src && mkdir shared && mkdir config
 - `spot/`
   - `place` + `comment` `||` `emoji`
   - 기본적으로 `place/`데이터는 캐시는 되어도, db에 저장되지 않기 때문에, 상태를 가지게 되면 spot이라는 entity를 활용해 db에 저장시킵니다.
+  - 총 3가지 경로로 생성/업데이트 된다.
+    1. 유저가 sticker를 지도에 붙이는 경우
+    2. 유저가 채팅방을 생성하는 경우(변경될 가능성 있음)
+    3. 유저가 customSpot을 생성하는 경우(place정보를 카카오로부터 받을 수 없기 때문에 유저가 기입해줘야함)
+- `course/`
+  - 스티커들을 사용해 생성되는 데이트 코스 정보
 - `user`
   - 사용자 도메인
 - `config`
@@ -201,10 +209,6 @@ docker run --name mongo -p 0.0.0.0:27017:27017 -d mongo
 - [이슈: 네이버 지도에 네이버 검색 결과를 같이 띄울 수 없을까?](https://github.com/navermaps/maps.js/issues/193)
 - [configService 의존성 주입](https://dev.to/kop7/how-to-build-autocomplete-search-with-nestjs-elasticsearch-and-vue-12h8)
 
-<br/>
-
-<br/>
-
 ## 9. SCHEMA of GraphQL API
 
 ```
@@ -246,7 +250,7 @@ enum SortType {
 }
 ```
 
-# deploy to heroku
+## 10. deploy to heroku
 
 > [ref](https://www.joshmorony.com/deploying-a-production-nestjs-server-on-heroku/)
 

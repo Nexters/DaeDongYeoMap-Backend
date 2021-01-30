@@ -1,12 +1,13 @@
 import { ObjectType, Field, ID, Int, Float } from "@nestjs/graphql";
 import * as mongoose from "mongoose";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Sticker } from "src/sticker/entities/sticker.entity";
 
 @ObjectType({
   description:
     "Emoji를 포함한 유저데이터를 포함하여, mongodb에 저장시킬 장소 데이터",
 })
-@Schema({ timestamps: true }) // graphql 은 timestamp 삽입 어떻게 할까?
+@Schema({ timestamps: true })
 export class Spot {
   @Field(() => String, { description: "Spot id" })
   _id: mongoose.Types.ObjectId;
@@ -15,9 +16,9 @@ export class Spot {
   @Prop({ required: true, unique: true })
   placeId: string;
 
-  @Field((type) => [String], { description: "list of emoji ids" })
-  @Prop({ required: true })
-  emojis: string[];
+  @Field(() => [Sticker], { description: "list of sticker ids" })
+  @Prop({ type: [mongoose.Types.ObjectId], ref: "Sticker" })
+  stickers: mongoose.Types.ObjectId[] | Sticker[];
 
   @Field(() => String)
   @Prop({ required: true, text: true }) // {text : true} for indexing
