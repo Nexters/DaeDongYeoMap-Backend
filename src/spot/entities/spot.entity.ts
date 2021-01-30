@@ -9,7 +9,7 @@ import { Sticker } from "src/sticker/entities/sticker.entity";
 })
 @Schema({ timestamps: true })
 export class Spot {
-  @Field(() => Spot, { description: "Spot id" })
+  @Field(() => String, { description: "Spot id" })
   _id: mongoose.Types.ObjectId;
 
   @Field(() => String, { description: "kakao place id" })

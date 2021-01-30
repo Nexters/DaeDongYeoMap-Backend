@@ -5,12 +5,12 @@ import { Spot } from "src/spot/entities/spot.entity";
 
 @InputType()
 export class CreateStickerInput extends PartialType(CreateSpotInput) {
-  // @Field(() => User, {
+  // @Field(() => String, {
   //   description: "스티커를 생성한 User",
   // })
   // owner: mongoose.Types.ObjectId;
 
-  // @Field(() => [User], {
+  // @Field(() => [String], {
   //   description: "스티커를 생성한 User와 함께한 파트너들(User 리스트)",
   // })
   // partners: mongoose.Types.ObjectId[];

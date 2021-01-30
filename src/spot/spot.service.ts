@@ -57,7 +57,18 @@ export class SpotService {
     });
   }
 
-  async update(_id: Types.ObjectId, emoji: string): Promise<Spot> {
+  // async update(_id: Types.ObjectId, ): Promise<Spot> {
+  //   return this.spotModel
+  //     .findOneAndUpdate({ _id }, { $push: { emojis: emoji } })
+  //     .catch((err) => {
+  //       console.error(err);
+  //       throw new HttpException(
+  //         `cannot update spot cause of ${err.message}`,
+  //         HttpStatus.BAD_REQUEST
+  //       );
+  //     });
+  // }
+
   async appendSticker(
     spotId: Types.ObjectId,
     stickerId: Types.ObjectId
@@ -73,6 +84,23 @@ export class SpotService {
       });
   }
 
+  async findOne(_id: Types.ObjectId): Promise<Spot> {
+    return this.spotModel
+      .findOne()
+      .exec()
+      .catch((err) => {
+        console.error(err);
+        throw new HttpException(
+          `cannot find spot cause of ${err.message}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
+  }
+
+  async findOneByPlaceId(placeId: string): Promise<Spot> {
+    return this.spotModel.findOne({ placeId }).exec();
+  }
+
   async findAll(): Promise<Spot[]> {
     return this.spotModel
       .find()
@@ -81,10 +109,6 @@ export class SpotService {
         console.error(err);
         throw new HttpException("bad request", HttpStatus.BAD_REQUEST);
       });
-  }
-
-  async findOneByPlaceId(placeId: string): Promise<Spot> {
-    return this.spotModel.findOne({ placeId }).exec();
   }
 
   async remove(placeId: string) {
@@ -112,6 +136,7 @@ export class SpotService {
   async populateStickers(spot_id: Types.ObjectId): Promise<Sticker[]> {
     // aggregate: https://gist.github.com/kdelemme/9659364#file-aggregate-js-L127
     // lookup: https://github.com/Automattic/mongoose/issues/5090
+    // @TODO: 스티커 카운트 세기
     return this.spotModel
       .aggregate([
         {

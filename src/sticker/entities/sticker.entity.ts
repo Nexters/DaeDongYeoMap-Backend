@@ -2,23 +2,23 @@ import { ObjectType, Field, ID, Int, Float } from "@nestjs/graphql";
 import * as mongoose from "mongoose";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
-import { Spot } from "src/spot/entities/spot.entity";
+import { Spot, SpotSchema } from "src/spot/entities/spot.entity";
 
 @ObjectType({
   description: "'이모지 스티커'로 코스 생성에 기본적으로 사용되는 단위입니다.",
 })
 @Schema({ timestamps: true })
 export class Sticker {
-  @Field(() => Sticker, { description: "Sticker id" })
-  _id: mongoose.Schema.Types.ObjectId;
+  @Field(() => String, { description: "Sticker id" })
+  _id: mongoose.Types.ObjectId;
 
-  // @Field(() => User, {
+  // @Field(() => String, {
   //   description: "스티커를 생성한 User",
   // })
   // @Prop({ type: mongoose.Types.ObjectId, ref: "User" })
   // owner: mongoose.Types.ObjectId;
 
-  // @Field(() => [User], {
+  // @Field(() => [String], {
   //   description: "스티커를 생성한 User와 함께한 파트너들(User 리스트)",
   // })
   // @Prop({ type: mongoose.Types.ObjectId, ref: "User" })
@@ -36,10 +36,10 @@ export class Sticker {
   is_used: boolean;
 
   @Field(() => Spot, {
-    description: "스티커가 붙여진 Spot id",
+    description: "스티커가 붙여진 Spot id 또는 Spot 객체값",
   })
   @Prop({ type: mongoose.Types.ObjectId, ref: "Spot" })
-  spot_id: mongoose.Types.ObjectId;
+  spot: mongoose.Types.ObjectId | Spot;
 }
 
 export type StickerDocument = Sticker & mongoose.Document;

@@ -47,7 +47,7 @@ export class StickerService {
       );
     }
 
-    stickerDocument.spot_id = spot._id;
+    stickerDocument.spot = spot._id;
     return stickerDocument.save().catch((error) => {
       console.error(error);
       throw new HttpException(
@@ -57,8 +57,14 @@ export class StickerService {
     });
   }
 
-  findAll() {
-    return `This action returns all sticker`;
+  async findAll(): Promise<Sticker[]> {
+    return this.stickerModel
+      .find()
+      .exec()
+      .catch((err) => {
+        console.error(err);
+        throw new HttpException("bad request", HttpStatus.BAD_REQUEST);
+      });
   }
 
   findOne(id: number) {

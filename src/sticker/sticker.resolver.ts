@@ -1,10 +1,18 @@
-import { Resolver, Query, Mutation, Args, Int } from "@nestjs/graphql";
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  ResolveField,
+  Parent,
+} from "@nestjs/graphql";
 import { Types } from "mongoose";
 
 import { SpotService } from "src/spot/spot.service";
-
+import { Spot, SpotDocument } from "src/spot/entities/spot.entity";
 import { StickerService } from "src/sticker/sticker.service";
-import { Sticker } from "./entities/sticker.entity";
+import { Sticker, StickerDocument } from "./entities/sticker.entity";
 import { CreateStickerInput } from "./dto/create-sticker.input";
 import { UpdateStickerInput } from "./dto/update-sticker.input";
 
@@ -45,5 +53,19 @@ export class StickerResolver {
   @Mutation(() => Sticker)
   removeSticker(@Args("id", { type: () => Int }) id: number) {
     return this.stickerService.remove(id);
+  }
+
+  @ResolveField(() => Spot, {
+    description:
+      "populate: true 경우 spot_id를 spot 값으로 치환하여 반환합니다.",
+  })
+  async spot(
+    @Parent() sticker: StickerDocument,
+    @Args("populate") populate: boolean
+  ) {
+    if (populate) {
+      return await this.spotService.findOne(sticker.spot as Types.ObjectId);
+    }
+    return sticker.spot;
   }
 }
