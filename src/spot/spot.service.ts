@@ -85,29 +85,4 @@ export class SpotService {
   async remove(placeId: string) {
     return this.spotModel.remove({ placeId }).exec();
   }
-<<<<<<< HEAD
-=======
-
-  async getByKeyword(keyword: string): Promise<Spot[]> {
-    /*
-    mongodb 한국어 쿼리 참고자료
-    - https://ip99202.github.io/posts/nodejs,-mongodb-%EA%B2%8C%EC%8B%9C%ED%8C%90-%EA%B2%80%EC%83%89-%EA%B8%B0%EB%8A%A5/
-    - https://github.com/Tekiter/EZSET/blob/master/backend/src/api/v1/simple.route.js
-    */
-    return this.spotModel
-      .find({ place_name: new RegExp(keyword) })
-      .exec()
-      .catch((err) => {
-        console.error(err);
-        throw new HttpException(
-          "There is no spots that matched by keyword.",
-          HttpStatus.BAD_REQUEST
-        );
-      });
-  }
-
-  // async removeAll() {
-  // remove all spots for cleanup
-  // }
->>>>>>> e7c3bd648bb2435b51ccdaa73f00c0db554851ea
 }
