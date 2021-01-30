@@ -76,7 +76,7 @@ type Course {
 
 type Query {
   stickers: [Sticker!]!
-  sticker(id: Int!): Sticker!
+  sticker(id: String!): Sticker!
 
   """(For Debugging) mongoDB에 저장된 모든 스팟 반환"""
   getAllSpots: [Spot!]!
@@ -116,7 +116,6 @@ enum SortType {
 type Mutation {
   createSticker(createStickerInput: CreateStickerInput!): Sticker!
   updateSticker(updateStickerInput: UpdateStickerInput!): Sticker!
-  removeSticker(id: Int!): Sticker!
 
   """(For Debugging) 스팟 하나 삭제"""
   removeSpot(id: String!): DeleteSpotDto!
@@ -148,26 +147,11 @@ input CreateStickerInput {
 }
 
 input UpdateStickerInput {
-  """카카오 Place id"""
-  placeId: String
-  place_name: String
-  x: Float
-  y: Float
-  category_name: String
-  category_group_code: String
-  category_group_name: String
-  phone: String
-  address_name: String
-  road_address_name: String
-  place_url: String
-  distance: String
-
-  """Sticker category로 스티커 이름정도 주면 적당할 듯"""
-  sticker_category: String
+  """Sticker id"""
+  _id: String!
 
   """Sticker가 코스 생성에 사용여부"""
   is_used: Boolean
-  id: Int!
 }
 
 input CreateCourseInput {

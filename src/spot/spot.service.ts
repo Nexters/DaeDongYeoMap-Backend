@@ -91,7 +91,7 @@ export class SpotService {
       .catch((err) => {
         console.error(err);
         throw new HttpException(
-          `cannot find spot cause of ${err.message}`,
+          `cannot find a spot cause of ${err.message}`,
           HttpStatus.BAD_REQUEST
         );
       });

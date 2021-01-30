@@ -1,8 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { Model, Types } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
-import { CreateStickerInput } from "./dto/create-sticker.input";
-import { UpdateStickerInput } from "./dto/update-sticker.input";
+import { CreateStickerInput, UpdateStickerInput } from "./dto/sticker.input";
 import { Sticker, StickerDocument } from "./entities/sticker.entity";
 import { SpotService } from "src/spot/spot.service";
 import { Spot, SpotDocument } from "src/spot/entities/spot.entity";
@@ -63,19 +62,40 @@ export class StickerService {
       .exec()
       .catch((err) => {
         console.error(err);
-        throw new HttpException("bad request", HttpStatus.BAD_REQUEST);
+        throw new HttpException(
+          `cannot find stickers cause of ${err.message}`,
+          HttpStatus.BAD_REQUEST
+        );
       });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} sticker`;
+  async findOne(_id: Types.ObjectId): Promise<Sticker> {
+    return this.stickerModel
+      .findOne()
+      .exec()
+      .catch((err) => {
+        console.error(err);
+        throw new HttpException(
+          `cannot find a sticker cause of ${err.message}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
   }
 
-  update(id: number, updateStickerInput: UpdateStickerInput) {
-    return `This action updates a #${id} sticker`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} sticker`;
+  async update(updateStickerInput: UpdateStickerInput): Promise<Sticker> {
+    return this.stickerModel
+      .findOneAndUpdate(
+        { _id: updateStickerInput._id },
+        { $set: updateStickerInput },
+        { new: true }
+      )
+      .exec()
+      .catch((err) => {
+        console.error(err);
+        throw new HttpException(
+          `cannot update a sticker cause of ${err.message}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
   }
 }

@@ -32,3 +32,15 @@ export class CreateStickerInput extends PartialType(CreateSpotInput) {
   // })
   // spotId?: mongoose.Types.ObjectId;
 }
+
+@InputType()
+export class UpdateStickerInput {
+  @Field(() => String, { description: "Sticker id" })
+  _id: mongoose.Types.ObjectId;
+
+  @Field(() => Boolean, {
+    description: "Sticker가 코스 생성에 사용여부",
+    nullable: true,
+  })
+  is_used: boolean;
+}

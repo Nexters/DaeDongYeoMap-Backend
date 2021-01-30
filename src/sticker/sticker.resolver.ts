@@ -13,8 +13,7 @@ import { SpotService } from "src/spot/spot.service";
 import { Spot, SpotDocument } from "src/spot/entities/spot.entity";
 import { StickerService } from "src/sticker/sticker.service";
 import { Sticker, StickerDocument } from "./entities/sticker.entity";
-import { CreateStickerInput } from "./dto/create-sticker.input";
-import { UpdateStickerInput } from "./dto/update-sticker.input";
+import { CreateStickerInput, UpdateStickerInput } from "./dto/sticker.input";
 
 @Resolver(() => Sticker)
 export class StickerResolver {
@@ -30,29 +29,21 @@ export class StickerResolver {
     return await this.stickerService.create(createStickerInput);
   }
 
+  @Mutation(() => Sticker)
+  async updateSticker(
+    @Args("updateStickerInput") updateStickerInput: UpdateStickerInput
+  ): Promise<Sticker> {
+    return await this.stickerService.update(updateStickerInput);
+  }
+
   @Query(() => [Sticker], { name: "stickers" })
   findAll() {
     return this.stickerService.findAll();
   }
 
   @Query(() => Sticker, { name: "sticker" })
-  findOne(@Args("id", { type: () => Int }) id: number) {
+  findOne(@Args("id", { type: () => String }) id: Types.ObjectId) {
     return this.stickerService.findOne(id);
-  }
-
-  @Mutation(() => Sticker)
-  updateSticker(
-    @Args("updateStickerInput") updateStickerInput: UpdateStickerInput
-  ) {
-    return this.stickerService.update(
-      updateStickerInput.id,
-      updateStickerInput
-    );
-  }
-
-  @Mutation(() => Sticker)
-  removeSticker(@Args("id", { type: () => Int }) id: number) {
-    return this.stickerService.remove(id);
   }
 
   @ResolveField(() => Spot, {
