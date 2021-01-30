@@ -2,16 +2,31 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""'이모지 스티커'로 코스 생성에 기본적으로 사용되는 단위입니다."""
+type Sticker {
+  """Sticker id"""
+  _id: Sticker!
+
+  """Sticker category로 스티커 이름정도 주면 적당할 듯"""
+  sticker_category: String!
+
+  """Sticker가 코스 생성에 사용여부"""
+  is_used: Boolean!
+
+  """스티커가 붙여진 Spot id"""
+  spot_id: Spot!
+}
+
 """Emoji를 포함한 유저데이터를 포함하여, mongodb에 저장시킬 장소 데이터"""
 type Spot {
   """Spot id"""
-  _id: String!
+  _id: Spot!
 
   """kakao place id"""
   placeId: String!
 
-  """list of emoji ids"""
-  emojis: [String!]!
+  """list of sticker ids"""
+  stickers: [Sticker!]!
   place_name: String!
   category_name: String
   category_group_code: String
@@ -56,10 +71,13 @@ type Course {
   """스팟들의 ID를 담고 있는 리스트(순서 포함)"""
   spots: [Spot!]!
   title: String!
-  isPrivate: String!
+  isPrivate: Boolean!
 }
 
 type Query {
+  stickers: [Sticker!]!
+  sticker(id: Int!): Sticker!
+
   """(For Debugging) mongoDB에 저장된 모든 스팟 반환"""
   getAllSpots: [Spot!]!
 
@@ -96,11 +114,15 @@ enum SortType {
 }
 
 type Mutation {
+  createSticker(createStickerInput: CreateStickerInput!): Sticker!
+  updateSticker(updateStickerInput: UpdateStickerInput!): Sticker!
+  removeSticker(id: Int!): Sticker!
+
   """
   스팟을 생성/업데이트합니다.
   이미 기존에 스팟이 생성되었다면 자동으로 update처리 됩니다.
   """
-  createOrUpdateSpot(createSpotInput: CreateSpotInput!): Spot!
+  getAllSpots: Spot!
 
   """(For Debugging) 스팟 하나 삭제"""
   removeSpot(id: String!): DeleteSpotDto!
@@ -109,15 +131,12 @@ type Mutation {
   createCourse(createCourseInput: CreateCourseInput!): Course!
 }
 
-input CreateSpotInput {
+input CreateStickerInput {
   """카카오 Place id"""
-  placeId: String!
-  place_name: String!
-  x: Float!
-  y: Float!
-
-  """이모지 id"""
-  emoji: String!
+  placeId: String
+  place_name: String
+  x: Float
+  y: Float
   category_name: String
   category_group_code: String
   category_group_name: String
@@ -126,6 +145,35 @@ input CreateSpotInput {
   road_address_name: String
   place_url: String
   distance: String
+
+  """Sticker category로 스티커 이름정도 주면 적당할 듯"""
+  sticker_category: String!
+
+  """Sticker가 코스 생성에 사용여부"""
+  is_used: Boolean
+}
+
+input UpdateStickerInput {
+  """카카오 Place id"""
+  placeId: String
+  place_name: String
+  x: Float
+  y: Float
+  category_name: String
+  category_group_code: String
+  category_group_name: String
+  phone: String
+  address_name: String
+  road_address_name: String
+  place_url: String
+  distance: String
+
+  """Sticker category로 스티커 이름정도 주면 적당할 듯"""
+  sticker_category: String
+
+  """Sticker가 코스 생성에 사용여부"""
+  is_used: Boolean
+  id: Int!
 }
 
 input CreateCourseInput {

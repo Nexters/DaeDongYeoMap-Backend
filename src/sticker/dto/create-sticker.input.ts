@@ -19,13 +19,16 @@ export class CreateStickerInput extends PartialType(CreateSpotInput) {
   @Field(() => String, {
     description: "Sticker category로 스티커 이름정도 주면 적당할 듯",
   })
-  category: string;
+  sticker_category: string;
 
-  @Field(() => Boolean, { description: "Sticker가 코스 생성에 사용여부" })
-  isUsed: boolean;
-
-  @Field(() => Spot, {
-    description: "스티커가 붙여진 Spot id",
+  @Field(() => Boolean, {
+    description: "Sticker가 코스 생성에 사용여부",
+    nullable: true,
   })
-  spotId?: mongoose.Types.ObjectId;
+  is_used?: boolean;
+
+  // @Field(() => Spot, {
+  //   description: "스티커가 붙여진 Spot id",
+  // })
+  // spotId?: mongoose.Types.ObjectId;
 }

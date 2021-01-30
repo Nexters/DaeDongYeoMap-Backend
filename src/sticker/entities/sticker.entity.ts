@@ -9,19 +9,19 @@ import { Spot } from "src/spot/entities/spot.entity";
 })
 @Schema({ timestamps: true })
 export class Sticker {
-  @Field(() => String, { description: "Sticker id" })
-  _id: mongoose.Types.ObjectId;
+  @Field(() => Sticker, { description: "Sticker id" })
+  _id: mongoose.Schema.Types.ObjectId;
 
   // @Field(() => User, {
   //   description: "스티커를 생성한 User",
   // })
-  // @Prop({ type: mongoose.Types.ObjectId, ref: User })
+  // @Prop({ type: mongoose.Types.ObjectId, ref: "User" })
   // owner: mongoose.Types.ObjectId;
 
   // @Field(() => [User], {
   //   description: "스티커를 생성한 User와 함께한 파트너들(User 리스트)",
   // })
-  // @Prop({ type: mongoose.Types.ObjectId, ref: User })
+  // @Prop({ type: mongoose.Types.ObjectId, ref: "User" })
   // partners: mongoose.Types.ObjectId[];
 
   // @TODO: 추후 enum으로 변경
@@ -29,18 +29,18 @@ export class Sticker {
     description: "Sticker category로 스티커 이름정도 주면 적당할 듯",
   })
   @Prop({ required: true })
-  category: string;
+  sticker_category: string;
 
   @Field(() => Boolean, { description: "Sticker가 코스 생성에 사용여부" })
   @Prop({ default: false })
-  isUsed: boolean;
+  is_used: boolean;
 
   @Field(() => Spot, {
     description: "스티커가 붙여진 Spot id",
   })
-  @Prop({ type: mongoose.Types.ObjectId, ref: Spot })
-  spotId: mongoose.Types.ObjectId;
+  @Prop({ type: mongoose.Types.ObjectId, ref: "Spot" })
+  spot_id: mongoose.Types.ObjectId;
 }
 
-export type SpotDocument = Spot & mongoose.Document;
-export const SpotSchema = SchemaFactory.createForClass(Spot);
+export type StickerDocument = Sticker & mongoose.Document;
+export const StickerSchema = SchemaFactory.createForClass(Sticker);
