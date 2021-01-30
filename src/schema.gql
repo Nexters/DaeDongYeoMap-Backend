@@ -26,7 +26,7 @@ type Spot {
   placeId: String!
 
   """list of sticker ids"""
-  stickers: [Sticker!]!
+  stickers(populate: Boolean!): [Sticker!]!
   place_name: String!
   category_name: String
   category_group_code: String
@@ -117,12 +117,6 @@ type Mutation {
   createSticker(createStickerInput: CreateStickerInput!): Sticker!
   updateSticker(updateStickerInput: UpdateStickerInput!): Sticker!
   removeSticker(id: Int!): Sticker!
-
-  """
-  스팟을 생성/업데이트합니다.
-  이미 기존에 스팟이 생성되었다면 자동으로 update처리 됩니다.
-  """
-  getAllSpots: Spot!
 
   """(For Debugging) 스팟 하나 삭제"""
   removeSpot(id: String!): DeleteSpotDto!

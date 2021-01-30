@@ -7,6 +7,7 @@ import { CreateSpotInput } from "src/spot/dto/create-spot.input";
 import { UpdateSpotInput } from "src/spot/dto/update-spot.input";
 import { Spot, SpotDocument } from "src/spot/entities/spot.entity";
 import { Place } from "src/place/place.entity";
+import { Sticker } from "src/sticker/entities/sticker.entity";
 
 @Injectable()
 export class SpotService {
@@ -108,7 +109,30 @@ export class SpotService {
       });
   }
 
-  // async removeAll() {
-  // remove all spots for cleanup
-  // }
+  async populateStickers(spot_id: Types.ObjectId): Promise<Sticker[]> {
+    // aggregate: https://gist.github.com/kdelemme/9659364#file-aggregate-js-L127
+    // lookup: https://github.com/Automattic/mongoose/issues/5090
+    return this.spotModel
+      .aggregate([
+        {
+          $match: { _id: spot_id },
+        },
+        {
+          $lookup: {
+            from: "stickers",
+            localField: "stickers",
+            foreignField: "_id",
+            as: "stickers",
+          },
+        },
+      ])
+      .then((response) => response[0].stickers)
+      .catch((error) => {
+        console.error(error);
+        throw new HttpException(
+          `cannot populate a sticker cause of ${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR
+        );
+      });
+  }
 }

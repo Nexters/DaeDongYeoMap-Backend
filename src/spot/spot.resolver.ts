@@ -61,6 +61,19 @@ export class SpotResolver {
       );
     }
   }
+
+  @ResolveField(() => [Sticker])
+  async stickers(
+    @Parent() spot: SpotDocument,
+    @Args("populate") populate: boolean
+  ) {
+    if (populate) {
+      const result = await this.spotService.populateStickers(spot._id);
+      console.log(result);
+      return result;
+    }
+    return spot.stickers;
+  }
 }
 
 // @Mutation(() => Spot)

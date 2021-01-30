@@ -18,7 +18,7 @@ export class Spot {
 
   @Field(() => [Sticker], { description: "list of sticker ids" })
   @Prop({ type: [mongoose.Types.ObjectId], ref: "Sticker" })
-  stickers: mongoose.Types.ObjectId[];
+  stickers: mongoose.Types.ObjectId[] | Sticker[];
 
   @Field(() => String)
   @Prop({ required: true, text: true }) // {text : true} for indexing
