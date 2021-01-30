@@ -12,7 +12,11 @@ import { CommentModule } from "./comment/comment.module";
 import { SpotModule } from "./spot/spot.module";
 import { PlaceModule } from "./place/place.module";
 import { UserModule } from "./user/user.module";
+<<<<<<< HEAD
 import { DauthModule } from './dauth/dauth.module';
+=======
+import { CourseModule } from './course/course.module';
+>>>>>>> e7c3bd648bb2435b51ccdaa73f00c0db554851ea
 
 @Module({
   imports: [
@@ -35,7 +39,11 @@ import { DauthModule } from './dauth/dauth.module';
       }),
       inject: [ConfigService],
     }),
+<<<<<<< HEAD
     DauthModule,
+=======
+    CourseModule,
+>>>>>>> e7c3bd648bb2435b51ccdaa73f00c0db554851ea
   ],
   controllers: [AppController],
   providers: [AppService],

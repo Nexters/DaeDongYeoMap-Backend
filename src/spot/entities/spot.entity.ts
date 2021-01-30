@@ -8,9 +8,18 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 })
 @Schema({ timestamps: true }) // graphql 은 timestamp 삽입 어떻게 할까?
 export class Spot {
+<<<<<<< HEAD
   @Field(() => String, { description: "kakao place id" })
   @Prop({ required: true, unique: true })
   id: string;
+=======
+  @Field(() => String, { description: "Spot id" })
+  _id: mongoose.Types.ObjectId;
+
+  @Field(() => String, { description: "kakao place id" })
+  @Prop({ required: true, unique: true })
+  placeId: string;
+>>>>>>> e7c3bd648bb2435b51ccdaa73f00c0db554851ea
 
   @Field((type) => [String], { description: "list of emoji ids" })
   @Prop({ required: true })

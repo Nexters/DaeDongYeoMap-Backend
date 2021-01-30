@@ -17,11 +17,10 @@ export class PlaceResolver {
   ): Promise<object> {
     const places: Place[] = await this.searchService.searchByKeyword(filters);
     places.forEach(async (place) => {
-      const cachedPlace: Place | null = await this.searchService.getPlaceFromCacheById(
-        place.id
-      );
-      const isCached = cachedPlace !== null;
-      isCached || this.searchService.setPlaceFromCacheById(place.id, place);
+      const cachedPlace:
+        | Place
+        | undefined = await this.searchService.getPlaceFromCacheById(place.id);
+      cachedPlace || this.searchService.setPlaceFromCacheById(place.id, place);
     });
     return places;
   }

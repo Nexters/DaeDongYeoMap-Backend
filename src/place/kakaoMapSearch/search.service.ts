@@ -51,30 +51,48 @@ export class SearchService {
 
   // https://github.com/BryanDonovan/node-cache-manager
   async setPlaceFromCacheById(key, value) {
-    this.cacheManager.set(key, value, { ttl: 300 }, function (err) {
-      console.error(err);
-      throw new HttpException(
-        "set place cache error",
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
-    });
+    this.cacheManager
+      .set(key, value, { ttl: 300 })
+      .then()
+      .catch((err) => {
+        console.error(err);
+        throw new HttpException(
+          "set place cache error",
+          HttpStatus.INTERNAL_SERVER_ERROR
+        );
+      });
   }
 
   async getPlaceFromCacheById(id): Promise<Place> {
-    return this.cacheManager.get(id);
+    return this.cacheManager
+      .get(id)
+      .then()
+      .catch((error) => {
+        console.error(error);
+        throw new HttpException(
+          `cannot get place from cache cause of ${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR
+        );
+      });
   }
 
   async getIdenticalPlace(
     createSpotInput: CreateSpotInput
   ): Promise<Place | null> {
-    const places: Place[] = await this.searchByKeyword({
+    return this.searchByKeyword({
       query: createSpotInput.place_name,
       x: createSpotInput.x,
       y: createSpotInput.y,
       radius: 1,
       sort: SortType.distance,
-    });
-    console.log(places);
-    return places.length >= 1 ? places[0] : null;
+    })
+      .then((places) => (places.length >= 1 ? places[0] : null))
+      .catch((error) => {
+        console.error(error);
+        throw new HttpException(
+          `cannot get identical place cause of ${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR
+        );
+      });
   }
 }

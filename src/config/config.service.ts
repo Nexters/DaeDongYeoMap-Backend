@@ -5,8 +5,6 @@ export class ConfigService {
   private readonly envConfig: { [key: string]: string };
 
   constructor() {
-    console.log(`${process.env.NODE_ENV}`);
-
     if (process.env.NODE_ENV === "prod") {
       this.envConfig = {
         NODE_ENV: process.env.NODE_ENV,

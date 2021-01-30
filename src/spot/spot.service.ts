@@ -20,7 +20,7 @@ export class SpotService {
     let place:
       | Place
       | undefined = await this.searchService.getPlaceFromCacheById(
-      createSpotInput.id
+      createSpotInput.placeId
     );
 
     if (place === undefined) {
@@ -38,21 +38,33 @@ export class SpotService {
 
     const location = { type: "Point", coordinates: [place.x, place.y] };
     const createSpotDto = {
-      id: createSpotInput.id,
+      placeId: place.id,
       emojis: [createSpotInput.emoji],
       location,
       ...place,
     };
+    console.log(createSpotDto);
     const createdSpot = new this.spotModel(createSpotDto);
-    console.log(createdSpot);
-    // TODO: save error handling
-    return createdSpot.save();
+    return createdSpot.save().catch((error) => {
+      console.error(error);
+      throw new HttpException(
+        `cannot save a spot cause of ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    });
   }
 
-  async update(spot: any, emoji: string): Promise<Spot> {
-    spot.emojis.push(emoji);
-    return spot.save();
-    // const update = { $push: { emojis: emoji } };
+  async update(_id: Types.ObjectId, emoji: string): Promise<Spot> {
+    return this.spotModel
+      .findOneAndUpdate({ _id }, { $push: { emojis: emoji } })
+      .catch((err) => {
+        console.error(err);
+        throw new HttpException(
+          `cannot update spot cause of ${err.message}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
+    // const update = ;
     // return await this.spotModel.findOneAndUpdate(filter, update);
   }
 
@@ -66,15 +78,36 @@ export class SpotService {
       });
   }
 
-  async findOne(id: string) {
-    const spot = this.spotModel.findOne({ id: id }).exec();
-    if (spot) {
-      return spot;
-    }
-    return undefined;
+  async findOneByPlaceId(placeId: string): Promise<Spot> {
+    return this.spotModel.findOne({ placeId }).exec();
   }
 
-  async remove(id: string) {
-    return this.spotModel.remove({ id: id }).exec();
+  async remove(placeId: string) {
+    return this.spotModel.remove({ placeId }).exec();
   }
+<<<<<<< HEAD
+=======
+
+  async getByKeyword(keyword: string): Promise<Spot[]> {
+    /*
+    mongodb 한국어 쿼리 참고자료
+    - https://ip99202.github.io/posts/nodejs,-mongodb-%EA%B2%8C%EC%8B%9C%ED%8C%90-%EA%B2%80%EC%83%89-%EA%B8%B0%EB%8A%A5/
+    - https://github.com/Tekiter/EZSET/blob/master/backend/src/api/v1/simple.route.js
+    */
+    return this.spotModel
+      .find({ place_name: new RegExp(keyword) })
+      .exec()
+      .catch((err) => {
+        console.error(err);
+        throw new HttpException(
+          "There is no spots that matched by keyword.",
+          HttpStatus.BAD_REQUEST
+        );
+      });
+  }
+
+  // async removeAll() {
+  // remove all spots for cleanup
+  // }
+>>>>>>> e7c3bd648bb2435b51ccdaa73f00c0db554851ea
 }

@@ -2,7 +2,11 @@ import { Field, ObjectType, Float } from "@nestjs/graphql";
 
 // https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword
 @ObjectType({
+<<<<<<< HEAD
   description: "카카오 지도 api로 부터 받은 위치 정보로 (TTL 300 cache)",
+=======
+  description: "카카오 지도 api로 부터 받은 위치 정보로 TTL 300 캐싱됩니다.",
+>>>>>>> e7c3bd648bb2435b51ccdaa73f00c0db554851ea
 })
 export class Place {
   @Field(() => String, { description: "kakao place id" })
