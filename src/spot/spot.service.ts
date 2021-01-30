@@ -3,7 +3,6 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { SearchService } from "src/place/kakaoMapSearch/search.service";
 import { SortType } from "src/place/kakaoMapSearch/search.dto";
-
 import { CreateSpotInput } from "src/spot/dto/create-spot.input";
 import { UpdateSpotInput } from "src/spot/dto/update-spot.input";
 import { Spot, SpotDocument } from "src/spot/entities/spot.entity";
@@ -16,7 +15,8 @@ export class SpotService {
     private readonly searchService: SearchService
   ) {}
 
-  async create(createSpotInput: CreateSpotInput): Promise<Spot> {
+  async document(createSpotInput: CreateSpotInput): Promise<SpotDocument> {
+    const spot = await this.findOneByPlaceId(createSpotInput.placeId);
     let place:
       | Place
       | undefined = await this.searchService.getPlaceFromCacheById(
@@ -39,13 +39,15 @@ export class SpotService {
     const location = { type: "Point", coordinates: [place.x, place.y] };
     const createSpotDto = {
       placeId: place.id,
-      emojis: [createSpotInput.emoji],
       location,
       ...place,
     };
-    console.log(createSpotDto);
-    const createdSpot = new this.spotModel(createSpotDto);
-    return createdSpot.save().catch((error) => {
+
+    return new this.spotModel(createSpotDto);
+  }
+
+  async save(spotDocument: SpotDocument): Promise<Spot> {
+    return spotDocument.save().catch((error) => {
       console.error(error);
       throw new HttpException(
         `cannot save a spot cause of ${error.message}`,
@@ -55,17 +57,19 @@ export class SpotService {
   }
 
   async update(_id: Types.ObjectId, emoji: string): Promise<Spot> {
+  async appendSticker(
+    spotId: Types.ObjectId,
+    stickerId: Types.ObjectId
+  ): Promise<Spot> {
     return this.spotModel
-      .findOneAndUpdate({ _id }, { $push: { emojis: emoji } })
+      .findOneAndUpdate({ _id: spotId }, { $push: { stickers: stickerId } })
       .catch((err) => {
         console.error(err);
         throw new HttpException(
-          `cannot update spot cause of ${err.message}`,
+          `cannot append sticker to spot cause of ${err.message}`,
           HttpStatus.BAD_REQUEST
         );
       });
-    // const update = ;
-    // return await this.spotModel.findOneAndUpdate(filter, update);
   }
 
   async findAll(): Promise<Spot[]> {
