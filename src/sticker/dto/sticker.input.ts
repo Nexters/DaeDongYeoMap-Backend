@@ -1,10 +1,16 @@
-import { InputType, Int, Field, PartialType } from "@nestjs/graphql";
+import {
+  InputType,
+  Int,
+  Field,
+  PartialType,
+  IntersectionType,
+} from "@nestjs/graphql";
 import * as mongoose from "mongoose";
 import { CreateSpotInput } from "src/spot/dto/create-spot.input";
 import { Spot } from "src/spot/entities/spot.entity";
 
 @InputType()
-export class CreateStickerInput extends PartialType(CreateSpotInput) {
+export class StickerInput {
   // @Field(() => String, {
   //   description: "스티커를 생성한 User",
   // })
@@ -30,8 +36,14 @@ export class CreateStickerInput extends PartialType(CreateSpotInput) {
   // @Field(() => Spot, {
   //   description: "스티커가 붙여진 Spot id",
   // })
-  // spotId?: mongoose.Types.ObjectId;
+  // spotId?: mongoose.Schema.Types.ObjectId;
 }
+
+@InputType()
+export class CreateStickerInput extends IntersectionType(
+  CreateSpotInput,
+  StickerInput
+) {}
 
 @InputType()
 export class UpdateStickerInput {

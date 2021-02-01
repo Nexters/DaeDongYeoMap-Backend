@@ -17,11 +17,11 @@ export class SpotService {
   ) {}
 
   async document(createSpotInput: CreateSpotInput): Promise<SpotDocument> {
-    const spot = await this.findOneByPlaceId(createSpotInput.placeId);
+    const spot = await this.findOneByPlaceId(createSpotInput.place_id);
     let place:
       | Place
       | undefined = await this.searchService.getPlaceFromCacheById(
-      createSpotInput.placeId
+      createSpotInput.place_id
     );
 
     if (place === undefined) {
@@ -39,7 +39,7 @@ export class SpotService {
 
     const location = { type: "Point", coordinates: [place.x, place.y] };
     const createSpotDto = {
-      placeId: place.id,
+      place_id: place.id,
       location,
       ...place,
     };
@@ -97,8 +97,8 @@ export class SpotService {
       });
   }
 
-  async findOneByPlaceId(placeId: string): Promise<Spot> {
-    return this.spotModel.findOne({ placeId }).exec();
+  async findOneByPlaceId(place_id: string): Promise<Spot> {
+    return this.spotModel.findOne({ place_id }).exec();
   }
 
   async findAll(): Promise<Spot[]> {
@@ -111,8 +111,8 @@ export class SpotService {
       });
   }
 
-  async remove(placeId: string) {
-    return this.spotModel.remove({ placeId }).exec();
+  async remove(place_id: string) {
+    return this.spotModel.remove({ place_id }).exec();
   }
 
   async getByKeyword(keyword: string): Promise<Spot[]> {

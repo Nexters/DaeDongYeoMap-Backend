@@ -29,7 +29,7 @@ export class SpotResolver {
   //   @Args("createSpotInput") createSpotInput: CreateSpotInput
   // ): Promise<Spot> {
   //   const spot = await this.spotService.findOneByPlaceId(
-  //     createSpotInput.placeId
+  //     createSpotInput.place_id
   //   );
 
   //   if (spot === null) {
@@ -63,8 +63,8 @@ export class SpotResolver {
     name: "spot",
     description: "(For Debugging) 카카오 place id로 스팟 검색",
   })
-  async findOne(@Args("placeId", { type: () => String }) placeId: string) {
-    const result = await this.spotService.findOneByPlaceId(placeId);
+  async findOne(@Args("place_id", { type: () => String }) place_id: string) {
+    const result = await this.spotService.findOneByPlaceId(place_id);
     if (result) {
       throw new HttpException(
         "There is no spots that matched by kakao id.",

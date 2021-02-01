@@ -14,7 +14,7 @@ export class Spot {
 
   @Field(() => String, { description: "kakao place id" })
   @Prop({ required: true, unique: true })
-  placeId: string;
+  place_id: string;
 
   @Field(() => [Sticker], { description: "list of sticker ids" })
   @Prop({ type: [mongoose.Types.ObjectId], ref: "Sticker" })
