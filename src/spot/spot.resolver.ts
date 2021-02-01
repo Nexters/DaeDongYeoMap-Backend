@@ -9,12 +9,12 @@ import {
   ResolveField,
   Parent,
 } from "@nestjs/graphql";
-import { SpotService } from "src/spot/spot.service";
-import { Spot, SpotDocument } from "src/spot/entities/spot.entity";
-import { Sticker } from "src/sticker/entities/sticker.entity";
-import { CreateSpotInput } from "src/spot/dto/create-spot.input";
-import { UpdateSpotInput } from "src/spot/dto/update-spot.input";
-import { DeleteSpotDto } from "src/spot/dto/delete.spot.dto";
+import { SpotService } from "../spot/spot.service";
+import { Spot, SpotDocument } from "../spot/entities/spot.entity";
+import { Sticker } from "../sticker/entities/sticker.entity";
+import { CreateSpotInput } from "../spot/dto/create-spot.input";
+import { UpdateSpotInput } from "../spot/dto/update-spot.input";
+import { DeleteSpotDto } from "../spot/dto/delete.spot.dto";
 
 @Resolver(() => Spot)
 export class SpotResolver {

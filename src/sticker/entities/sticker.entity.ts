@@ -1,8 +1,7 @@
 import { ObjectType, Field, ID, Int, Float } from "@nestjs/graphql";
 import * as mongoose from "mongoose";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-
-import { Spot, SpotSchema } from "src/spot/entities/spot.entity";
+import { Spot, SpotSchema } from "../../spot/entities/spot.entity";
 
 @ObjectType({
   description: "'이모지 스티커'로 코스 생성에 기본적으로 사용되는 단위입니다.",

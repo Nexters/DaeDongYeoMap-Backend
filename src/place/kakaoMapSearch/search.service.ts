@@ -8,11 +8,11 @@ import {
 } from "@nestjs/common";
 import { Cache } from "cache-manager";
 
-import { CreateSpotInput } from "src/spot/dto/create-spot.input";
+import { CreateSpotInput } from "../../spot/dto/create-spot.input";
 import { ConfigService } from "../../config/config.service";
 import { KeywordSearchDto } from "./search.dto";
 import { Place } from "../place.entity";
-import { SortType } from "src/place/kakaoMapSearch/search.dto";
+import { SortType } from "../../place/kakaoMapSearch/search.dto";
 
 @Injectable()
 export class SearchService {

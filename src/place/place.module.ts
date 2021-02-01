@@ -1,8 +1,7 @@
 import { Module, CacheModule } from "@nestjs/common";
 import * as cacheManager from "cache-manager";
 import * as mongoStore from "cache-manager-mongodb";
-import { ConfigService } from "src/config/config.service";
-
+import { ConfigService } from "../config/config.service";
 import { ConfigModule } from "../config/config.module";
 import { SearchService } from "./kakaoMapSearch/search.service";
 import { PlaceResolver } from "./place.resolver";
@@ -25,5 +24,6 @@ export const cacheConfig = {
 @Module({
   imports: [ConfigModule, CacheModule.registerAsync(cacheConfig)],
   providers: [SearchService, PlaceResolver],
+  exports: [SearchService, CacheModule],
 })
 export class PlaceModule {}

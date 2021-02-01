@@ -84,6 +84,9 @@ npm i dotenv
 npm install cache-manager
 # https://github.com/v4l3r10/node-cache-manager-mongodb
 npm install cache-manager-mongodb --save
+
+# for test
+npm i --save-dev mongodb-memory-server 
 ```
 
 ## 3. 프로젝트 세팅

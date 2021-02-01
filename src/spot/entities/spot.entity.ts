@@ -1,7 +1,7 @@
 import { ObjectType, Field, ID, Int, Float } from "@nestjs/graphql";
 import * as mongoose from "mongoose";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Sticker } from "src/sticker/entities/sticker.entity";
+import { Sticker } from "../../sticker/entities/sticker.entity";
 
 @ObjectType({
   description:
