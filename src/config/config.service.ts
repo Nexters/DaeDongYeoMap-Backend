@@ -5,7 +5,7 @@ export class ConfigService {
   private readonly envConfig: { [key: string]: string };
 
   constructor() {
-    if (process.env.NODE_ENV === "prod") {
+    if (process.env.NODE_ENV) {
       this.envConfig = {
         NODE_ENV: process.env.NODE_ENV,
         NODE_PORT: process.env.NODE_PORT,
