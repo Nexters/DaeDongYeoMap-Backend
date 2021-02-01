@@ -30,7 +30,7 @@ export class StickerService {
       | Spot
       | SpotDocument
       | null = await this.spotService.findOneByPlaceId(
-      createStickerInput.placeId
+      createStickerInput.place_id
     );
 
     if (spot === null) {
