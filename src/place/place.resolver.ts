@@ -27,15 +27,15 @@ export class PlaceResolver {
 
   @Query(() => Place)
   async getPlaceFromCache(
-    @Args("placeId", { type: () => String }) placeId: string
+    @Args("place_id", { type: () => String }) place_id: string
   ): Promise<Place | HttpException> {
     const cachedPlace: Place | null = await this.searchService.getPlaceFromCacheById(
-      placeId
+      place_id
     );
 
     if (cachedPlace === undefined) {
       return new HttpException(
-        `There is no cached place with ${placeId}`,
+        `There is no cached place with ${place_id}`,
         HttpStatus.BAD_REQUEST
       );
     }

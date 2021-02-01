@@ -1,7 +1,7 @@
 import { ObjectType, Field, ID, Int, Float } from "@nestjs/graphql";
 import * as mongoose from "mongoose";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Sticker } from "src/sticker/entities/sticker.entity";
+import { Sticker } from "../../sticker/entities/sticker.entity";
 
 @ObjectType({
   description:
@@ -14,7 +14,7 @@ export class Spot {
 
   @Field(() => String, { description: "kakao place id" })
   @Prop({ required: true, unique: true })
-  placeId: string;
+  place_id: string;
 
   @Field(() => [Sticker], { description: "list of sticker ids" })
   @Prop({ type: [mongoose.Types.ObjectId], ref: "Sticker" })

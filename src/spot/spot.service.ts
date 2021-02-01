@@ -1,13 +1,13 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
-import { SearchService } from "src/place/kakaoMapSearch/search.service";
-import { SortType } from "src/place/kakaoMapSearch/search.dto";
-import { CreateSpotInput } from "src/spot/dto/create-spot.input";
-import { UpdateSpotInput } from "src/spot/dto/update-spot.input";
-import { Spot, SpotDocument } from "src/spot/entities/spot.entity";
-import { Place } from "src/place/place.entity";
-import { Sticker } from "src/sticker/entities/sticker.entity";
+import { SearchService } from "../place/kakaoMapSearch/search.service";
+import { SortType } from "../place/kakaoMapSearch/search.dto";
+import { CreateSpotInput } from "../spot/dto/create-spot.input";
+import { UpdateSpotInput } from "../spot/dto/update-spot.input";
+import { Spot, SpotDocument } from "../spot/entities/spot.entity";
+import { Place } from "../place/place.entity";
+import { Sticker } from "../sticker/entities/sticker.entity";
 
 @Injectable()
 export class SpotService {
@@ -17,11 +17,11 @@ export class SpotService {
   ) {}
 
   async document(createSpotInput: CreateSpotInput): Promise<SpotDocument> {
-    const spot = await this.findOneByPlaceId(createSpotInput.placeId);
+    const spot = await this.findOneByPlaceId(createSpotInput.place_id);
     let place:
       | Place
       | undefined = await this.searchService.getPlaceFromCacheById(
-      createSpotInput.placeId
+      createSpotInput.place_id
     );
 
     if (place === undefined) {
@@ -39,7 +39,7 @@ export class SpotService {
 
     const location = { type: "Point", coordinates: [place.x, place.y] };
     const createSpotDto = {
-      placeId: place.id,
+      place_id: place.id,
       location,
       ...place,
     };
@@ -97,8 +97,8 @@ export class SpotService {
       });
   }
 
-  async findOneByPlaceId(placeId: string): Promise<Spot> {
-    return this.spotModel.findOne({ placeId }).exec();
+  async findOneByPlaceId(place_id: string): Promise<Spot> {
+    return this.spotModel.findOne({ place_id }).exec();
   }
 
   async findAll(): Promise<Spot[]> {
@@ -111,8 +111,8 @@ export class SpotService {
       });
   }
 
-  async remove(placeId: string) {
-    return this.spotModel.remove({ placeId }).exec();
+  async remove(place_id: string) {
+    return this.spotModel.remove({ place_id }).exec();
   }
 
   async getByKeyword(keyword: string): Promise<Spot[]> {

@@ -3,9 +3,9 @@ import { Model, Types } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { CreateStickerInput, UpdateStickerInput } from "./dto/sticker.input";
 import { Sticker, StickerDocument } from "./entities/sticker.entity";
-import { SpotService } from "src/spot/spot.service";
-import { Spot, SpotDocument } from "src/spot/entities/spot.entity";
-import { CreateSpotInput } from "src/spot/dto/create-spot.input";
+import { SpotService } from "../spot/spot.service";
+import { Spot, SpotDocument } from "../spot/entities/spot.entity";
+import { CreateSpotInput } from "../spot/dto/create-spot.input";
 
 @Injectable()
 export class StickerService {
@@ -30,7 +30,7 @@ export class StickerService {
       | Spot
       | SpotDocument
       | null = await this.spotService.findOneByPlaceId(
-      createStickerInput.placeId
+      createStickerInput.place_id
     );
 
     if (spot === null) {
@@ -56,6 +56,23 @@ export class StickerService {
     });
   }
 
+  async update(updateStickerInput: UpdateStickerInput): Promise<Sticker> {
+    return this.stickerModel
+      .findOneAndUpdate(
+        { _id: updateStickerInput._id },
+        { $set: updateStickerInput },
+        { new: true }
+      )
+      .exec()
+      .catch((err) => {
+        console.error(err);
+        throw new HttpException(
+          `cannot update a sticker cause of ${err.message}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
+  }
+
   async findAll(): Promise<Sticker[]> {
     return this.stickerModel
       .find()
@@ -77,23 +94,6 @@ export class StickerService {
         console.error(err);
         throw new HttpException(
           `cannot find a sticker cause of ${err.message}`,
-          HttpStatus.BAD_REQUEST
-        );
-      });
-  }
-
-  async update(updateStickerInput: UpdateStickerInput): Promise<Sticker> {
-    return this.stickerModel
-      .findOneAndUpdate(
-        { _id: updateStickerInput._id },
-        { $set: updateStickerInput },
-        { new: true }
-      )
-      .exec()
-      .catch((err) => {
-        console.error(err);
-        throw new HttpException(
-          `cannot update a sticker cause of ${err.message}`,
           HttpStatus.BAD_REQUEST
         );
       });

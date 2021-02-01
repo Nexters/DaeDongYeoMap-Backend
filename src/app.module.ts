@@ -3,7 +3,7 @@ import { join } from "path";
 import { GraphQLModule } from "@nestjs/graphql";
 import { MongooseModule } from "@nestjs/mongoose";
 
-import { ConfigService } from "src/config/config.service";
+import { ConfigService } from "./config/config.service";
 import { ConfigModule } from "./config/config.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
