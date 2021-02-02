@@ -4,9 +4,6 @@
 
 """'이모지 스티커'로 코스 생성에 기본적으로 사용되는 단위입니다."""
 type Sticker {
-  """Sticker id"""
-  _id: String!
-
   """Sticker category로 스티커 이름정도 주면 적당할 듯"""
   sticker_category: String!
 
@@ -63,15 +60,14 @@ type DeleteSpotDto {
   deletedCount: Int!
 }
 
-"""Spot들을 순서대로 저장하고 있는 데이터 코스 정보"""
+"""스티커(스팟)을 순서대로 저장하고 있는 데이터 코스 정보"""
 type Course {
-  """Course id"""
-  _id: String!
-
-  """스팟들의 ID를 담고 있는 리스트(순서 포함)"""
-  spots: [Spot!]!
+  """list of sticker ids(순서 중요)"""
+  stickers: [Sticker!]!
   title: String!
-  isPrivate: Boolean!
+
+  """list of sticker ids(순서 중요)"""
+  is_share: Boolean!
 }
 
 type Query {
@@ -120,7 +116,7 @@ type Mutation {
   """(For Debugging) 스팟 하나 삭제"""
   removeSpot(id: String!): DeleteSpotDto!
 
-  """코스를 생성합니다. 이때 스팟의 순서는 전달된 스팟 아이디의 index로 처리됩니다."""
+  """Sticker를 사용하여 코스를 생성합니다. 이때 코스의 순서는 전달된 스티커들의 순서로 처리됩니다."""
   createCourse(createCourseInput: CreateCourseInput!): Course!
 }
 
@@ -155,8 +151,8 @@ input UpdateStickerInput {
 }
 
 input CreateCourseInput {
-  """스팟들의 ID를 담고 있는 리스트(순서 포함)"""
-  spots: [String!]!
+  """list of sticker ids(순서 중요)"""
+  stickers: [String!]!
   title: String!
   isPrivate: String!
 }

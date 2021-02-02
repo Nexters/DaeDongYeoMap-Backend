@@ -2,7 +2,6 @@ import { Resolver, Query, Mutation, Args, Int } from "@nestjs/graphql";
 import { CourseService } from "./course.service";
 import { Course } from "./entities/course.entity";
 import { CreateCourseInput } from "./dto/create-course.input";
-import { UpdateCourseInput } from "./dto/update-course.input";
 
 @Resolver(() => Course)
 export class CourseResolver {
@@ -10,7 +9,7 @@ export class CourseResolver {
 
   @Mutation(() => Course, {
     description:
-      "코스를 생성합니다. 이때 스팟의 순서는 전달된 스팟 아이디의 index로 처리됩니다.",
+      "Sticker를 사용하여 코스를 생성합니다. 이때 코스의 순서는 전달된 스티커들의 순서로 처리됩니다.",
   })
   async createCourse(
     @Args("createCourseInput") createCourseInput: CreateCourseInput

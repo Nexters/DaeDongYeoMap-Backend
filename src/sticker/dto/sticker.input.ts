@@ -36,7 +36,7 @@ export class StickerInput {
   // @Field(() => Spot, {
   //   description: "스티커가 붙여진 Spot id",
   // })
-  // spotId?: mongoose.Schema.Types.ObjectId;
+  // spotId?: mongoose.Types.ObjectId;
 }
 
 @InputType()

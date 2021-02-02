@@ -4,7 +4,6 @@ import { Model, Types } from "mongoose";
 
 import { Course, CourseDocument } from "src/course/entities/course.entity";
 import { CreateCourseInput } from "src/course/dto/create-course.input";
-import { UpdateCourseInput } from "src/course/dto/update-course.input";
 
 @Injectable()
 export class CourseService {
