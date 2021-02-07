@@ -1,4 +1,5 @@
-import { Module } from '@nestjs/common';
+import { Module } from "@nestjs/common";
+import { Field, Int } from "@nestjs/graphql";
 
 @Module({})
 export class UserModule {
