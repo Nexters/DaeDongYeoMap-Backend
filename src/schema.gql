@@ -2,6 +2,23 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""카카오 지도 api로 부터 받은 위치 정보로 TTL 300 캐싱됩니다."""
+type Place {
+  """kakao place id"""
+  id: String!
+  place_name: String!
+  category_name: String
+  category_group_code: String
+  category_group_name: String
+  phone: String
+  address_name: String
+  road_address_name: String
+  place_url: String
+  distance: String
+  x: Float
+  y: Float
+}
+
 """'이모지 스티커'로 코스 생성에 기본적으로 사용되는 단위입니다."""
 type Sticker {
   """Sticker id"""
@@ -40,43 +57,32 @@ type Spot {
   y: Float
 }
 
-"""카카오 지도 api로 부터 받은 위치 정보로 TTL 300 캐싱됩니다."""
-type Place {
-  """kakao place id"""
-  id: String!
-  place_name: String!
-  category_name: String
-  category_group_code: String
-  category_group_name: String
-  phone: String
-  address_name: String
-  road_address_name: String
-  place_url: String
-  distance: String
-  x: Float
-  y: Float
-}
-
 type DeleteSpotDto {
   ok: Int!
   n: Int!
   deletedCount: Int!
 }
 
-"""Spot들을 순서대로 저장하고 있는 데이터 코스 정보"""
+"""스티커(스팟)을 순서대로 저장하고 있는 데이터 코스 정보"""
 type Course {
   """Course id"""
   _id: String!
 
-  """스팟들의 ID를 담고 있는 리스트(순서 포함)"""
-  spots: [Spot!]!
+  """list of sticker ids(순서 중요)"""
+  stickers: [Sticker!]!
   title: String!
-  isPrivate: Boolean!
+
+  """list of sticker ids(순서 중요)"""
+  is_share: Boolean!
 }
 
 type Query {
-  stickers: [Sticker!]!
-  sticker(id: String!): Sticker!
+  """
+  키워드로 위치 정보를 확인합니다. 
+  내부적으로 카카오 API를 요청합니다.
+  """
+  getPlacesByKeyword(filters: KeywordSearchDto!): [Place!]!
+  getPlaceFromCache(place_id: String!): Place!
 
   """(For Debugging) mongoDB에 저장된 모든 스팟 반환"""
   getAllSpots: [Spot!]!
@@ -86,13 +92,8 @@ type Query {
 
   """(For Debugging) 카카오 place id로 스팟 검색"""
   spot(place_id: String!): Spot!
-
-  """
-  키워드로 위치 정보를 확인합니다. 
-  내부적으로 카카오 API를 요청합니다.
-  """
-  getPlacesByKeyword(filters: KeywordSearchDto!): [Place!]!
-  getPlaceFromCache(place_id: String!): Place!
+  stickers: [Sticker!]!
+  sticker(id: String!): Sticker!
 }
 
 """SortType은 정확도(accuracy)가 기본이며, 거리순(distance) 정렬을 원할 경우 x,y는 필수 입니다."""
@@ -114,13 +115,12 @@ enum SortType {
 }
 
 type Mutation {
+  """(For Debugging) 스팟 하나 삭제"""
+  removeSpot(id: String!): DeleteSpotDto!
   createSticker(createStickerInput: CreateStickerInput!): Sticker!
   updateSticker(updateStickerInput: UpdateStickerInput!): Sticker!
 
-  """(For Debugging) 스팟 하나 삭제"""
-  removeSpot(id: String!): DeleteSpotDto!
-
-  """코스를 생성합니다. 이때 스팟의 순서는 전달된 스팟 아이디의 index로 처리됩니다."""
+  """Sticker를 사용하여 코스를 생성합니다. 이때 코스의 순서는 전달된 스티커들의 순서로 처리됩니다."""
   createCourse(createCourseInput: CreateCourseInput!): Course!
 }
 
@@ -155,8 +155,8 @@ input UpdateStickerInput {
 }
 
 input CreateCourseInput {
-  """스팟들의 ID를 담고 있는 리스트(순서 포함)"""
-  spots: [String!]!
+  """list of sticker ids(순서 중요)"""
+  stickers: [String!]!
   title: String!
   isPrivate: String!
 }

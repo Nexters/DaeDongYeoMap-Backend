@@ -2,7 +2,7 @@ import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { SearchService } from "../place/kakaoMapSearch/search.service";
-import { SortType } from "../place/kakaoMapSearch/search.dto";
+
 import { CreateSpotInput } from "../spot/dto/create-spot.input";
 import { UpdateSpotInput } from "../spot/dto/update-spot.input";
 import { Spot, SpotDocument } from "../spot/entities/spot.entity";
@@ -57,18 +57,6 @@ export class SpotService {
     });
   }
 
-  // async update(_id: Types.ObjectId, ): Promise<Spot> {
-  //   return this.spotModel
-  //     .findOneAndUpdate({ _id }, { $push: { emojis: emoji } })
-  //     .catch((err) => {
-  //       console.error(err);
-  //       throw new HttpException(
-  //         `cannot update spot cause of ${err.message}`,
-  //         HttpStatus.BAD_REQUEST
-  //       );
-  //     });
-  // }
-
   async appendSticker(
     spotId: Types.ObjectId,
     stickerId: Types.ObjectId
@@ -101,9 +89,10 @@ export class SpotService {
     return this.spotModel.findOne({ place_id }).exec();
   }
 
-  async findAll(): Promise<Spot[]> {
+  async findAll(ids: Types.ObjectId[] | null): Promise<Spot[]> {
+    const filters = ids ? { _id: { $in: ids } } : {};
     return this.spotModel
-      .find()
+      .find(filters)
       .exec()
       .catch((err) => {
         console.error(err);

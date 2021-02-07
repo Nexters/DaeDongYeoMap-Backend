@@ -10,7 +10,6 @@ import { Spot, SpotSchema } from "../../spot/entities/spot.entity";
 export class Sticker {
   @Field(() => String, { description: "Sticker id" })
   _id: mongoose.Types.ObjectId;
-
   // @Field(() => String, {
   //   description: "스티커를 생성한 User",
   // })
@@ -20,7 +19,7 @@ export class Sticker {
   // @Field(() => [String], {
   //   description: "스티커를 생성한 User와 함께한 파트너들(User 리스트)",
   // })
-  // @Prop({ type: mongoose.Types.ObjectId, ref: "User" })
+  // @Prop({ type: [mongoose.Types.ObjectId], ref: "User" })
   // partners: mongoose.Types.ObjectId[];
 
   // @TODO: 추후 enum으로 변경

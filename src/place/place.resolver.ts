@@ -16,6 +16,7 @@ export class PlaceResolver {
     @Args("filters") filters: KeywordSearchDto
   ): Promise<object> {
     const places: Place[] = await this.searchService.searchByKeyword(filters);
+
     places.forEach(async (place) => {
       const cachedPlace:
         | Place

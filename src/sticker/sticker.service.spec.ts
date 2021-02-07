@@ -3,15 +3,12 @@ import { CacheModule, CACHE_MANAGER } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { getConnectionToken, MongooseModule } from "@nestjs/mongoose";
 import { Connection } from "mongoose";
+
+import { PlaceModule } from "../place/place.module";
 import { Sticker, StickerSchema } from "../sticker/entities/sticker.entity";
 import { Spot, SpotSchema } from "../spot/entities/spot.entity";
 import { SpotService } from "../spot/spot.service";
 import { StickerService } from "./sticker.service";
-import { SearchService } from "../place/kakaoMapSearch/search.service";
-import { ConfigService } from "../config/config.service";
-import { ConfigModule } from "../config/config.module";
-import { cacheConfig } from "../place/place.module";
-import { PlaceModule } from "../place/place.module";
 
 import DbModule, {
   closeMongoConnection,
@@ -25,6 +22,7 @@ describe("StickerService", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
+        PlaceModule,
         DbModule({
           connectionName: (new Date().getTime() * Math.random()).toString(16),
         }),
@@ -32,11 +30,8 @@ describe("StickerService", () => {
           { name: Sticker.name, schema: StickerSchema },
         ]),
         MongooseModule.forFeature([{ name: Spot.name, schema: SpotSchema }]),
-        ConfigModule,
-        PlaceModule,
-        CacheModule.registerAsync(cacheConfig),
       ],
-      providers: [ConfigService, SearchService, SpotService, StickerService],
+      providers: [SpotService, StickerService],
     }).compile();
 
     service = module.get<StickerService>(StickerService);

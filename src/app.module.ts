@@ -1,41 +1,40 @@
 import { Module } from "@nestjs/common";
-import { join } from "path";
+import * as path from "path";
+
 import { GraphQLModule } from "@nestjs/graphql";
 import { MongooseModule } from "@nestjs/mongoose";
-
-import { ConfigService } from "./config/config.service";
-import { ConfigModule } from "./config/config.module";
+import { AppConfigModule } from "./config/config.module";
+import { AppConfigService } from "./config/config.service";
+import { PlaceModule } from "./place/place.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { CommentModule } from "./comment/comment.module";
 import { SpotModule } from "./spot/spot.module";
-import { PlaceModule } from "./place/place.module";
 import { UserModule } from "./user/user.module";
 import { CourseModule } from "./course/course.module";
 import { StickerModule } from "./sticker/sticker.module";
 
 @Module({
   imports: [
-    ConfigModule,
-    StickerModule,
-    CommentModule,
-    SpotModule,
-    PlaceModule,
-    UserModule,
+    AppConfigModule,
     GraphQLModule.forRoot({
-      autoSchemaFile: join(process.cwd(), "src/schema.gql"),
+      autoSchemaFile: path.join(process.cwd(), "src/schema.gql"),
       debug: false,
       playground: true,
     }),
     MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (cfs: ConfigService) => ({
-        uri: cfs.getDB(),
-      }),
-      inject: [ConfigService],
+      imports: [AppConfigModule],
+      useFactory: async (cfs: AppConfigService) => {
+        return {
+          uri: cfs.getDB(),
+        };
+      },
+      inject: [AppConfigService],
     }),
-    CourseModule,
+    PlaceModule,
+    SpotModule,
     StickerModule,
+    CourseModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

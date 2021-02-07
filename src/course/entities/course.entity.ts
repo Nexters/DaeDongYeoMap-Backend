@@ -2,30 +2,37 @@ import { ObjectType, Field } from "@nestjs/graphql";
 import * as mongoose from "mongoose";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Spot } from "src/spot/entities/spot.entity";
+import { Sticker } from "../../sticker/entities/sticker.entity";
 
 @ObjectType({
-  description: "Spot들을 순서대로 저장하고 있는 데이터 코스 정보",
+  description: "스티커(스팟)을 순서대로 저장하고 있는 데이터 코스 정보",
 })
 @Schema({ timestamps: true })
 export class Course {
   @Field(() => String, { description: "Course id" })
   _id: mongoose.Types.ObjectId;
 
-  @Field(() => [Spot], {
-    description: "스팟들의 ID를 담고 있는 리스트(순서 포함)",
+  @Field(() => [Sticker], {
+    description: "list of sticker ids(순서 중요)",
   })
-  @Prop({ type: [mongoose.Types.ObjectId], ref: "Spot" })
-  spots: mongoose.Types.ObjectId[];
+  @Prop({ type: [mongoose.Types.ObjectId], ref: "Sticker" })
+  stickers: mongoose.Types.ObjectId[];
 
   @Field(() => String)
   @Prop()
   title: string;
 
-  @Field(() => Boolean)
-  @Prop({ default: true })
-  isPrivate: boolean;
+  @Field(() => Boolean, {
+    description: "list of sticker ids(순서 중요)",
+  })
+  @Prop({ default: false })
+  is_share: boolean;
 
-  // user: User
+  // @Field(() => String, {
+  //   description: "스티커를 생성한 User",
+  // })
+  // @Prop({ type: mongoose.Types.ObjectId, ref: "User" })
+  // owner: mongoose.Types.ObjectId;
 }
 
 export type CourseDocument = Course & mongoose.Document;
