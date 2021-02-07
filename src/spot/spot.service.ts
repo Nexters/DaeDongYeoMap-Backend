@@ -2,7 +2,7 @@ import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { SearchService } from "../place/kakaoMapSearch/search.service";
-import { SortType } from "../place/kakaoMapSearch/search.dto";
+
 import { CreateSpotInput } from "../spot/dto/create-spot.input";
 import { UpdateSpotInput } from "../spot/dto/update-spot.input";
 import { Spot, SpotDocument } from "../spot/entities/spot.entity";
@@ -56,18 +56,6 @@ export class SpotService {
       );
     });
   }
-
-  // async update(_id: Types.ObjectId, ): Promise<Spot> {
-  //   return this.spotModel
-  //     .findOneAndUpdate({ _id }, { $push: { emojis: emoji } })
-  //     .catch((err) => {
-  //       console.error(err);
-  //       throw new HttpException(
-  //         `cannot update spot cause of ${err.message}`,
-  //         HttpStatus.BAD_REQUEST
-  //       );
-  //     });
-  // }
 
   async appendSticker(
     spotId: Types.ObjectId,

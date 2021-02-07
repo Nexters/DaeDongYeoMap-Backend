@@ -37,6 +37,7 @@
   - [8. LINKS](#8-links)
   - [9. SCHEMA of GraphQL API](#9-schema-of-graphql-api)
   - [10. deploy to heroku](#10-deploy-to-heroku)
+  - [mapbox](#mapbox)
 
 <!-- /TOC -->
 
@@ -77,6 +78,7 @@ npm i @types/express
 npm i @nestjs/graphql graphql-tools graphql apollo-server-express
 
 # https://dev.to/kop7/how-to-build-autocomplete-search-with-nestjs-elasticsearch-and-vue-12h8
+# https://github.com/nestjsx/nestjs-config
 npm i dotenv
 
 # cache
@@ -285,7 +287,7 @@ git push origin main
 - mongodb 세팅
   - [mongodb 서버 생성](https://docs.ncloud.com/ko/database/database-10-1.html)
   - [공인 ip 신청](https://docs.ncloud.com/ko/database/database-10-4.html)
-
+  - [auth 설정](https://stackoverflow.com/questions/27784956/error-couldnt-add-user-not-authorized-on-test-to-execute-command-createuser)
 ```bash
 ssh -p 11111 root@210.89.191.239
 passwd mongodb
@@ -296,6 +298,20 @@ db.createUser({ user: "<아이디>", pwd: "<비번>", roles: ["readWrite", "dbAd
 use <db이름2>
 db.createUser({ user: "<아이디>", pwd: "<비번>", roles: ["readWrite", "dbAdmin" ] })
 
-db.auth("<아이디>","<비번>")
+use admin
+db.auth("nexters","비밀번호")
+db.updateUser("nexters",{roles : ["userAdminAnyDatabase","userAdmin","readWrite","dbAdmin","clusterAdmin","readWriteAnyDatabase","dbAdminAnyDatabase"]});
+
+cat /home/mongodb/db/log/mongod.log # 로깅
+tail -f /home/mongodb/db/log/mongod.log # 로깅 테일링
+
+> db.serverStatus().connections # 커넥션 갯수 확인
+{ "current" : 47, "available" : 772, "totalCreated" : 79 }
 ```
 
+## mapbox
+
+```
+npm install mapbox-gl --save
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.1.0/mapbox-gl.css' rel='stylesheet' />
+```

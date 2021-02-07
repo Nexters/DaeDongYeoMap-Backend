@@ -9,6 +9,9 @@ import { Sticker } from "../../sticker/entities/sticker.entity";
 })
 @Schema({ timestamps: true })
 export class Course {
+  @Field(() => String, { description: "Course id" })
+  _id: mongoose.Types.ObjectId;
+
   @Field(() => [Sticker], {
     description: "list of sticker ids(순서 중요)",
   })

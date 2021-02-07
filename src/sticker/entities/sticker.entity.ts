@@ -8,6 +8,8 @@ import { Spot, SpotSchema } from "../../spot/entities/spot.entity";
 })
 @Schema({ timestamps: true })
 export class Sticker {
+  @Field(() => String, { description: "Sticker id" })
+  _id: mongoose.Types.ObjectId;
   // @Field(() => String, {
   //   description: "스티커를 생성한 User",
   // })

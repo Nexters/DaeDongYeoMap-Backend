@@ -73,19 +73,6 @@ export class StickerService {
       });
   }
 
-  async findAll(): Promise<Sticker[]> {
-    return this.stickerModel
-      .find()
-      .exec()
-      .catch((err) => {
-        console.error(err);
-        throw new HttpException(
-          `cannot find stickers cause of ${err.message}`,
-          HttpStatus.BAD_REQUEST
-        );
-      });
-  }
-
   async findOne(_id: Types.ObjectId): Promise<Sticker> {
     return this.stickerModel
       .findOne()
@@ -94,6 +81,19 @@ export class StickerService {
         console.error(err);
         throw new HttpException(
           `cannot find a sticker cause of ${err.message}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
+  }
+
+  async findAll(): Promise<Sticker[]> {
+    return this.stickerModel
+      .find()
+      .exec()
+      .catch((err) => {
+        console.error(err);
+        throw new HttpException(
+          `cannot find stickers cause of ${err.message}`,
           HttpStatus.BAD_REQUEST
         );
       });

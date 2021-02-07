@@ -1,16 +1,15 @@
-import { Module, CacheModule } from "@nestjs/common";
-import * as cacheManager from "cache-manager";
 import * as mongoStore from "cache-manager-mongodb";
-import { ConfigService } from "../config/config.service";
-import { ConfigModule } from "../config/config.module";
+
+import { Module, CacheModule } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+
 import { SearchService } from "./kakaoMapSearch/search.service";
 import { PlaceResolver } from "./place.resolver";
 
-export const cacheConfig = {
-  imports: [ConfigModule],
+const cacheConfig = {
   useFactory: (cfs: ConfigService) => ({
     store: mongoStore,
-    uri: cfs.getCacheDB(),
+    uri: getCacheDB(cfs),
     options: {
       collection: "cacheManager",
       compression: false,
@@ -21,9 +20,18 @@ export const cacheConfig = {
   inject: [ConfigService],
 };
 
+function getCacheDB(cfs: ConfigService): string {
+  if (cfs.get("NODE_ENV") === "dev") {
+    return `mongodb://localhost:27017/nodeCacheDb`;
+  }
+  return `mongodb://${cfs.get("MONGO_USER")}:${cfs.get("MONGO_PWD")}@${cfs.get(
+    "MONGO_IP"
+  )}:${cfs.get("MONGO_PORT")}/${cfs.get("MONGO_CACHE_NAME")}`;
+}
+
 @Module({
-  imports: [ConfigModule, CacheModule.registerAsync(cacheConfig)],
+  imports: [CacheModule.register(cacheConfig)],
   providers: [SearchService, PlaceResolver],
-  exports: [SearchService, CacheModule],
+  exports: [SearchService],
 })
 export class PlaceModule {}
