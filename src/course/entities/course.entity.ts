@@ -12,7 +12,7 @@ export class Course {
   @Field(() => String, { description: "Course id" })
   _id: mongoose.Types.ObjectId;
 
-  @Field(() => [Sticker], {
+  @Field(() => [String], {
     description: "list of sticker ids(순서 중요)",
   })
   @Prop({ type: [mongoose.Types.ObjectId], ref: "Sticker" })

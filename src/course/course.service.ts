@@ -33,12 +33,25 @@ export class CourseService {
   }
   async findOne(_id: Types.ObjectId): Promise<Course> {
     return this.courseModel
-      .findOne()
+      .findById(_id)
       .exec()
       .catch((err) => {
         console.error(err);
         throw new HttpException(
           `cannot find a course cause of ${err.message}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
+  }
+
+  async findAll(): Promise<Course[]> {
+    return this.courseModel
+      .find()
+      .exec()
+      .catch((err) => {
+        console.error(err);
+        throw new HttpException(
+          `cannot find courses cause of ${err.message}`,
           HttpStatus.BAD_REQUEST
         );
       });

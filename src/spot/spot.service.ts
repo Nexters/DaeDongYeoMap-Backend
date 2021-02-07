@@ -38,6 +38,7 @@ export class SpotService {
     }
 
     const location = { type: "Point", coordinates: [place.x, place.y] };
+
     const createSpotDto = {
       place_id: place.id,
       location,
@@ -89,7 +90,7 @@ export class SpotService {
     return this.spotModel.findOne({ place_id }).exec();
   }
 
-  async findAll(ids: Types.ObjectId[] | null): Promise<Spot[]> {
+  async findAll(ids: Types.ObjectId[] | null = null): Promise<Spot[]> {
     const filters = ids ? { _id: { $in: ids } } : {};
     return this.spotModel
       .find(filters)

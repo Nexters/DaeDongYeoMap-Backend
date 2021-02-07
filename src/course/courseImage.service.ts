@@ -28,7 +28,7 @@ export class CourseImageService {
     let coords: [Number, Number][];
     const spots: Spot[] = await this.stickerService.getAllSpots(stickers);
     spots.forEach((s) => {
-      console.log(s.location);
+      const [longitude, latitude] = s.location["coordinates"];
     });
 
     return "This have to defined";

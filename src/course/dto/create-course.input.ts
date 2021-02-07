@@ -14,8 +14,8 @@ export class CreateCourseInput {
   @Field(() => String)
   title: string;
 
-  @Field(() => String)
-  isPrivate: boolean;
+  @Field(() => Boolean)
+  is_share: boolean;
 
   // @Field(() => String, {
   //   description: "스티커를 생성한 User",

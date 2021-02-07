@@ -86,7 +86,7 @@ export class StickerService {
       });
   }
 
-  async findAll(ids: Types.ObjectId[] | null): Promise<Sticker[]> {
+  async findAll(ids: Types.ObjectId[] | null = null): Promise<Sticker[]> {
     const filters = ids ? { _id: { $in: ids } } : {};
     return this.stickerModel
       .find(filters)
@@ -102,7 +102,11 @@ export class StickerService {
 
   async getAllSpots(stickerIds: Types.ObjectId[]): Promise<Spot[]> {
     const stickers: Sticker[] = await this.findAll(stickerIds);
-    const spotIds: Types.ObjectId[] = stickers.map((s) => s.spot);
+
+    const spotIds: Types.ObjectId[] = stickers.map(
+      (s) => s.spot as Types.ObjectId
+    );
+
     return this.spotService.findAll(spotIds);
   }
 }
