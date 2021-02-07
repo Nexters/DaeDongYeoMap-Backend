@@ -89,9 +89,10 @@ export class SpotService {
     return this.spotModel.findOne({ place_id }).exec();
   }
 
-  async findAll(): Promise<Spot[]> {
+  async findAll(ids: Types.ObjectId[] | null): Promise<Spot[]> {
+    const filters = ids ? { _id: { $in: ids } } : {};
     return this.spotModel
-      .find()
+      .find(filters)
       .exec()
       .catch((err) => {
         console.error(err);

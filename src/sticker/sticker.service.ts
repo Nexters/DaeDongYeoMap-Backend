@@ -86,9 +86,10 @@ export class StickerService {
       });
   }
 
-  async findAll(): Promise<Sticker[]> {
+  async findAll(ids: Types.ObjectId[] | null): Promise<Sticker[]> {
+    const filters = ids ? { _id: { $in: ids } } : {};
     return this.stickerModel
-      .find()
+      .find(filters)
       .exec()
       .catch((err) => {
         console.error(err);
@@ -97,5 +98,11 @@ export class StickerService {
           HttpStatus.BAD_REQUEST
         );
       });
+  }
+
+  async getAllSpots(stickerIds: Types.ObjectId[]): Promise<Spot[]> {
+    const stickers: Sticker[] = await this.findAll(stickerIds);
+    const spotIds: Types.ObjectId[] = stickers.map((s) => s.spot);
+    return this.spotService.findAll(spotIds);
   }
 }
