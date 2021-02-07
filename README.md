@@ -89,6 +89,10 @@ npm install cache-manager-mongodb --save
 
 # for test
 npm i --save-dev mongodb-memory-server 
+
+# configservice
+# https://medium.com/the-crowdlinker-chronicle/creating-config-files-in-nestjs-dcd059ae15e4
+npm i @nestjs/config
 ```
 
 ## 3. 프로젝트 세팅

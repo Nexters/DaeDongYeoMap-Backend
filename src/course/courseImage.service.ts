@@ -14,21 +14,24 @@ export class CourseImageService {
     private configService: ConfigService,
     private readonly stickerService: StickerService
   ) {
-    const mapboxHost: string = this.configService.get("MAPBOX_API_HOST");
-    const mapboxToken: string = this.configService.get("MAPBOX_TOKEN");
-    const directionUrl: string = this.configService.get(
-      "MAPBOX_DIRECTION_PATH"
+    const mapboxHost: string = this.configService.get("app.MAPBOX_API_HOST");
+    const mapboxToken: string = this.configService.get("app.MAPBOX_TOKEN");
+    const directionPath: string = this.configService.get(
+      "app.MAPBOX_DIRECTION_PATH"
     );
-    const staticUrl: string = this.configService.get(
-      "MAPBOX_STATIC_IMAGE_PATH"
+    const staticPath: string = this.configService.get(
+      "app.MAPBOX_STATIC_IMAGE_PATH"
     );
   }
 
   async generate(stickers: Types.ObjectId[]): Promise<String> {
+    let coords: [Number, Number][];
     const spots: Spot[] = await this.stickerService.getAllSpots(stickers);
-    let coords: Coordinate[];
+    spots.forEach((s) => {
+      console.log(s.location);
+    });
 
-    return "THis have to defined";
+    return "This have to defined";
   }
 
   async getPath(start: Spot, end: Spot) {}

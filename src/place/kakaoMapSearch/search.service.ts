@@ -22,11 +22,12 @@ export class SearchService {
 
   // https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword
   async searchByKeyword(keywordSearchDto: KeywordSearchDto): Promise<Place[]> {
-    const baseUrl = this.configService.get("KAKAO_DEV_HOST");
+    const baseUrl = this.configService.get("app.KAKAO_DEV_HOST");
+
     return Axios.get(baseUrl, {
       headers: {
         Authorization: `KakaoAK ${this.configService.get(
-          "KAKAO_DEV_REST_API_KEY"
+          "app.KAKAO_DEV_REST_API_KEY"
         )}`,
       },
       params: {
@@ -35,6 +36,7 @@ export class SearchService {
     })
       .then((response) => response.data.documents)
       .catch((err) => {
+        console.log(err);
         if (err.response.status == 400) {
           console.error(err.response);
           throw new HttpException("no matched place", HttpStatus.BAD_REQUEST);
