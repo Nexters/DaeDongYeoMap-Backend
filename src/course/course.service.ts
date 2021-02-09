@@ -59,7 +59,6 @@ export class CourseService {
 
   async getCourseStaticUrl(_id: Types.ObjectId): Promise<String> {
     const course: Course = await this.findOne(_id);
-    const url = this.courseImageService.generate(course.stickers);
-    return url;
+    return await this.courseImageService.generate(course.stickers);
   }
 }
