@@ -1,13 +1,17 @@
 import { Module } from "@nestjs/common";
-import { ConfigService } from "./config.service";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+
+import configuration from "./configuration";
+import { AppConfigService } from "./config.service";
+
+const configModuleOptions =
+  process.env.NODE_ENV === "prod"
+    ? { isGlobal: true, ignoreEnvFile: true }
+    : { isGlobal: true, load: [configuration] };
 
 @Module({
-  providers: [
-    {
-      provide: ConfigService,
-      useValue: new ConfigService(),
-    },
-  ],
-  exports: [ConfigService],
+  imports: [ConfigModule.forRoot(configModuleOptions)],
+  providers: [ConfigService, AppConfigService],
+  exports: [ConfigService, AppConfigService],
 })
-export class ConfigModule {}
+export class AppConfigModule {}

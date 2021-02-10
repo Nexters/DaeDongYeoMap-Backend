@@ -1,4 +1,4 @@
-import Axios, { AxiosResponse } from "axios";
+import Axios from "axios";
 import {
   Injectable,
   Inject,
@@ -7,9 +7,8 @@ import {
   HttpStatus,
 } from "@nestjs/common";
 import { Cache } from "cache-manager";
-
+import { ConfigService } from "@nestjs/config";
 import { CreateSpotInput } from "../../spot/dto/create-spot.input";
-import { ConfigService } from "../../config/config.service";
 import { KeywordSearchDto } from "./search.dto";
 import { Place } from "../place.entity";
 import { SortType } from "../../place/kakaoMapSearch/search.dto";
@@ -17,17 +16,18 @@ import { SortType } from "../../place/kakaoMapSearch/search.dto";
 @Injectable()
 export class SearchService {
   constructor(
-    private readonly configService: ConfigService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache
+    @Inject(CACHE_MANAGER) private readonly cache: Cache,
+    private configService: ConfigService
   ) {}
 
   // https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword
   async searchByKeyword(keywordSearchDto: KeywordSearchDto): Promise<Place[]> {
-    const baseUrl = this.configService.get("KAKAO_DEV_HOST");
+    const baseUrl = this.configService.get("app.KAKAO_DEV_HOST");
+
     return Axios.get(baseUrl, {
       headers: {
         Authorization: `KakaoAK ${this.configService.get(
-          "KAKAO_DEV_REST_API_KEY"
+          "app.KAKAO_DEV_REST_API_KEY"
         )}`,
       },
       params: {
@@ -51,7 +51,7 @@ export class SearchService {
 
   // https://github.com/BryanDonovan/node-cache-manager
   async setPlaceFromCacheById(key, value) {
-    this.cacheManager
+    this.cache
       .set(key, value, { ttl: 300 })
       .then()
       .catch((err) => {
@@ -64,7 +64,7 @@ export class SearchService {
   }
 
   async getPlaceFromCacheById(id): Promise<Place> {
-    return this.cacheManager
+    return this.cache
       .get(id)
       .then()
       .catch((error) => {

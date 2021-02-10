@@ -73,19 +73,6 @@ export class StickerService {
       });
   }
 
-  async findAll(): Promise<Sticker[]> {
-    return this.stickerModel
-      .find()
-      .exec()
-      .catch((err) => {
-        console.error(err);
-        throw new HttpException(
-          `cannot find stickers cause of ${err.message}`,
-          HttpStatus.BAD_REQUEST
-        );
-      });
-  }
-
   async findOne(_id: Types.ObjectId): Promise<Sticker> {
     return this.stickerModel
       .findOne()
@@ -97,5 +84,29 @@ export class StickerService {
           HttpStatus.BAD_REQUEST
         );
       });
+  }
+
+  async findAll(ids: Types.ObjectId[] | null = null): Promise<Sticker[]> {
+    const filters = ids ? { _id: { $in: ids } } : {};
+    return this.stickerModel
+      .find(filters)
+      .exec()
+      .catch((err) => {
+        console.error(err);
+        throw new HttpException(
+          `cannot find stickers cause of ${err.message}`,
+          HttpStatus.BAD_REQUEST
+        );
+      });
+  }
+
+  async getAllSpots(stickerIds: Types.ObjectId[]): Promise<Spot[]> {
+    const stickers: Sticker[] = await this.findAll(stickerIds);
+
+    const spotIds: Types.ObjectId[] = stickers.map(
+      (s) => s.spot as Types.ObjectId
+    );
+
+    return this.spotService.findAll(spotIds);
   }
 }
