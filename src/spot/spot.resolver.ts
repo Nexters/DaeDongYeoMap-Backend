@@ -43,7 +43,6 @@ export class SpotResolver {
   })
   async getAllSpots(): Promise<Spot[]> {
     const result = await this.spotService.findAll();
-    // console.log(result);
     return result;
   }
 

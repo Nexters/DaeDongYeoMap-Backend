@@ -12,7 +12,7 @@ export class Course {
   @Field(() => String, { description: "Course id" })
   _id: mongoose.Types.ObjectId;
 
-  @Field(() => [Sticker], {
+  @Field(() => [String], {
     description: "list of sticker ids(순서 중요)",
   })
   @Prop({ type: [mongoose.Types.ObjectId], ref: "Sticker" })
@@ -27,6 +27,9 @@ export class Course {
   })
   @Prop({ default: false })
   is_share: boolean;
+
+  @Field(() => String, { description: "course의 image url", defaultValue: "" })
+  courseImage: String;
 
   // @Field(() => String, {
   //   description: "스티커를 생성한 User",

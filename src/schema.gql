@@ -69,11 +69,14 @@ type Course {
   _id: String!
 
   """list of sticker ids(순서 중요)"""
-  stickers: [Sticker!]!
+  stickers: [String!]!
   title: String!
 
   """list of sticker ids(순서 중요)"""
   is_share: Boolean!
+
+  """course의 image url"""
+  courseImage: String!
 }
 
 type Query {
@@ -94,6 +97,10 @@ type Query {
   spot(place_id: String!): Spot!
   stickers: [Sticker!]!
   sticker(id: String!): Sticker!
+  courses: [Course!]!
+
+  """a Course"""
+  course(courseInput: CourseInput!): Course!
 }
 
 """SortType은 정확도(accuracy)가 기본이며, 거리순(distance) 정렬을 원할 경우 x,y는 필수 입니다."""
@@ -112,6 +119,31 @@ input KeywordSearchDto {
 enum SortType {
   distance
   accuracy
+}
+
+input CourseInput {
+  """코스 id"""
+  courseId: String!
+
+  """course input을 채우면, 이미지 url을 생성하여 전달합니다."""
+  courseImageInput: CreateCourseImageInput
+}
+
+input CreateCourseImageInput {
+  """이미지 테마"""
+  theme: ImageThemeType = street
+
+  """이미지 가로 사이즈"""
+  width: Float = 700
+
+  """이미지 세로 사이즈"""
+  height: Float = 700
+}
+
+enum ImageThemeType {
+  dark
+  light
+  street
 }
 
 type Mutation {
@@ -158,5 +190,5 @@ input CreateCourseInput {
   """list of sticker ids(순서 중요)"""
   stickers: [String!]!
   title: String!
-  isPrivate: String!
+  is_share: Boolean!
 }
