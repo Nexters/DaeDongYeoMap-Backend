@@ -28,6 +28,9 @@ export class Course {
   @Prop({ default: false })
   is_share: boolean;
 
+  @Field(() => String, { description: "course의 image url", defaultValue: "" })
+  courseImage: String;
+
   // @Field(() => String, {
   //   description: "스티커를 생성한 User",
   // })

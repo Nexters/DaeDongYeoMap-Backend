@@ -1,8 +1,5 @@
 import { InputType, Field } from "@nestjs/graphql";
 import * as mongoose from "mongoose";
-import { Prop } from "@nestjs/mongoose";
-import { Spot } from "src/spot/entities/spot.entity";
-import { Sticker } from "../../sticker/entities/sticker.entity";
 
 @InputType()
 export class CreateCourseInput {
