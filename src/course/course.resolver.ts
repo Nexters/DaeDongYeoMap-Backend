@@ -1,9 +1,9 @@
-import { Resolver, Query, Mutation, Args, Int } from "@nestjs/graphql";
-import { Types } from "mongoose";
+import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 
 import { CourseService } from "./course.service";
 import { Course } from "./entities/course.entity";
 import { CreateCourseInput } from "./dto/create-course.input";
+import { CourseInput } from "./dto/course.input";
 
 @Resolver(() => Course)
 export class CourseResolver {
@@ -20,19 +20,25 @@ export class CourseResolver {
   }
 
   @Query(() => [Course], { name: "courses" })
-  findAll() {
-    return this.courseService.findAll();
+  async findAll(): Promise<Course[]> {
+    return await this.courseService.findAll();
   }
 
-  // @Query(() => Course, {
-  @Query(() => String, {
+  @Query(() => Course, {
     name: "course",
-    description: "get a Course",
+    description: "a Course",
   })
   async findOne(
-    @Args("id", { type: () => String }) id: Types.ObjectId
-  ): Promise<String> {
-    return await this.courseService.getCourseStaticUrl(id);
+    @Args("courseInput") courseInput: CourseInput
+  ): Promise<Course> {
+    const course = await this.courseService.findOne(courseInput.courseId);
+    if (courseInput.courseImageInput) {
+      course.courseImage = await this.courseService.getCourseStaticUrl(
+        course,
+        courseInput.courseImageInput
+      );
+    }
+    return course;
   }
 
   // @Mutation(() => Course)

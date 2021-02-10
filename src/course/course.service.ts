@@ -2,10 +2,11 @@ import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 
-import { Course, CourseDocument } from "src/course/entities/course.entity";
-import { CreateCourseInput } from "src/course/dto/create-course.input";
+import { Course, CourseDocument } from "../course/entities/course.entity";
+import { CreateCourseInput } from "../course/dto/create-course.input";
 import { CourseImageService } from "../course/courseImage.service";
-import { StickerService } from "src/sticker/sticker.service";
+import { StickerService } from "../sticker/sticker.service";
+import { CreateCourseImageInput } from "./dto/create-course-image.input";
 
 @Injectable()
 export class CourseService {
@@ -31,9 +32,9 @@ export class CourseService {
         );
       });
   }
-  async findOne(_id: Types.ObjectId): Promise<Course> {
+  async findOne(id: String): Promise<Course> {
     return this.courseModel
-      .findById(_id)
+      .findById(id)
       .exec()
       .catch((err) => {
         console.error(err);
@@ -57,8 +58,13 @@ export class CourseService {
       });
   }
 
-  async getCourseStaticUrl(_id: Types.ObjectId): Promise<String> {
-    const course: Course = await this.findOne(_id);
-    return await this.courseImageService.generate(course.stickers);
+  async getCourseStaticUrl(
+    course: Course,
+    createCourseImageInput: CreateCourseImageInput
+  ): Promise<String> {
+    return await this.courseImageService.generate(
+      course.stickers,
+      createCourseImageInput
+    );
   }
 }
