@@ -12,23 +12,27 @@ export class AppConfigService {
     return this.configService.get("app");
   }
 
-  getDB(): string {
+  async getDB(): Promise<string> {
     return this.get("NODE_ENV") === "dev"
       ? `mongodb://localhost:27017/mongo`
-      : `mongodb://${this.get("MONGO_USER")}:${this.get(
-          "MONGO_PWD"
-        )}@${this.get("MONGO_IP")}:${this.get("MONGO_PORT")}/${this.get(
-          "MONGO_DB_NAME"
+      : `mongodb://${this.configService.get(
+          "app.MONGO_USER"
+        )}:${this.configService.get("app.MONGO_PWD")}@${this.configService.get(
+          "app.MONGO_IP"
+        )}:${this.configService.get("app.MONGO_PORT")}/${this.configService.get(
+          "app.MONGO_DB_NAME"
         )}`;
   }
 
-  getCacheDB(): string {
+  async getCacheDB(): Promise<string> {
     return this.get("NODE_ENV") === "dev"
       ? `mongodb://localhost:27017/nodeCacheDb`
-      : `mongodb://${this.get("MONGO_USER")}:${this.get(
-          "MONGO_PWD"
-        )}@${this.get("MONGO_IP")}:${this.get("MONGO_PORT")}/${this.get(
-          "MONGO_CACHE_NAME"
+      : `mongodb://${this.configService.get(
+          "app.MONGO_USER"
+        )}:${this.configService.get("app.MONGO_PWD")}@${this.configService.get(
+          "app.MONGO_IP"
+        )}:${this.configService.get("app.MONGO_PORT")}/${this.configService.get(
+          "app.MONGO_CACHE_NAME"
         )}`;
   }
 }

@@ -293,18 +293,20 @@ git push origin main
   - [공인 ip 신청](https://docs.ncloud.com/ko/database/database-10-4.html)
   - [auth 설정](https://stackoverflow.com/questions/27784956/error-couldnt-add-user-not-authorized-on-test-to-execute-command-createuser)
 ```bash
-ssh -p 11111 root@210.89.191.239
+ssh -p 11111 root@101.101.163.214
 passwd mongodb
 su mongodb
 mongo --port 27017
+use admin
+db.createUser({ user: "<아이디>", pwd: "<비번>", roles: ["root" ] })
+# db.updateUser("nexters",{roles : ["userAdminAnyDatabase","userAdmin","readWrite","dbAdmin","clusterAdmin","readWriteAnyDatabase","dbAdminAnyDatabase"]});
+
 use <db이름1>
 db.createUser({ user: "<아이디>", pwd: "<비번>", roles: ["readWrite", "dbAdmin" ] })
 use <db이름2>
 db.createUser({ user: "<아이디>", pwd: "<비번>", roles: ["readWrite", "dbAdmin" ] })
 
-use admin
-db.auth("nexters","비밀번호")
-db.updateUser("nexters",{roles : ["userAdminAnyDatabase","userAdmin","readWrite","dbAdmin","clusterAdmin","readWriteAnyDatabase","dbAdminAnyDatabase"]});
+
 
 cat /home/mongodb/db/log/mongod.log # 로깅
 tail -f /home/mongodb/db/log/mongod.log # 로깅 테일링

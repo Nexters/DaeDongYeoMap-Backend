@@ -47,10 +47,11 @@ export class CourseImageService {
     );
 
     const stickerPath: String = this.genStickerPath(coords);
-
+    console.log(spots);
     const path: String = await this.genPolyline(coords);
 
     const imageUrl: String = `${this.mapboxImageUrl}/${theme}/static/${path},${stickerPath}/${autoScale}/${mapSize}?access_token=${this.mapboxToken}`;
+    console.log(imageUrl);
 
     return imageUrl;
   }

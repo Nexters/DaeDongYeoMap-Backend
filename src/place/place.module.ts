@@ -8,18 +8,21 @@ import { PlaceResolver } from "./place.resolver";
 
 @Module({
   imports: [
-    CacheModule.register({
+    CacheModule.registerAsync({
       imports: [AppConfigModule],
-      useFactory: (cfs: AppConfigService) => ({
-        store: mongoStore,
-        uri: cfs.getCacheDB(),
-        options: {
-          collection: "cacheManager",
-          compression: false,
-          poolSize: 5,
-        },
-        ttl: 300,
-      }),
+      useFactory: async (cfs: AppConfigService) => {
+        console.log(await cfs.getCacheDB());
+        return {
+          store: mongoStore,
+          uri: await cfs.getCacheDB(),
+          options: {
+            collection: "cacheManager",
+            compression: false,
+            poolSize: 5,
+          },
+          ttl: 300,
+        };
+      },
       inject: [AppConfigService],
     }),
   ],

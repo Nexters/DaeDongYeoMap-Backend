@@ -1,6 +1,5 @@
 import { registerAs } from "@nestjs/config";
 import * as dotenv from "dotenv";
-import * as fs from "fs";
 
 const configMap = {
   NODE_ENV: process.env.NODE_ENV,
@@ -23,7 +22,8 @@ const configMap = {
 };
 
 export default registerAs("app", () => {
+  console.log(process.env.NODE_ENV);
   return process.env.NODE_ENV === "prod"
     ? configMap
-    : dotenv.parse(fs.readFileSync("src/.env.dev"));
+    : dotenv.config({ path: ".env.dev" }).parsed;
 });

@@ -24,8 +24,9 @@ import { StickerModule } from "./sticker/sticker.module";
     MongooseModule.forRootAsync({
       imports: [AppConfigModule],
       useFactory: async (cfs: AppConfigService) => {
+        console.log(await cfs.getDB());
         return {
-          uri: cfs.getDB(),
+          uri: await cfs.getDB(),
         };
       },
       inject: [AppConfigService],
