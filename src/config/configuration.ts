@@ -25,5 +25,5 @@ const configMap = {
 export default registerAs("app", () => {
   return process.env.NODE_ENV === "prod"
     ? configMap
-    : dotenv.parse(fs.readFileSync("src/env/.env.dev"));
+    : dotenv.parse(fs.readFileSync("src/.env.dev"));
 });
