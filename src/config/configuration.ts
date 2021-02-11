@@ -22,7 +22,7 @@ const configMap = {
 };
 
 export default registerAs("app", () => {
-  return process.env.NODE_ENV === "production"
+  return process.env.NODE_ENV === "prod"
     ? configMap
     : dotenv.config({ path: ".env.dev" }).parsed;
 });
