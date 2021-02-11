@@ -15,6 +15,7 @@ import { Sticker } from "../sticker/entities/sticker.entity";
 import { CreateSpotInput } from "../spot/dto/create-spot.input";
 import { UpdateSpotInput } from "../spot/dto/update-spot.input";
 import { DeleteSpotDto } from "../spot/dto/delete.spot.dto";
+import { SearchSpotDto } from "./dto/search-spot.dto";
 
 @Resolver(() => Spot)
 export class SpotResolver {
@@ -38,12 +39,29 @@ export class SpotResolver {
   //     return await this.spotService.update(spot._id, createStickerInput.emoji);
   //   }
   // }
+
   @Query(() => [Spot], {
-    description: "(For Debugging) mongoDB에 저장된 모든 스팟 반환",
+    name: "spots",
+    description: "searchSpotDto에 매칭되는 스팟들을 반환합니다.",
   })
-  async getAllSpots(): Promise<Spot[]> {
-    const result = await this.spotService.findAll();
-    return result;
+  async findAll(
+    @Args({ name: "searchSpotDto", nullable: true })
+    searchSpotDto: SearchSpotDto
+  ): Promise<Spot[]> {
+    if (searchSpotDto === undefined) {
+      return await this.spotService.findAll();
+    }
+
+    if ("keyword" in searchSpotDto) {
+      if ("x" in searchSpotDto && "y" in searchSpotDto) {
+        return await this.spotService.getNearSpotsByKeyword(searchSpotDto);
+      }
+      // x,y가 없을 경우
+      return await this.spotService.getByKeyword(searchSpotDto);
+    }
+
+    // 키워드가 없을 경우
+    return await this.spotService.getNearSpots(searchSpotDto);
   }
 
   @Mutation(() => DeleteSpotDto, {
@@ -51,11 +69,6 @@ export class SpotResolver {
   })
   async removeSpot(@Args("id", { type: () => String }) id: string) {
     return await this.spotService.remove(id);
-  }
-
-  @Query(() => [Spot], { description: "검색 키워드와 매칭되는 스팟들을 반환" })
-  async getSpotsByKeyword(@Args("keyword") keyword: string): Promise<Spot[]> {
-    return await this.spotService.getByKeyword(keyword);
   }
 
   @Query(() => Spot, {
