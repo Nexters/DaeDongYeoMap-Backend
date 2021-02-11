@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 
 const configMap = {
   NODE_ENV: process.env.NODE_ENV,
-  NODE_PORT: process.env.NODE_PORT,
+  PORT: process.env.PORT,
   KAKAO_DEV_HOST: process.env.KAKAO_DEV_HOST,
   KAKAO_DEV_REST_API_KEY: process.env.KAKAO_DEV_REST_API_KEY,
   KAKAO_DEV_JDK: process.env.KAKAO_DEV_JDK,
