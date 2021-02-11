@@ -19,6 +19,7 @@ const configMap = {
   MAPBOX_TOKEN: process.env.MAPBOX_TOKEN,
   MAPBOX_DIRECTION_PATH: process.env.MAPBOX_DIRECTION_PATH,
   MAPBOX_STATIC_IMAGE_PATH: process.env.MAPBOX_STATIC_IMAGE_PATH,
+  IMG_SWEET_URL: process.env.IMG_SWEET_URL,
 };
 
 export default registerAs("app", () => {
