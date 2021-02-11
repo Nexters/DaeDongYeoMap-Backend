@@ -5,8 +5,8 @@ import configuration from "./configuration";
 import { AppConfigService } from "./config.service";
 
 const configModuleOptions =
-  process.env.NODE_ENV === "prod"
-    ? { isGlobal: true, ignoreEnvFile: true }
+  process.env.NODE_ENV === "production"
+    ? { isGlobal: true, load: [configuration], ignoreEnvFile: true }
     : { isGlobal: true, load: [configuration] };
 
 @Module({
