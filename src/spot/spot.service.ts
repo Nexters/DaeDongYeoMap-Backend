@@ -4,7 +4,7 @@ import { Model, Types } from "mongoose";
 import { SearchService } from "../place/kakaoMapSearch/search.service";
 
 import { CreateSpotInput } from "../spot/dto/create-spot.input";
-import { UpdateSpotInput } from "../spot/dto/update-spot.input";
+import { SearchSpotDto } from "../spot/dto/search-spot.dto";
 import { Spot, SpotDocument } from "../spot/entities/spot.entity";
 import { Place } from "../place/place.entity";
 import { Sticker } from "../sticker/entities/sticker.entity";
@@ -105,20 +105,81 @@ export class SpotService {
     return this.spotModel.remove({ place_id }).exec();
   }
 
-  async getByKeyword(keyword: string): Promise<Spot[]> {
+  async getByKeyword(searchSpotDto: SearchSpotDto): Promise<Spot[]> {
     /*
     mongodb 한국어 쿼리 참고자료
     - https://ip99202.github.io/posts/nodejs,-mongodb-%EA%B2%8C%EC%8B%9C%ED%8C%90-%EA%B2%80%EC%83%89-%EA%B8%B0%EB%8A%A5/
     - https://github.com/Tekiter/EZSET/blob/master/backend/src/api/v1/simple.route.js
     */
+    const place_name: RegExp = new RegExp(searchSpotDto.keyword);
     return this.spotModel
-      .find({ place_name: new RegExp(keyword) })
+      .find({ place_name })
       .exec()
       .catch((err) => {
         console.error(err);
         throw new HttpException(
           "There is no spots that matched by keyword.",
           HttpStatus.BAD_REQUEST
+        );
+      });
+  }
+
+  async getNearSpots(searchSpotDto: SearchSpotDto): Promise<Spot[]> {
+    const maxNumSpots: number = 15;
+    const maxDistance: number = searchSpotDto.radius;
+    return this.spotModel
+      .aggregate([
+        {
+          $geoNear: {
+            near: {
+              type: "Point",
+              coordinates: [searchSpotDto.x, searchSpotDto.y],
+            },
+            distanceField: "dist.calculated",
+            maxDistance,
+            includeLocs: "dist.location",
+            spherical: true,
+          },
+        },
+        { $limit: maxNumSpots },
+      ])
+      .then((response) => response)
+      .catch((error) => {
+        console.error(error);
+        throw new HttpException(
+          `cannot get near spots cause of ${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR
+        );
+      });
+  }
+
+  async getNearSpotsByKeyword(searchSpotDto: SearchSpotDto): Promise<Spot[]> {
+    const maxNumSpots: number = 15;
+    const maxDistance: number = searchSpotDto.radius;
+    const place_name: RegExp = new RegExp(searchSpotDto.keyword);
+    return this.spotModel
+      .aggregate([
+        {
+          $geoNear: {
+            near: {
+              type: "Point",
+              coordinates: [searchSpotDto.x, searchSpotDto.y],
+            },
+            distanceField: "dist.calculated",
+            maxDistance,
+            query: { place_name },
+            includeLocs: "dist.location",
+            spherical: true,
+          },
+        },
+        { $limit: maxNumSpots },
+      ])
+      .then((response) => response)
+      .catch((error) => {
+        console.error(error);
+        throw new HttpException(
+          `cannot get near spots with keyword cause of ${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR
         );
       });
   }
