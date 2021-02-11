@@ -25,16 +25,4 @@ export class AppConfigService {
           "app.MONGO_DB_NAME"
         )}`;
   }
-
-  async getCacheDB(): Promise<string> {
-    return this.get("NODE_ENV") === "dev"
-      ? `mongodb://localhost:27017/nodeCacheDb`
-      : `mongodb://${this.configService.get(
-          "app.MONGO_USER"
-        )}:${this.configService.get("app.MONGO_PWD")}@${this.configService.get(
-          "app.MONGO_IP"
-        )}:${this.configService.get("app.MONGO_PORT")}/${this.configService.get(
-          "app.MONGO_CACHE_NAME"
-        )}`;
-  }
 }

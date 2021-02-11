@@ -15,31 +15,6 @@ export class PlaceResolver {
   async getPlacesByKeyword(
     @Args("filters") filters: KeywordSearchDto
   ): Promise<object> {
-    const places: Place[] = await this.searchService.searchByKeyword(filters);
-
-    places.forEach(async (place) => {
-      const cachedPlace:
-        | Place
-        | undefined = await this.searchService.getPlaceFromCacheById(place.id);
-      cachedPlace || this.searchService.setPlaceFromCacheById(place.id, place);
-    });
-    return places;
-  }
-
-  @Query(() => Place)
-  async getPlaceFromCache(
-    @Args("place_id", { type: () => String }) place_id: string
-  ): Promise<Place | HttpException> {
-    const cachedPlace: Place | null = await this.searchService.getPlaceFromCacheById(
-      place_id
-    );
-
-    if (cachedPlace === undefined) {
-      return new HttpException(
-        `There is no cached place with ${place_id}`,
-        HttpStatus.BAD_REQUEST
-      );
-    }
-    return cachedPlace;
+    return await this.searchService.searchByKeyword(filters);
   }
 }

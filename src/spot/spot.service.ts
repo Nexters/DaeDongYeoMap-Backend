@@ -18,30 +18,18 @@ export class SpotService {
 
   async document(createSpotInput: CreateSpotInput): Promise<SpotDocument> {
     const spot = await this.findOneByPlaceId(createSpotInput.place_id);
-    let place:
-      | Place
-      | undefined = await this.searchService.getPlaceFromCacheById(
-      createSpotInput.place_id
+    const place: Place = await this.searchService.getIdenticalPlace(
+      createSpotInput
     );
 
     if (place === undefined) {
-      const placeResult = await this.searchService.getIdenticalPlace(
-        createSpotInput
-      );
-
-      if (placeResult === undefined) {
-        // TODO: custom place 만들기
-        // pass
-      } else {
-        place = placeResult;
-      }
+      // TODO: custom place 만들기
+      // pass
     }
-
-    const location = { type: "Point", coordinates: [place.x, place.y] };
 
     const createSpotDto = {
       place_id: place.id,
-      location,
+      location: { type: "Point", coordinates: [place.x, place.y] },
       ...place,
     };
 

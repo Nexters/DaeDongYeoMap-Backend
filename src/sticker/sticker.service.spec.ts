@@ -1,5 +1,5 @@
 // https://github.com/dantman/nestjs-user-cache-test/blob/master/src/user-cache/user-cache.service.spec.ts
-import { CacheModule, CACHE_MANAGER } from "@nestjs/common";
+
 import { Test, TestingModule } from "@nestjs/testing";
 import { getConnectionToken, MongooseModule } from "@nestjs/mongoose";
 import { Connection } from "mongoose";
@@ -17,7 +17,6 @@ import DbModule, {
 describe("StickerService", () => {
   let service: StickerService;
   let connection: Connection;
-  let cacheManager: any;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -36,7 +35,6 @@ describe("StickerService", () => {
 
     service = module.get<StickerService>(StickerService);
     connection = await module.get(getConnectionToken());
-    cacheManager = module.get(CACHE_MANAGER);
   });
   afterEach(async () => {
     await connection.close();
@@ -49,10 +47,6 @@ describe("StickerService", () => {
 
   it("mongodb connection should be defined", () => {
     expect(connection).toBeDefined();
-  });
-
-  it("mongodb cache manager should be available", () => {
-    expect(cacheManager).toBeDefined();
   });
 
   describe("getAll", () => {
