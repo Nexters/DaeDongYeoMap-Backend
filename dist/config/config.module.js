@@ -12,7 +12,7 @@ const config_1 = require("@nestjs/config");
 const configuration_1 = require("./configuration");
 const config_service_1 = require("./config.service");
 const configModuleOptions = process.env.NODE_ENV === "prod"
-    ? { isGlobal: true, ignoreEnvFile: true }
+    ? { isGlobal: true, load: [configuration_1.default], ignoreEnvFile: true }
     : { isGlobal: true, load: [configuration_1.default] };
 let AppConfigModule = class AppConfigModule {
 };

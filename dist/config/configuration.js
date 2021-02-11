@@ -22,8 +22,6 @@ const configMap = {
     MAPBOX_STATIC_IMAGE_PATH: process.env.MAPBOX_STATIC_IMAGE_PATH,
 };
 exports.default = config_1.registerAs("app", () => {
-    console.log(process.env.NODE_ENV);
-    console.log(configMap);
     return process.env.NODE_ENV === "prod"
         ? configMap
         : dotenv.config({ path: ".env.dev" }).parsed;

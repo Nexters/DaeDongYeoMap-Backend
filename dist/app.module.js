@@ -34,6 +34,7 @@ AppModule = __decorate([
             mongoose_1.MongooseModule.forRootAsync({
                 imports: [config_module_1.AppConfigModule],
                 useFactory: async (cfs) => {
+                    console.log(process.env);
                     console.log(await cfs.getDB());
                     return {
                         uri: await cfs.getDB(),

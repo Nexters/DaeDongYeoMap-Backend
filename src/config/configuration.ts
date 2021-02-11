@@ -22,8 +22,6 @@ const configMap = {
 };
 
 export default registerAs("app", () => {
-  console.log(process.env.NODE_ENV);
-  console.log(configMap);
   return process.env.NODE_ENV === "prod"
     ? configMap
     : dotenv.config({ path: ".env.dev" }).parsed;
