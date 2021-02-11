@@ -87,11 +87,8 @@ type Query {
   getPlacesByKeyword(filters: KeywordSearchDto!): [Place!]!
   getPlaceFromCache(place_id: String!): Place!
 
-  """(For Debugging) mongoDB에 저장된 모든 스팟 반환"""
-  getAllSpots: [Spot!]!
-
-  """검색 키워드와 매칭되는 스팟들을 반환"""
-  getSpotsByKeyword(keyword: String!): [Spot!]!
+  """searchSpotDto에 매칭되는 스팟들을 반환합니다."""
+  spots(searchSpotDto: SearchSpotDto): [Spot!]!
 
   """(For Debugging) 카카오 place id로 스팟 검색"""
   spot(place_id: String!): Spot!
@@ -119,6 +116,18 @@ input KeywordSearchDto {
 enum SortType {
   distance
   accuracy
+}
+
+"""스팟 검색으로, 해당 필드가 비워져 있을 경우 db에 저장된 모든 스팟을 반환합니다."""
+input SearchSpotDto {
+  keyword: String
+  x: Float
+  y: Float
+
+  """
+  단위 meter, 0~20000 사이의 값으로 중심 좌표부터의 반경거리. 특정 지역을 중심으로 검색하려고 할 경우 중심좌표로 쓰일 x,y와 함께 사용.
+  """
+  radius: Int = 1000
 }
 
 input CourseInput {
