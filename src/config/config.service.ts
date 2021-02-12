@@ -15,14 +15,30 @@ export class AppConfigService {
   }
 
   async getDB(): Promise<string> {
-    return this.get("NODE_ENV") === "dev"
-      ? `mongodb://localhost:27017/mongo`
-      : `mongodb://${this.configService.get(
-          "app.MONGO_USER"
-        )}:${this.configService.get("app.MONGO_PWD")}@${this.configService.get(
-          "app.MONGO_IP"
-        )}:${this.configService.get("app.MONGO_PORT")}/${this.configService.get(
-          "app.MONGO_DB_NAME"
-        )}`;
+    const level: string = this.get("NODE_ENV");
+    console.log(`db level: ${level}`);
+    if (level === "dev") {
+      return `mongodb://localhost:27017/mongo`;
+    }
+
+    if (level === "sandbox") {
+      return `mongodb://${this.configService.get(
+        "app.MONGO_USER"
+      )}:${this.configService.get("app.MONGO_PWD")}@${this.configService.get(
+        "app.MONGO_IP"
+      )}:${this.configService.get("app.MONGO_PORT")}/${this.configService.get(
+        "app.MONGO_DB_NAME"
+      )}`;
+    }
+
+    if (level === "production") {
+      return `mongodb+srv://${this.configService.get(
+        "app.MONGO_USER"
+      )}:${this.configService.get("app.MONGO_PWD")}@${this.configService.get(
+        "app.MONGO_IP"
+      )}/${this.configService.get(
+        "app.MONGO_DB_NAME"
+      )}?retryWrites=true&w=majority`;
+    }
   }
 }

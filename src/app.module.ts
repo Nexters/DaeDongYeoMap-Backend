@@ -34,6 +34,7 @@ import { StickerModule } from "./sticker/sticker.module";
       useFactory: async (cfs: AppConfigService) => {
         return {
           uri: await cfs.getDB(),
+          useNewUrlParser: true,
         };
       },
       inject: [AppConfigService],

@@ -19,4 +19,3 @@ ENV NODE_ENV=${NODE_ENV}
 CMD ["npm", "run", "start:prod"]
 
 
-# docker run -p 8000:8000 -d leoo/daedong-app

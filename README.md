@@ -36,7 +36,11 @@
   - [7. API](#7-api)
   - [8. LINKS](#8-links)
   - [9. SCHEMA of GraphQL API](#9-schema-of-graphql-api)
-  - [10. deploy to heroku](#10-deploy-to-heroku)
+  - [10. deploy sandbox](#10-deploy-sandbox)
+    - [Heroku](#heroku)
+  - [deploy production](#deploy-production)
+    - [gcp cloud run](#gcp-cloud-run)
+    - [mongodb atlas](#mongodb-atlas)
   - [mapbox](#mapbox)
 
 <!-- /TOC -->
@@ -259,10 +263,11 @@ enum SortType {
 }
 ```
 
-## 10. deploy to heroku
-
+## 10. deploy sandbox
 > [ref](https://www.joshmorony.com/deploying-a-production-nestjs-server-on-heroku/)
 
+
+### Heroku
 - 환경 세팅
 
 ```bash
@@ -313,6 +318,71 @@ tail -f /home/mongodb/db/log/mongod.log # 로깅 테일링
 > db.serverStatus().connections # 커넥션 갯수 확인
 { "current" : 47, "available" : 772, "totalCreated" : 79 }
 ```
+## deploy production
+
+### gcp cloud run
+
+- build docker
+```
+# docker build -t asia.gcr.io/daedongyeomap/backend .
+# docker run -p 8000:8000 -d asia.gcr.io/daedongyeomap/backend daedongmap
+```
+- docker push
+```
+gcloud auth login
+gcloud auth configure-docker
+docker push asia.gcr.io/daedongyeomap/backend
+
+# https://console.cloud.google.com/gcr/images/daedongyeomap?project=daedongyeomap
+```
+
+- cloud deploy
+```
+gcloud run deploy --image gcr.io/daedongyeomap/backend --platform managed
+# [5] asia-northeast3 == asia/seoul
+```
+- [서버리스 VPC 액세스 커넥터 만들기](https://cloud.google.com/vpc/docs/configure-serverless-vpc-access#creating_a_connector)
+- [고정 아웃바운드 IP 주소](https://cloud.google.com/run/docs/configuring/static-outbound-ip)
+```
+$ gcloud compute networks list
+$ gcloud compute routers create daedong-router \
+  --network=default \
+  --region=asia-northeast3
+
+NAME            REGION           NETWORK
+daedong-router  asia-northeast3  default
+
+$ gcloud compute addresses create daedong-ip --region=asia-northeast3
+$ gcloud compute routers nats create daedong-nat \
+  --router=daedong-router \
+  --region=asia-northeast3 \
+  --nat-all-subnet-ip-ranges \
+  --nat-external-ip-pool=daedong-ip
+
+$ gcloud beta run deploy daedongyeomap \
+   --image=asia.gcr.io/daedongyeomap/backend \
+   --vpc-connector=daedong-connector \
+   --vpc-egress=all
+
+# 고정 ip 확인
+https://console.cloud.google.com/networking/addresses/list?folder=&organizationId=&project=daedongyeomap
+```
+
+### mongodb atlas
+```javascript
+
+const MongoClient = require('mongodb').MongoClient;
+const uri = "mongodb+srv://<user>:<password>@cluster1.96jmq.mongodb.net/<dbname>?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true });
+client.connect(err => {
+  const collection = client.db("test").collection("devices");
+  // perform actions on the collection object
+  client.close();
+});
+
+```
+
+
 
 ## mapbox
 
