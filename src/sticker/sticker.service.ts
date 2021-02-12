@@ -48,7 +48,6 @@ export class StickerService {
 
     stickerDocument.spot = spot._id;
     return stickerDocument.save().catch((error) => {
-      console.error(error);
       throw new HttpException(
         `cannot create a sticker cause of ${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR
@@ -65,7 +64,6 @@ export class StickerService {
       )
       .exec()
       .catch((err) => {
-        console.error(err);
         throw new HttpException(
           `cannot update a sticker cause of ${err.message}`,
           HttpStatus.BAD_REQUEST
@@ -78,7 +76,6 @@ export class StickerService {
       .findOne()
       .exec()
       .catch((err) => {
-        console.error(err);
         throw new HttpException(
           `cannot find a sticker cause of ${err.message}`,
           HttpStatus.BAD_REQUEST
@@ -92,7 +89,6 @@ export class StickerService {
       .find(filters)
       .exec()
       .catch((err) => {
-        console.error(err);
         throw new HttpException(
           `cannot find stickers cause of ${err.message}`,
           HttpStatus.BAD_REQUEST

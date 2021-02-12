@@ -38,7 +38,6 @@ export class SpotService {
 
   async save(spotDocument: SpotDocument): Promise<Spot> {
     return spotDocument.save().catch((error) => {
-      console.error(error);
       throw new HttpException(
         `cannot save a spot cause of ${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR
@@ -53,7 +52,6 @@ export class SpotService {
     return this.spotModel
       .findOneAndUpdate({ _id: spotId }, { $push: { stickers: stickerId } })
       .catch((err) => {
-        console.error(err);
         throw new HttpException(
           `cannot append sticker to spot cause of ${err.message}`,
           HttpStatus.BAD_REQUEST
@@ -66,7 +64,6 @@ export class SpotService {
       .findOne()
       .exec()
       .catch((err) => {
-        console.error(err);
         throw new HttpException(
           `cannot find a spot cause of ${err.message}`,
           HttpStatus.BAD_REQUEST
@@ -84,7 +81,6 @@ export class SpotService {
       .find(filters)
       .exec()
       .catch((err) => {
-        console.error(err);
         throw new HttpException("bad request", HttpStatus.BAD_REQUEST);
       });
   }
@@ -104,7 +100,6 @@ export class SpotService {
       .find({ place_name })
       .exec()
       .catch((err) => {
-        console.error(err);
         throw new HttpException(
           "There is no spots that matched by keyword.",
           HttpStatus.BAD_REQUEST
@@ -133,7 +128,6 @@ export class SpotService {
       ])
       .then((response) => response)
       .catch((error) => {
-        console.error(error);
         throw new HttpException(
           `cannot get near spots cause of ${error.message}`,
           HttpStatus.INTERNAL_SERVER_ERROR
@@ -164,7 +158,6 @@ export class SpotService {
       ])
       .then((response) => response)
       .catch((error) => {
-        console.error(error);
         throw new HttpException(
           `cannot get near spots with keyword cause of ${error.message}`,
           HttpStatus.INTERNAL_SERVER_ERROR
@@ -192,7 +185,6 @@ export class SpotService {
       ])
       .then((response) => response[0].stickers)
       .catch((error) => {
-        console.error(error);
         throw new HttpException(
           `cannot populate a sticker cause of ${error.message}`,
           HttpStatus.INTERNAL_SERVER_ERROR

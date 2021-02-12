@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 
 import { PlaceModule } from "../place/place.module";
+
 import { StickerService } from "./sticker.service";
 import { StickerResolver } from "./sticker.resolver";
 import { Sticker, StickerSchema } from "../sticker/entities/sticker.entity";
