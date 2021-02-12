@@ -43,7 +43,7 @@ type Spot {
   place_id: String!
 
   """list of sticker ids"""
-  stickers(populate: Boolean!): [Sticker!]!
+  stickers(group: Boolean = false, populate: Boolean = false): [Sticker!]!
   place_name: String!
   category_name: String
   category_group_code: String
@@ -84,7 +84,7 @@ type Query {
   키워드로 위치 정보를 확인합니다. 
   내부적으로 카카오 API를 요청합니다.
   """
-  getPlacesByKeyword(filters: KeywordSearchDto!): [Place!]!
+  places(filters: KeywordSearchDto!): [Place!]!
 
   """searchSpotDto에 매칭되는 스팟들을 반환합니다."""
   spots(searchSpotDto: SearchSpotDto): [Spot!]!
