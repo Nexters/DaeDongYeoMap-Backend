@@ -25,7 +25,6 @@ export class CourseService {
       .save()
       .then()
       .catch((error) => {
-        console.error(error);
         throw new HttpException(
           `cannot save a course cause of ${error.message}`,
           HttpStatus.INTERNAL_SERVER_ERROR
@@ -37,7 +36,6 @@ export class CourseService {
       .findById(id)
       .exec()
       .catch((err) => {
-        console.error(err);
         throw new HttpException(
           `cannot find a course cause of ${err.message}`,
           HttpStatus.BAD_REQUEST
@@ -50,7 +48,6 @@ export class CourseService {
       .find()
       .exec()
       .catch((err) => {
-        console.error(err);
         throw new HttpException(
           `cannot find courses cause of ${err.message}`,
           HttpStatus.BAD_REQUEST

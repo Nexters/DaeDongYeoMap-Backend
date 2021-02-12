@@ -27,10 +27,8 @@ export class SearchService {
       .then((response) => response.data.documents)
       .catch((err) => {
         if (err.response.status == 400) {
-          console.error(err.response);
           throw new HttpException("no matched place", HttpStatus.BAD_REQUEST);
         } else {
-          console.error(err.response);
           throw new HttpException(
             "kakao api server error",
             HttpStatus.INTERNAL_SERVER_ERROR
@@ -51,7 +49,6 @@ export class SearchService {
     })
       .then((places) => (places.length >= 1 ? places[0] : null))
       .catch((error) => {
-        console.error(error);
         throw new HttpException(
           `cannot get identical place cause of ${error.message}`,
           HttpStatus.INTERNAL_SERVER_ERROR
