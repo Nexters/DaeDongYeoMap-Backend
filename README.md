@@ -369,6 +369,11 @@ $ gcloud beta run deploy daedongyeomap \
 https://console.cloud.google.com/networking/addresses/list?folder=&organizationId=&project=daedongyeomap
 ```
 
+- [env 관리](https://console.cloud.google.com/run/deploy/asia-northeast3/daedongyeomap?project=daedongyeomap)
+  - sandbox, production의 경우
+  - 추가로 configuration.ts
+
+- [도메인 등록](https://cloud.google.com/run/docs/mapping-custom-domains)
 ### mongodb atlas
 ```javascript
 
@@ -388,8 +393,6 @@ client.connect(err => {
 ```
 $ gcloud builds submit
 ```
-
-
 
 
 ## mapbox
