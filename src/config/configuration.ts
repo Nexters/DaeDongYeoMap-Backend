@@ -23,7 +23,9 @@ const configMap = {
 };
 
 export default registerAs("app", () => {
-  return process.env.NODE_ENV === "prod"
-    ? configMap
-    : dotenv.config({ path: ".env.dev" }).parsed;
+  const level: string = process.env.NODE_ENV;
+  if (level === "dev") {
+    return dotenv.config({ path: ".env.dev" }).parsed;
+  }
+  return configMap;
 });
