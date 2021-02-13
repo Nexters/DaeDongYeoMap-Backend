@@ -41,6 +41,7 @@
   - [deploy production](#deploy-production)
     - [gcp cloud run](#gcp-cloud-run)
     - [mongodb atlas](#mongodb-atlas)
+    - [Cloud Run CD](#cloud-run-cd)
   - [mapbox](#mapbox)
 
 <!-- /TOC -->
@@ -325,7 +326,7 @@ tail -f /home/mongodb/db/log/mongod.log # 로깅 테일링
 - build docker
 ```
 # docker build -t asia.gcr.io/daedongyeomap/backend .
-# docker run -p 8000:8000 -d asia.gcr.io/daedongyeomap/backend daedongmap
+# docker run -p 8080:8080 -d asia.gcr.io/daedongyeomap/backend daedongmap
 ```
 - docker push
 ```
@@ -379,8 +380,15 @@ client.connect(err => {
   // perform actions on the collection object
   client.close();
 });
+```
+
+### Cloud Run CD
+> [cloudbuild.yaml](https://cloud.google.com/build/docs/deploying-builds/deploy-cloud-run)
 
 ```
+$ gcloud builds submit
+```
+
 
 
 

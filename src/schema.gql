@@ -43,7 +43,7 @@ type Spot {
   place_id: String!
 
   """list of sticker ids"""
-  stickers(group: Boolean = false, populate: Boolean = false): [Sticker!]!
+  stickers(populate: Boolean!): [Sticker!]!
   place_name: String!
   category_name: String
   category_group_code: String
