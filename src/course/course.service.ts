@@ -1,6 +1,6 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, Types } from "mongoose";
+import { Model } from "mongoose";
 
 import { Course, CourseDocument } from "../course/entities/course.entity";
 import { CreateCourseInput } from "../course/dto/create-course.input";

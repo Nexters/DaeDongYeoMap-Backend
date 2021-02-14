@@ -61,7 +61,7 @@ export class SpotService {
 
   async findOne(_id: Types.ObjectId): Promise<Spot> {
     return this.spotModel
-      .findOne()
+      .findById(_id)
       .exec()
       .catch((err) => {
         throw new HttpException(

@@ -55,6 +55,8 @@ type Spot {
   distance: String
   x: Float
   y: Float
+  is_custom: Boolean!
+  is_custom_share: Boolean!
 }
 
 type DeleteSpotDto {
@@ -155,6 +157,9 @@ enum ImageThemeType {
 }
 
 type Mutation {
+  """커스텀 스팟을 생성/업데이트합니다."""
+  customSpot(createCustomSpotInput: CreateCustomSpotInput!): Spot!
+
   """(For Debugging) 스팟 하나 삭제"""
   removeSpot(id: String!): DeleteSpotDto!
   createSticker(createStickerInput: CreateStickerInput!): Sticker!
@@ -162,6 +167,16 @@ type Mutation {
 
   """Sticker를 사용하여 코스를 생성합니다. 이때 코스의 순서는 전달된 스티커들의 순서로 처리됩니다."""
   createCourse(createCourseInput: CreateCourseInput!): Course!
+}
+
+"""커스텀 스팟 생성 input입니다. 테마는 category_group_name로 넣어주세요"""
+input CreateCustomSpotInput {
+  place_name: String!
+  x: Float!
+  y: Float!
+  category_group_name: String!
+  is_custom: Boolean = true
+  is_custom_share: Boolean = false
 }
 
 input CreateStickerInput {
