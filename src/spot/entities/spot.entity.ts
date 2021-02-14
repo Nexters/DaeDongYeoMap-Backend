@@ -79,6 +79,14 @@ export class Spot {
   @Field((type) => Float, { nullable: true })
   @Prop()
   y?: number;
+
+  @Field((type) => Boolean, { defaultValue: false, nullable: true })
+  @Prop()
+  is_custom?: boolean;
+
+  @Field((type) => Boolean, { defaultValue: false, nullable: true })
+  @Prop()
+  is_custom_share?: boolean;
 }
 
 export type SpotDocument = Spot & mongoose.Document;

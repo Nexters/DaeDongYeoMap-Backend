@@ -1,14 +1,11 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { INestApplication } from "@nestjs/common";
-import { MongooseModule, getConnectionToken } from "@nestjs/mongoose";
+import { getConnectionToken } from "@nestjs/mongoose";
 import * as request from "supertest";
 import { Connection } from "mongoose";
 
 import { AppModule } from "./../src/app.module";
 import { createSticker } from "./constants";
-
-import { StickerDocument } from "../src/sticker/entities/sticker.entity";
-import { StickerService } from "../src/sticker/sticker.service";
 
 // mongoose e2e test with rollout https://dev.to/webeleon/unit-testing-nestjs-with-mongo-in-memory-54gd
 // https://github.com/nestjs/mongoose/issues/167

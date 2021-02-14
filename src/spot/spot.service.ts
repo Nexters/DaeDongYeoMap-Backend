@@ -8,6 +8,7 @@ import { SearchSpotDto } from "../spot/dto/search-spot.dto";
 import { Spot, SpotDocument } from "../spot/entities/spot.entity";
 import { Place } from "../place/place.entity";
 import { Sticker } from "../sticker/entities/sticker.entity";
+import { CreateCustomSpotInput } from "./dto/create-custom-spot.input";
 
 @Injectable()
 export class SpotService {
@@ -49,6 +50,39 @@ export class SpotService {
     return spotDocument.save().catch((error) => {
       throw new HttpException(
         `cannot save a spot cause of ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    });
+  }
+
+  async createCustomSpot(
+    createCustomSpotInput: CreateCustomSpotInput
+  ): Promise<Spot> {
+    if (!createCustomSpotInput.is_custom) {
+      throw new HttpException(
+        "커스텀 스팟은 is_custom이 true여야 합니다.",
+        HttpStatus.BAD_REQUEST
+      );
+    }
+    const createSpotDto = {
+      location: {
+        type: "Point",
+        coordinates: [createCustomSpotInput.x, createCustomSpotInput.y],
+      },
+      ...createCustomSpotInput,
+    };
+
+    const customSpotDocument: SpotDocument = await new this.spotModel(
+      createSpotDto
+    );
+
+    // 커스텀 스팟의 경우 place_id에 spot_id를 넣는다. (unique key 확보)
+    // 추가로 카카오 place_id는 string이기 때문에 mongodb objectId와 매칭될 수 없으므로 unique 만족한다.
+    customSpotDocument.place_id = customSpotDocument._id.toString();
+
+    return customSpotDocument.save().catch((error) => {
+      throw new HttpException(
+        `cannot save a custom spot cause of ${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     });
