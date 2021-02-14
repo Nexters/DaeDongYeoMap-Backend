@@ -24,6 +24,9 @@ const configMap = {
 
 export default registerAs("app", () => {
   const level: string = process.env.NODE_ENV;
+  if (level === "test") {
+    return dotenv.config({ path: ".env.test" }).parsed;
+  }
   if (level === "dev") {
     return dotenv.config({ path: ".env.dev" }).parsed;
   }

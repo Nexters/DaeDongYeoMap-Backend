@@ -17,6 +17,10 @@ export class AppConfigService {
   async getDB(): Promise<string> {
     const level: string = this.get("NODE_ENV");
     console.log(`db level: ${level}`);
+    if (level === "test") {
+      return `mongodb://localhost:27017/mongo-test`;
+    }
+
     if (level === "dev") {
       return `mongodb://localhost:27017/mongo`;
     }

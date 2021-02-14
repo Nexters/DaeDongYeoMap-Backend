@@ -5,8 +5,8 @@ import { Model, Types } from "mongoose";
 import Axios from "axios";
 import * as urlencode from "urlencode";
 
-import { Course, CourseDocument } from "src/course/entities/course.entity";
-import { StickerService } from "src/sticker/sticker.service";
+import { Course, CourseDocument } from "./entities/course.entity";
+import { StickerService } from "../sticker/sticker.service";
 import { Spot } from "../spot/entities/spot.entity";
 import { CreateCourseImageInput } from "./dto/create-course-image.input";
 
