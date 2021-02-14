@@ -16,15 +16,24 @@ export class SpotService {
     private readonly searchService: SearchService
   ) {}
 
-  async document(createSpotInput: CreateSpotInput): Promise<SpotDocument> {
-    const spot = await this.findOneByPlaceId(createSpotInput.place_id);
+  async document(
+    createSpotInput: CreateSpotInput
+  ): Promise<SpotDocument | Spot> {
     const place: Place = await this.searchService.getIdenticalPlace(
       createSpotInput
     );
 
-    if (place === undefined) {
-      // TODO: custom place 만들기
-      // pass
+    if (place === null) {
+      throw new HttpException(
+        "잘못된 place정보(카카오 api에 없거나, 커스텀 스팟에 없는 place 경우) 때문에 spot을 생성할 수 없습니다.",
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    if (place.id !== createSpotInput.place_id) {
+      // 정책: place id랑 다를 경우라도, 오타로 간주하고 저장시킨다.
+      const spot: Spot = await this.findOneByPlaceId(place.id);
+      if (spot !== null) return spot;
     }
 
     const createSpotDto = {

@@ -33,6 +33,7 @@ export class StickerService {
     );
 
     if (spot === null) {
+      // 커스텀 스팟은 절대 올 수 없다.
       spot = await this.spotService.document(
         createStickerInput as CreateSpotInput
       );
