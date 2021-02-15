@@ -6,8 +6,8 @@ import {
   IntersectionType,
 } from "@nestjs/graphql";
 import * as mongoose from "mongoose";
-import { CreateSpotInput } from "src/spot/dto/create-spot.input";
-import { Spot } from "src/spot/entities/spot.entity";
+import { CreateSpotInput } from "../../spot/dto/create-spot.input";
+import { Spot } from "../../spot/entities/spot.entity";
 
 @InputType()
 export class StickerInput {

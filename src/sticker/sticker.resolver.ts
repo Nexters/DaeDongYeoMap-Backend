@@ -3,17 +3,16 @@ import {
   Query,
   Mutation,
   Args,
-  Int,
   ResolveField,
   Parent,
 } from "@nestjs/graphql";
 import { Types } from "mongoose";
 
-import { SpotService } from "src/spot/spot.service";
-import { Spot, SpotDocument } from "src/spot/entities/spot.entity";
-import { StickerService } from "src/sticker/sticker.service";
+import { StickerService } from "./sticker.service";
 import { Sticker, StickerDocument } from "./entities/sticker.entity";
 import { CreateStickerInput, UpdateStickerInput } from "./dto/sticker.input";
+import { SpotService } from "../spot/spot.service";
+import { Spot } from "../spot/entities/spot.entity";
 
 @Resolver(() => Sticker)
 export class StickerResolver {

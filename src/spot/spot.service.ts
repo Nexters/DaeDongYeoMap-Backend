@@ -4,6 +4,8 @@ import { Model, Types } from "mongoose";
 import { SearchService } from "../place/kakaoMapSearch/search.service";
 
 import { CreateSpotInput } from "../spot/dto/create-spot.input";
+import { CreateCustomSpotInput } from "./dto/create-custom-spot.input";
+import { UpdateCustomSpotInput } from "./dto/update-custom-spot.input";
 import { SearchSpotDto } from "../spot/dto/search-spot.dto";
 import { Spot, SpotDocument } from "../spot/entities/spot.entity";
 import { Place } from "../place/place.entity";
@@ -16,15 +18,24 @@ export class SpotService {
     private readonly searchService: SearchService
   ) {}
 
-  async document(createSpotInput: CreateSpotInput): Promise<SpotDocument> {
-    const spot = await this.findOneByPlaceId(createSpotInput.place_id);
+  async document(
+    createSpotInput: CreateSpotInput
+  ): Promise<SpotDocument | Spot> {
     const place: Place = await this.searchService.getIdenticalPlace(
       createSpotInput
     );
 
-    if (place === undefined) {
-      // TODO: custom place 만들기
-      // pass
+    if (place === null) {
+      throw new HttpException(
+        "잘못된 place정보(카카오 api에 없거나, 커스텀 스팟에 없는 place 경우) 때문에 spot을 생성할 수 없습니다.",
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    if (place.id !== createSpotInput.place_id) {
+      // 정책: place id랑 다를 경우라도, 오타로 간주하고 저장시킨다.
+      const spot: Spot = await this.findOneByPlaceId(place.id);
+      if (spot !== null) return spot;
     }
 
     const createSpotDto = {
@@ -45,6 +56,80 @@ export class SpotService {
     });
   }
 
+  async createCustomSpot(
+    createCustomSpotInput: CreateCustomSpotInput
+  ): Promise<Spot> {
+    if (!createCustomSpotInput.is_custom) {
+      throw new HttpException(
+        "커스텀 스팟은 is_custom이 true여야 합니다.",
+        HttpStatus.BAD_REQUEST
+      );
+    }
+    const createSpotDto = {
+      location: {
+        type: "Point",
+        coordinates: [createCustomSpotInput.x, createCustomSpotInput.y],
+      },
+      ...createCustomSpotInput,
+    };
+
+    const customSpotDocument: SpotDocument = await new this.spotModel(
+      createSpotDto
+    );
+
+    // 커스텀 스팟의 경우 place_id에 spot_id를 넣는다. (unique key 확보)
+    // 추가로 카카오 place_id는 string이기 때문에 mongodb objectId와 매칭될 수 없으므로 unique 만족한다.
+    customSpotDocument.place_id = customSpotDocument._id.toString();
+
+    return customSpotDocument.save().catch((error) => {
+      throw new HttpException(
+        `cannot save a custom spot cause of ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    });
+  }
+
+  async updateCustomSpot(
+    updateCustomSpotInput: UpdateCustomSpotInput
+  ): Promise<Spot> {
+    if (!updateCustomSpotInput.is_custom) {
+      throw new HttpException(
+        "커스텀 스팟은 is_custom이 true여야 합니다.",
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    const customSpot: SpotDocument = await this.findOne(
+      updateCustomSpotInput._id
+    );
+
+    console.log(customSpot);
+
+    if (customSpot.is_custom_share) {
+      throw new HttpException(
+        "공개 설정이된 커스텀 스팟은 수정할 수 없습니다.",
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    updateCustomSpotInput["location"] = {
+      coordinates: [updateCustomSpotInput.x, updateCustomSpotInput.y],
+    };
+
+    return this.spotModel
+      .findOneAndUpdate(
+        { _id: updateCustomSpotInput._id },
+        { $set: updateCustomSpotInput },
+        { new: true }
+      )
+      .catch((error) => {
+        throw new HttpException(
+          `cannot update a custom spot cause of ${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR
+        );
+      });
+  }
+
   async appendSticker(
     spotId: Types.ObjectId,
     stickerId: Types.ObjectId
@@ -59,9 +144,9 @@ export class SpotService {
       });
   }
 
-  async findOne(_id: Types.ObjectId): Promise<Spot> {
+  async findOne(_id: Types.ObjectId): Promise<SpotDocument> {
     return this.spotModel
-      .findOne()
+      .findById(_id)
       .exec()
       .catch((err) => {
         throw new HttpException(
@@ -71,7 +156,7 @@ export class SpotService {
       });
   }
 
-  async findOneByPlaceId(place_id: string): Promise<Spot> {
+  async findOneByPlaceId(place_id: string): Promise<SpotDocument> {
     return this.spotModel.findOne({ place_id }).exec();
   }
 

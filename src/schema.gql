@@ -55,6 +55,8 @@ type Spot {
   distance: String
   x: Float
   y: Float
+  is_custom: Boolean
+  is_custom_share: Boolean
 }
 
 type DeleteSpotDto {
@@ -86,11 +88,11 @@ type Query {
   """
   places(filters: KeywordSearchDto!): [Place!]!
 
-  """searchSpotDto에 매칭되는 스팟들을 반환합니다."""
-  spots(searchSpotDto: SearchSpotDto): [Spot!]!
-
   """(For Debugging) 카카오 place id로 스팟 검색"""
   spot(place_id: String!): Spot!
+
+  """searchSpotDto에 매칭되는 스팟들을 반환합니다."""
+  spots(searchSpotDto: SearchSpotDto): [Spot!]!
   stickers: [Sticker!]!
   sticker(id: String!): Sticker!
   courses: [Course!]!
@@ -157,11 +159,52 @@ enum ImageThemeType {
 type Mutation {
   """(For Debugging) 스팟 하나 삭제"""
   removeSpot(id: String!): DeleteSpotDto!
+
+  """커스텀 스팟을 생성합니다."""
+  createCustomSpot(createCustomSpotInput: CreateCustomSpotInput!): Spot!
+
+  """커스텀 스팟을 업데이트합니다."""
+  updateCustomSpot(updateCustomSpotInput: UpdateCustomSpotInput!): Spot!
   createSticker(createStickerInput: CreateStickerInput!): Sticker!
   updateSticker(updateStickerInput: UpdateStickerInput!): Sticker!
 
   """Sticker를 사용하여 코스를 생성합니다. 이때 코스의 순서는 전달된 스티커들의 순서로 처리됩니다."""
   createCourse(createCourseInput: CreateCourseInput!): Course!
+}
+
+"""커스텀 스팟 생성 input입니다. 테마는 category_group_name로 넣어주세요"""
+input CreateCustomSpotInput {
+  place_name: String!
+  x: Float!
+  y: Float!
+
+  """커스텀 스팟의 테마입니다. (ex. 음식점, 공원)"""
+  category_group_name: String!
+
+  """커스텀 스팟 여부 지정, default true입니다."""
+  is_custom: Boolean = true
+
+  """커스텀 스팟 공개 여부 지정, default false입니다. 공개를 할 경우, 수정할 수 없습니다."""
+  is_custom_share: Boolean = false
+}
+
+"""커스텀 스팟 업데이트 input입니다. is_custom_share이 false일 경우에만 동작합니다."""
+input UpdateCustomSpotInput {
+  place_name: String
+  x: Float
+  y: Float
+
+  """커스텀 스팟의 테마입니다. (ex. 음식점, 공원)"""
+  category_group_name: String
+
+  """커스텀 스팟 여부 지정, default true입니다."""
+  is_custom: Boolean = true
+
+  """커스텀 스팟 공개 여부 지정, default false입니다. 공개를 할 경우, 수정할 수 없습니다."""
+  is_custom_share: Boolean = false
+
+  """Custom Spot id"""
+  _id: String!
 }
 
 input CreateStickerInput {

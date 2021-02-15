@@ -13,9 +13,7 @@
     "start:dev": "NODE_ENV=dev nest start --watch",
     "start:sandbox": "NODE_ENV=sandbox node dist/main",
     "start:prod": "NODE_ENV=production node dist/main",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "NODE_ENV=test jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@mapbox/polyline": "^1.1.1",

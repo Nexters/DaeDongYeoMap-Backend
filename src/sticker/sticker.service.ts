@@ -21,7 +21,6 @@ export class StickerService {
      * 2. save spot or update spot
      * 3. save sticker
      */
-
     const stickerDocument: StickerDocument = new this.stickerModel(
       createStickerInput
     );
@@ -34,6 +33,7 @@ export class StickerService {
     );
 
     if (spot === null) {
+      // 커스텀 스팟은 절대 올 수 없다.
       spot = await this.spotService.document(
         createStickerInput as CreateSpotInput
       );
@@ -45,7 +45,6 @@ export class StickerService {
         stickerDocument._id
       );
     }
-
     stickerDocument.spot = spot._id;
     return stickerDocument.save().catch((error) => {
       throw new HttpException(
@@ -73,7 +72,7 @@ export class StickerService {
 
   async findOne(_id: Types.ObjectId): Promise<Sticker> {
     return this.stickerModel
-      .findOne()
+      .findById(_id)
       .exec()
       .catch((err) => {
         throw new HttpException(
