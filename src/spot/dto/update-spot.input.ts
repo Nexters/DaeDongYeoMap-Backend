@@ -1,5 +1,5 @@
 import { CreateSpotInput } from "./create-spot.input";
-import { InputType, Field, Int, Float, PartialType } from "@nestjs/graphql";
+import { InputType, Field, Float, PartialType } from "@nestjs/graphql";
 
 @InputType()
 export class UpdateSpotInput extends PartialType(CreateSpotInput) {

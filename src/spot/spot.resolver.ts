@@ -13,7 +13,7 @@ import { SpotService } from "../spot/spot.service";
 import { Spot, SpotDocument } from "../spot/entities/spot.entity";
 import { Sticker } from "../sticker/entities/sticker.entity";
 import { CreateCustomSpotInput } from "./dto/create-custom-spot.input";
-import { CreateSpotInput } from "./dto/create-spot.input";
+import { UpdateCustomSpotInput } from "./dto/update-custom-spot.input";
 import { DeleteSpotDto } from "../spot/dto/delete.spot.dto";
 import { SearchSpotDto } from "./dto/search-spot.dto";
 
@@ -67,13 +67,27 @@ export class SpotResolver {
   }
 
   @Mutation(() => Spot, {
-    name: "customSpot",
-    description: "커스텀 스팟을 생성/업데이트합니다.",
+    name: "createCustomSpot",
+    description: "커스텀 스팟을 생성합니다.",
   })
   async createCustomSpot(
     @Args("createCustomSpotInput") createCustomSpotInput: CreateCustomSpotInput
   ): Promise<Spot> {
     return await this.spotService.createCustomSpot(createCustomSpotInput);
+  }
+
+  @Mutation(() => Spot, {
+    name: "updateCustomSpot",
+    description: "커스텀 스팟을 업데이트합니다.",
+  })
+  async updateCustomSpot(
+    @Args("updateCustomSpotInput") updateCustomSpotInput: UpdateCustomSpotInput
+  ): Promise<Spot> {
+    const result = await this.spotService.updateCustomSpot(
+      updateCustomSpotInput
+    );
+
+    return result;
   }
 
   @ResolveField(() => [Sticker], {

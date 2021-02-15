@@ -160,8 +160,11 @@ type Mutation {
   """(For Debugging) 스팟 하나 삭제"""
   removeSpot(id: String!): DeleteSpotDto!
 
-  """커스텀 스팟을 생성/업데이트합니다."""
-  customSpot(createCustomSpotInput: CreateCustomSpotInput!): Spot!
+  """커스텀 스팟을 생성합니다."""
+  createCustomSpot(createCustomSpotInput: CreateCustomSpotInput!): Spot!
+
+  """커스텀 스팟을 업데이트합니다."""
+  updateCustomSpot(updateCustomSpotInput: UpdateCustomSpotInput!): Spot!
   createSticker(createStickerInput: CreateStickerInput!): Sticker!
   updateSticker(updateStickerInput: UpdateStickerInput!): Sticker!
 
@@ -183,6 +186,25 @@ input CreateCustomSpotInput {
 
   """커스텀 스팟 공개 여부 지정, default false입니다. 공개를 할 경우, 수정할 수 없습니다."""
   is_custom_share: Boolean = false
+}
+
+"""커스텀 스팟 업데이트 input입니다. is_custom_share이 false일 경우에만 동작합니다."""
+input UpdateCustomSpotInput {
+  place_name: String
+  x: Float
+  y: Float
+
+  """커스텀 스팟의 테마입니다. (ex. 음식점, 공원)"""
+  category_group_name: String
+
+  """커스텀 스팟 여부 지정, default true입니다."""
+  is_custom: Boolean = true
+
+  """커스텀 스팟 공개 여부 지정, default false입니다. 공개를 할 경우, 수정할 수 없습니다."""
+  is_custom_share: Boolean = false
+
+  """Custom Spot id"""
+  _id: String!
 }
 
 input CreateStickerInput {

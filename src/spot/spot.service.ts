@@ -4,11 +4,12 @@ import { Model, Types } from "mongoose";
 import { SearchService } from "../place/kakaoMapSearch/search.service";
 
 import { CreateSpotInput } from "../spot/dto/create-spot.input";
+import { CreateCustomSpotInput } from "./dto/create-custom-spot.input";
+import { UpdateCustomSpotInput } from "./dto/update-custom-spot.input";
 import { SearchSpotDto } from "../spot/dto/search-spot.dto";
 import { Spot, SpotDocument } from "../spot/entities/spot.entity";
 import { Place } from "../place/place.entity";
 import { Sticker } from "../sticker/entities/sticker.entity";
-import { CreateCustomSpotInput } from "./dto/create-custom-spot.input";
 
 @Injectable()
 export class SpotService {
@@ -88,6 +89,47 @@ export class SpotService {
     });
   }
 
+  async updateCustomSpot(
+    updateCustomSpotInput: UpdateCustomSpotInput
+  ): Promise<Spot> {
+    if (!updateCustomSpotInput.is_custom) {
+      throw new HttpException(
+        "커스텀 스팟은 is_custom이 true여야 합니다.",
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    const customSpot: SpotDocument = await this.findOne(
+      updateCustomSpotInput._id
+    );
+
+    console.log(customSpot);
+
+    if (customSpot.is_custom_share) {
+      throw new HttpException(
+        "공개 설정이된 커스텀 스팟은 수정할 수 없습니다.",
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    updateCustomSpotInput["location"] = {
+      coordinates: [updateCustomSpotInput.x, updateCustomSpotInput.y],
+    };
+
+    return this.spotModel
+      .findOneAndUpdate(
+        { _id: updateCustomSpotInput._id },
+        { $set: updateCustomSpotInput },
+        { new: true }
+      )
+      .catch((error) => {
+        throw new HttpException(
+          `cannot update a custom spot cause of ${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR
+        );
+      });
+  }
+
   async appendSticker(
     spotId: Types.ObjectId,
     stickerId: Types.ObjectId
@@ -102,7 +144,7 @@ export class SpotService {
       });
   }
 
-  async findOne(_id: Types.ObjectId): Promise<Spot> {
+  async findOne(_id: Types.ObjectId): Promise<SpotDocument> {
     return this.spotModel
       .findById(_id)
       .exec()
@@ -114,7 +156,7 @@ export class SpotService {
       });
   }
 
-  async findOneByPlaceId(place_id: string): Promise<Spot> {
+  async findOneByPlaceId(place_id: string): Promise<SpotDocument> {
     return this.spotModel.findOne({ place_id }).exec();
   }
 
