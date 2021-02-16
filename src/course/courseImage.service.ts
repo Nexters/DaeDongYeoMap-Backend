@@ -15,7 +15,6 @@ export class CourseImageService {
   mapboxToken: string;
   mapboxImageUrl: string;
   mapboxDirectionUrl: string;
-  sweetImgUrl: string;
 
   constructor(
     @InjectModel(Course.name) private courseModel: Model<CourseDocument>,
@@ -30,7 +29,6 @@ export class CourseImageService {
     this.mapboxToken = this.configService.get("app.MAPBOX_TOKEN");
     this.mapboxImageUrl = `${mapboxHost}/${mapboxImagePath}`;
     this.mapboxDirectionUrl = `${mapboxHost}/${mapboxDirPath}`;
-    this.sweetImgUrl = urlencode(this.configService.get("app.IMG_SWEET_URL"));
   }
 
   async generate(
@@ -42,21 +40,31 @@ export class CourseImageService {
     const autoScale: String = "auto";
 
     const spots: Spot[] = await this.stickerService.getAllSpots(stickers);
+    const stickerImageUrls: String[] = await this.stickerService.getImageUrls(
+      stickers
+    );
+
     const coords: [Number, Number][] = spots.map(
       (s) => s.location["coordinates"]
     );
 
-    const stickerPath: String = this.genStickerPath(coords);
+    const stickerPath: String = this.genStickerPath(coords, stickerImageUrls);
     const path: String = await this.genPolyline(coords);
-
     const imageUrl: String = `${this.mapboxImageUrl}/${theme}/static/${path},${stickerPath}/${autoScale}/${mapSize}?access_token=${this.mapboxToken}`;
 
     return imageUrl;
   }
 
-  genStickerPath(coords: [Number, Number][]): string {
-    const prefix = `url-${this.sweetImgUrl}`;
-    const url = coords.map((coord) => `${prefix}(${coord})`).join(",");
+  genStickerPath(coords: [Number, Number][], imageUrls: String[]): string {
+    let imageUrl: String;
+    const prefix: string = "url-";
+    const url = coords
+      .map((coord, idx) => {
+        console.log(imageUrls[idx]);
+        imageUrl = urlencode(imageUrls[idx]);
+        return `${prefix}${imageUrl}(${coord})`;
+      })
+      .join(",");
     return url;
   }
 
