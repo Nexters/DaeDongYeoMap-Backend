@@ -374,6 +374,23 @@ https://console.cloud.google.com/networking/addresses/list?folder=&organizationI
   - 추가로 configuration.ts
 
 - [도메인 등록](https://cloud.google.com/run/docs/mapping-custom-domains)
+
+- [cloud storage 이미지 upload]
+- [cloud App engine]()
+```
+$ gcloud app deploy
+
+File upload done.
+Updating service [default]...done.
+Setting traffic split for service [default]...done.
+Deployed service [default] to [https://daedongyeomap.du.r.appspot.com]
+
+You can stream logs from the command line by running:
+  $ gcloud app logs tail -s default
+
+To view your application in the web browser run:
+  $ gcloud app browse
+```
 ### mongodb atlas
 ```javascript
 

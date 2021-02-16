@@ -22,11 +22,6 @@ export class Sticker {
   // @Prop({ type: [mongoose.Types.ObjectId], ref: "User" })
   // partners: mongoose.Types.ObjectId[];
 
-  // @Field(() => String, {
-  //   description: "Sticker category로 스티커 이름정도 주면 적당할 듯",
-  // })
-  // @Prop({ required: true })
-  // sticker_category!: string;
   @Field(() => Number, {
     description: "스티커 번호, 0~11",
   })
