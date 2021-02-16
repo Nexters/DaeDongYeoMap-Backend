@@ -24,8 +24,11 @@ type Sticker {
   """Sticker id"""
   _id: String!
 
-  """Sticker category로 스티커 이름정도 주면 적당할 듯"""
-  sticker_category: String!
+  """스티커 번호, 0~11"""
+  sticker_index: Float!
+
+  """스티커 당도 퍼센트"""
+  sweet_percent: Float!
 
   """Sticker가 코스 생성에 사용여부"""
   is_used: Boolean!
@@ -222,8 +225,11 @@ input CreateStickerInput {
   place_url: String
   distance: String
 
-  """Sticker category로 스티커 이름정도 주면 적당할 듯"""
-  sticker_category: String!
+  """스티커 번호, 0~11"""
+  sticker_index: Float!
+
+  """스티커 당도 퍼센트"""
+  sweet_percent: Float!
 
   """Sticker가 코스 생성에 사용여부"""
   is_used: Boolean

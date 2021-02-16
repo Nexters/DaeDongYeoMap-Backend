@@ -3,6 +3,7 @@ import * as path from "path";
 
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
+import { GraphQLError, GraphQLFormattedError } from "graphql";
 
 import { GraphQLModule } from "@nestjs/graphql";
 import { MongooseModule } from "@nestjs/mongoose";
@@ -13,6 +14,7 @@ import { SpotModule } from "./spot/spot.module";
 import { UserModule } from "./user/user.module";
 import { CourseModule } from "./course/course.module";
 import { StickerModule } from "./sticker/sticker.module";
+import { ValidationError } from "class-validator";
 
 @Module({
   imports: [
@@ -23,9 +25,13 @@ import { StickerModule } from "./sticker/sticker.module";
       playground: true,
       introspection: true,
       context: ({ req }) => ({ req }),
-      formatError: (error) => {
-        console.error("error", error);
-        return error;
+      formatError: (error: GraphQLError): GraphQLFormattedError => {
+        const graphQLFormattedError: GraphQLFormattedError = {
+          message:
+            error.extensions?.exception?.response?.message || error.message,
+        };
+
+        return graphQLFormattedError;
       },
     }),
     MongooseModule.forRootAsync({

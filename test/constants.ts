@@ -5,9 +5,11 @@ export const createSticker = {
       place_name: "소년소고기"
       x: 127.06707418096332
       y: 37.56272196299047
-      sticker_category: "당도50"    
+      sticker_index: 3
+      sweet_percent: 50
     }){
-      sticker_category
+      sticker_index
+      sweet_percent
       is_used
       spot(populate:true){
         place_id
@@ -28,7 +30,8 @@ export const createSticker = {
   output: {
     data: {
       createSticker: {
-        sticker_category: "당도50",
+        sticker_index: 3,
+        sweet_percent: 50,
         is_used: false,
         spot: {
           place_id: "27314276",

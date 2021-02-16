@@ -1,7 +1,7 @@
-import { ObjectType, Field, ID, Int, Float } from "@nestjs/graphql";
+import { ObjectType, Field, registerEnumType } from "@nestjs/graphql";
 import * as mongoose from "mongoose";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Spot, SpotSchema } from "../../spot/entities/spot.entity";
+import { Spot } from "../../spot/entities/spot.entity";
 
 @ObjectType({
   description: "'이모지 스티커'로 코스 생성에 기본적으로 사용되는 단위입니다.",
@@ -22,12 +22,22 @@ export class Sticker {
   // @Prop({ type: [mongoose.Types.ObjectId], ref: "User" })
   // partners: mongoose.Types.ObjectId[];
 
-  // @TODO: 추후 enum으로 변경
-  @Field(() => String, {
-    description: "Sticker category로 스티커 이름정도 주면 적당할 듯",
+  // @Field(() => String, {
+  //   description: "Sticker category로 스티커 이름정도 주면 적당할 듯",
+  // })
+  // @Prop({ required: true })
+  // sticker_category!: string;
+  @Field(() => Number, {
+    description: "스티커 번호, 0~11",
   })
   @Prop({ required: true })
-  sticker_category!: string;
+  sticker_index: number;
+
+  @Field(() => Number, {
+    description: "스티커 당도 퍼센트",
+  })
+  @Prop({ required: true })
+  sweet_percent: number;
 
   @Field(() => Boolean, { description: "Sticker가 코스 생성에 사용여부" })
   @Prop({ default: false })

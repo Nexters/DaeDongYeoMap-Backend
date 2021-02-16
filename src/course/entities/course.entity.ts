@@ -1,8 +1,6 @@
 import { ObjectType, Field } from "@nestjs/graphql";
 import * as mongoose from "mongoose";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Spot } from "src/spot/entities/spot.entity";
-import { Sticker } from "../../sticker/entities/sticker.entity";
 
 @ObjectType({
   description: "스티커(스팟)을 순서대로 저장하고 있는 데이터 코스 정보",

@@ -1,13 +1,7 @@
-import {
-  InputType,
-  Int,
-  Field,
-  PartialType,
-  IntersectionType,
-} from "@nestjs/graphql";
+import { InputType, Field, IntersectionType } from "@nestjs/graphql";
 import * as mongoose from "mongoose";
+import { Min, Max, IsInt, IsIn } from "class-validator";
 import { CreateSpotInput } from "../../spot/dto/create-spot.input";
-import { Spot } from "../../spot/entities/spot.entity";
 
 @InputType()
 export class StickerInput {
@@ -21,22 +15,31 @@ export class StickerInput {
   // })
   // partners: mongoose.Types.ObjectId[];
 
-  // @TODO: 추후 enum으로 변경
-  @Field(() => String, {
-    description: "Sticker category로 스티커 이름정도 주면 적당할 듯",
+  @Field(() => Number, {
+    description: "스티커 번호, 0~11",
   })
-  sticker_category: string;
+  @Min(0, {
+    message: "index는 0부터 시작합니다.",
+  })
+  @Max(11, {
+    message: "index는 11이 max입니다.",
+  })
+  @IsInt()
+  sticker_index: number;
+
+  @Field(() => Number, {
+    description: "스티커 당도 퍼센트",
+  })
+  @IsIn([0, 30, 50, 70, 100], {
+    message: "퍼센트는 0 30 50 70 100 중에서 선택해야 합니다.",
+  })
+  sweet_percent: number;
 
   @Field(() => Boolean, {
     description: "Sticker가 코스 생성에 사용여부",
     nullable: true,
   })
   is_used?: boolean;
-
-  // @Field(() => Spot, {
-  //   description: "스티커가 붙여진 Spot id",
-  // })
-  // spotId?: mongoose.Types.ObjectId;
 }
 
 @InputType()
