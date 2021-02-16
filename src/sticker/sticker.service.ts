@@ -1,6 +1,8 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { Model, Types } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
+import { ConfigService } from "@nestjs/config";
+
 import { CreateStickerInput, UpdateStickerInput } from "./dto/sticker.input";
 import { Sticker, StickerDocument } from "./entities/sticker.entity";
 import { SpotService } from "../spot/spot.service";
@@ -9,10 +11,15 @@ import { CreateSpotInput } from "../spot/dto/create-spot.input";
 
 @Injectable()
 export class StickerService {
+  sweetImgUrl: string;
+
   constructor(
     @InjectModel(Sticker.name) private stickerModel: Model<StickerDocument>,
-    private readonly spotService: SpotService
-  ) {}
+    private readonly spotService: SpotService,
+    private configService: ConfigService
+  ) {
+    this.sweetImgUrl = this.configService.get("app.IMG_SWEET_URL");
+  }
 
   async create(createStickerInput: CreateStickerInput) {
     /**
@@ -95,13 +102,20 @@ export class StickerService {
       });
   }
 
+  async getImageUrls(stickerIds: Types.ObjectId[]): Promise<String[]> {
+    const stickers: Sticker[] = await this.findAll(stickerIds);
+    const imageUrls: String[] = stickers.map((s) => {
+      return `${this.sweetImgUrl}/${s.sweet_percent}_${s.sticker_index}.png`;
+    });
+    return imageUrls;
+  }
+
   async getAllSpots(stickerIds: Types.ObjectId[]): Promise<Spot[]> {
     const stickers: Sticker[] = await this.findAll(stickerIds);
 
     const spotIds: Types.ObjectId[] = stickers.map(
       (s) => s.spot as Types.ObjectId
     );
-
     return this.spotService.findAll(spotIds);
   }
 }
