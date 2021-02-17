@@ -39,10 +39,18 @@ export class KeywordSearchDto {
   @Field(() => String, { nullable: true })
   rect?: string;
 
-  @Field(() => Int, { nullable: true })
+  @Field(() => Int, {
+    description: "결과 페이지 번호, 1~45 사이의 값",
+    nullable: true,
+    defaultValue: 1,
+  })
   page?: number;
 
-  @Field(() => Int, { nullable: true })
+  @Field(() => Int, {
+    description: "한 페이지에 보여질 문서의 개수, 1~15 사이의 값",
+    nullable: true,
+    defaultValue: 15,
+  })
   size?: number;
 
   @Field((type) => SortType, { nullable: true })
