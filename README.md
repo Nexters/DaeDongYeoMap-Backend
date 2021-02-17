@@ -318,6 +318,12 @@ tail -f /home/mongodb/db/log/mongod.log # 로깅 테일링
 
 > db.serverStatus().connections # 커넥션 갯수 확인
 { "current" : 47, "available" : 772, "totalCreated" : 79 }
+
+
+
+# 필드 수정
+db.stickers.updateMany({}, {$rename: {"sticker_category": "sticker_index"}});
+db.stickers.updateMany({}, { $set: {  "sticker_index": Math.floor(Math.random() * (11 - 0 + 1)) + 0, "sweet_percent":50 }});
 ```
 ## deploy production
 
