@@ -56,11 +56,11 @@ export class PageInfo {
   is_end: boolean;
 
   @Field(() => Number, {
-    description: "total_count 중 노출 가능 문서 수 (최대값: 45)",
+    description: "노출 가능 페이지 수 (1 ~ 45)",
   })
-  pageable_count: number;
+  total_page_count: number;
 
-  @Field(() => Number, { description: "현재 페이지" })
+  @Field(() => Number, { description: "현재 페이지 번호" })
   cur_page: number;
 }
 

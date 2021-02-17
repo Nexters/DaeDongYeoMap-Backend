@@ -27,10 +27,10 @@ type PageInfo {
   """현재 페이지가 마지막 페이지인지 여부, 값이 false면 page를 증가시켜 다음 페이지를 요청할 수 있음"""
   is_end: Boolean!
 
-  """total_count 중 노출 가능 문서 수 (최대값: 45)"""
-  pageable_count: Float!
+  """노출 가능 페이지 수 (1 ~ 45)"""
+  total_page_count: Float!
 
-  """현재 페이지"""
+  """현재 페이지 번호"""
   cur_page: Float!
 }
 
