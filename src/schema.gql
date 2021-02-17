@@ -2,7 +2,7 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-"""카카오 지도 api로 부터 받은 위치 정보로 TTL 300 캐싱됩니다."""
+"""카카오 지도 api로 부터 받은 위치 정보"""
 type Place {
   """kakao place id"""
   id: String!
@@ -17,6 +17,30 @@ type Place {
   distance: String
   x: Float
   y: Float
+}
+
+"""place 페이지네이션 정보, """
+type PageInfo {
+  """검색어에 검색된 문서 수"""
+  total_count: Float!
+
+  """현재 페이지가 마지막 페이지인지 여부, 값이 false면 page를 증가시켜 다음 페이지를 요청할 수 있음"""
+  is_end: Boolean!
+
+  """total_count 중 노출 가능 문서 수 (최대값: 45)"""
+  pageable_count: Float!
+
+  """현재 페이지"""
+  cur_page: Float!
+}
+
+"""페이지네이션 정보를 포함한 place 정보"""
+type PaginatedPlace {
+  """카카오 장소 페이지네이션 정보"""
+  pageInfo: PageInfo!
+
+  """카카오 장소 정보들"""
+  places: [Place!]!
 }
 
 """'이모지 스티커'로 코스 생성에 기본적으로 사용되는 단위입니다."""
@@ -89,7 +113,7 @@ type Query {
   키워드로 위치 정보를 확인합니다. 
   내부적으로 카카오 API를 요청합니다.
   """
-  places(filters: KeywordSearchDto!): [Place!]!
+  places(filters: KeywordSearchDto!): PaginatedPlace!
 
   """(For Debugging) 카카오 place id로 스팟 검색"""
   spot(place_id: String!): Spot!
@@ -112,8 +136,12 @@ input KeywordSearchDto {
   y: Float
   radius: Int
   rect: String
-  page: Int
-  size: Int
+
+  """결과 페이지 번호, 1~45 사이의 값"""
+  page: Int = 1
+
+  """한 페이지에 보여질 문서의 개수, 1~15 사이의 값"""
+  size: Int = 15
   sort: SortType
 }
 

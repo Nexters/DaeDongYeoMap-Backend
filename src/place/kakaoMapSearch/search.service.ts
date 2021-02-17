@@ -3,7 +3,7 @@ import { Injectable, Inject, HttpException, HttpStatus } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { CreateSpotInput } from "../../spot/dto/create-spot.input";
 import { KeywordSearchDto } from "./search.dto";
-import { Place } from "../place.entity";
+import { PaginatedPlace, PageInfo, Place } from "../place.entity";
 import { SortType } from "../../place/kakaoMapSearch/search.dto";
 
 @Injectable()
@@ -11,20 +11,25 @@ export class SearchService {
   constructor(private configService: ConfigService) {}
 
   // https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword
-  async searchByKeyword(keywordSearchDto: KeywordSearchDto): Promise<Place[]> {
+  async searchByKeyword(
+    keywordSearchDto: KeywordSearchDto
+  ): Promise<PaginatedPlace> {
     const baseUrl = this.configService.get("app.KAKAO_DEV_HOST");
 
-    return Axios.get(baseUrl, {
-      headers: {
-        Authorization: `KakaoAK ${this.configService.get(
-          "app.KAKAO_DEV_REST_API_KEY"
-        )}`,
-      },
-      params: {
-        ...keywordSearchDto,
-      },
-    })
-      .then((response) => response.data.documents)
+    const response: { meta: PageInfo; documents: Place[] } = await Axios.get(
+      baseUrl,
+      {
+        headers: {
+          Authorization: `KakaoAK ${this.configService.get(
+            "app.KAKAO_DEV_REST_API_KEY"
+          )}`,
+        },
+        params: {
+          ...keywordSearchDto,
+        },
+      }
+    )
+      .then((response) => response.data)
       .catch((err) => {
         if (err.response.status == 400) {
           throw new HttpException("no matched place", HttpStatus.BAD_REQUEST);
@@ -35,6 +40,16 @@ export class SearchService {
           );
         }
       });
+
+    const paginatedPlace: PaginatedPlace = {
+      pageInfo: {
+        cur_page: keywordSearchDto.page,
+        ...response.meta,
+      },
+      places: response.documents,
+    };
+
+    return paginatedPlace;
   }
 
   async getIdenticalPlace(
@@ -47,7 +62,7 @@ export class SearchService {
       radius: 1,
       sort: SortType.distance,
     })
-      .then((places) => (places.length >= 1 ? places[0] : null))
+      .then(({ places }) => (places.length >= 1 ? places[0] : null))
       .catch((error) => {
         throw new HttpException(
           `cannot get identical place cause of ${error.message}`,
