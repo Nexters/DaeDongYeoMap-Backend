@@ -1,5 +1,5 @@
 import { Args, Query, Resolver } from "@nestjs/graphql";
-import { Place, PageInfo, PaginatedPlace } from "./place.entity";
+import { Place, PaginatedPlace } from "./place.entity";
 import { SearchService } from "./kakaoMapSearch/search.service";
 import { KeywordSearchDto } from "./kakaoMapSearch/search.dto";
 

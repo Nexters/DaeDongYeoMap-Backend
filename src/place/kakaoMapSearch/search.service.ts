@@ -1,9 +1,10 @@
 import Axios from "axios";
-import { Injectable, Inject, HttpException, HttpStatus } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { CreateSpotInput } from "../../spot/dto/create-spot.input";
 import { KeywordSearchDto } from "./search.dto";
-import { PaginatedPlace, PageInfo, Place } from "../place.entity";
+import { PaginatedPlace, Place } from "../place.entity";
+import { PageInfo } from "../../shared/entities/pageinfo.entity";
 import { SortType } from "../../place/kakaoMapSearch/search.dto";
 
 @Injectable()
