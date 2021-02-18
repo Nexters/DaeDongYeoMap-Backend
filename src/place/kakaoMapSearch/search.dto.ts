@@ -40,7 +40,7 @@ export class KeywordSearchDto {
   rect?: string;
 
   @Field(() => Int, {
-    description: "결과 페이지 번호, 1~45 사이의 값",
+    description: "결과 페이지 번호",
     nullable: true,
     defaultValue: 1,
   })

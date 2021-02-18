@@ -17,19 +17,19 @@ export class SearchService {
   ): Promise<PaginatedPlace> {
     const baseUrl = this.configService.get("app.KAKAO_DEV_HOST");
 
-    const response: { meta: PageInfo; documents: Place[] } = await Axios.get(
-      baseUrl,
-      {
-        headers: {
-          Authorization: `KakaoAK ${this.configService.get(
-            "app.KAKAO_DEV_REST_API_KEY"
-          )}`,
-        },
-        params: {
-          ...keywordSearchDto,
-        },
-      }
-    )
+    const response: {
+      meta: PageInfo;
+      documents: Place[];
+    } = await Axios.get(baseUrl, {
+      headers: {
+        Authorization: `KakaoAK ${this.configService.get(
+          "app.KAKAO_DEV_REST_API_KEY"
+        )}`,
+      },
+      params: {
+        ...keywordSearchDto,
+      },
+    })
       .then((response) => response.data)
       .catch((err) => {
         if (err.response.status == 400) {
@@ -42,15 +42,32 @@ export class SearchService {
         }
       });
 
+    const { total_count, is_end } = response.meta;
+    const { size, page } = keywordSearchDto;
+    const pageInfo: PageInfo = this.getPageInfo(
+      size,
+      page,
+      total_count,
+      is_end
+    );
+
     const paginatedPlace: PaginatedPlace = {
-      pageInfo: {
-        cur_page: keywordSearchDto.page,
-        ...response.meta,
-      },
+      pageInfo,
       places: response.documents,
     };
 
     return paginatedPlace;
+  }
+
+  getPageInfo(size, page, count, is_end): PageInfo {
+    const maxKakaoItemSize: number = 45;
+    const total_count: number = Math.min(maxKakaoItemSize, count);
+    return {
+      total_count,
+      total_page_count: Math.ceil(total_count / size),
+      is_end,
+      cur_page: page,
+    };
   }
 
   async getIdenticalPlace(
