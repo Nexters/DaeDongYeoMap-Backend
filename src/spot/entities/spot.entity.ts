@@ -1,7 +1,9 @@
 import { ObjectType, Field, ID, Int, Float } from "@nestjs/graphql";
 import * as mongoose from "mongoose";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+
 import { Sticker } from "../../sticker/entities/sticker.entity";
+import { PageInfo } from "../../shared/entities/pageinfo.entity";
 
 @ObjectType({
   description:
@@ -87,6 +89,17 @@ export class Spot {
   @Field((type) => Boolean, { defaultValue: false, nullable: true })
   @Prop()
   is_custom_share?: boolean;
+}
+
+@ObjectType({
+  description: "페이지네이션 정보를 포함한 spot 정보",
+})
+export class PaginatedSpot {
+  @Field(() => PageInfo, { description: "카카오 장소 페이지네이션 정보" })
+  pageInfo: PageInfo;
+
+  @Field(() => [Spot], { description: "카카오 장소 정보들" })
+  places: Spot[];
 }
 
 export type SpotDocument = Spot & mongoose.Document;
