@@ -99,7 +99,7 @@ export class PaginatedSpot {
   pageInfo: PageInfo;
 
   @Field(() => [Spot], { description: "카카오 장소 정보들" })
-  places: Spot[];
+  spots: Spot[];
 }
 
 export type SpotDocument = Spot & mongoose.Document;
