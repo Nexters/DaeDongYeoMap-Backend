@@ -324,6 +324,18 @@ tail -f /home/mongodb/db/log/mongod.log # 로깅 테일링
 # 필드 수정
 db.stickers.updateMany({}, {$rename: {"sticker_category": "sticker_index"}});
 db.stickers.updateMany({}, { $set: {  "sticker_index": Math.floor(Math.random() * (11 - 0 + 1)) + 0, "sweet_percent":50 }});
+
+# db.stickers.find({sticker_category: {$exists : true }}).forEach(s => {
+#   print(Math.floor(Math.random() * (11 - 0 + 1)) + 0, choices[Math.floor(Math.random() * choices.length)]);
+# });
+
+const choices = [0, 30, 50, 70, 100];
+db.stickers.find().forEach(s => {
+  db.stickers.update({_id: s._id}, 
+    {$set: {"sticker_index": Math.floor(Math.random() * (11 - 0 + 1)) + 0, "sweet_percent":choices[Math.floor(Math.random() * choices.length)]} }
+    );
+});
+
 ```
 ## deploy production
 
