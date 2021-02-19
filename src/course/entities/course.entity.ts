@@ -2,6 +2,8 @@ import { ObjectType, Field } from "@nestjs/graphql";
 import * as mongoose from "mongoose";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
+import { Sticker } from "../../sticker/entities/sticker.entity";
+
 @ObjectType({
   description: "스티커(스팟)을 순서대로 저장하고 있는 데이터 코스 정보",
 })
@@ -10,11 +12,9 @@ export class Course {
   @Field(() => String, { description: "Course id" })
   _id: mongoose.Types.ObjectId;
 
-  @Field(() => [String], {
-    description: "list of sticker ids(순서 중요)",
-  })
+  @Field(() => [Sticker], { description: "list of sticker ids(순서 중요)" })
   @Prop({ type: [mongoose.Types.ObjectId], ref: "Sticker" })
-  stickers: mongoose.Types.ObjectId[];
+  stickers: mongoose.Types.ObjectId[] | Sticker[];
 
   @Field(() => String)
   @Prop()

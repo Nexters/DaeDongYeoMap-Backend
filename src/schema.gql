@@ -70,7 +70,7 @@ type Spot {
   place_id: String!
 
   """list of sticker ids"""
-  stickers(populate: Boolean!): [Sticker!]!
+  stickers(populate: Boolean = false): [Sticker!]!
   place_name: String!
   category_name: String
   category_group_code: String
@@ -98,7 +98,7 @@ type Course {
   _id: String!
 
   """list of sticker ids(순서 중요)"""
-  stickers: [String!]!
+  stickers(populate: Boolean = false): [Sticker!]!
   title: String!
 
   """list of sticker ids(순서 중요)"""

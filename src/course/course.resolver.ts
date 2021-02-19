@@ -1,9 +1,19 @@
-import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from "@nestjs/graphql";
 
 import { CourseService } from "./course.service";
-import { Course } from "./entities/course.entity";
+import { Course, CourseDocument } from "./entities/course.entity";
 import { CreateCourseInput } from "./dto/create-course.input";
 import { CourseInput } from "./dto/course.input";
+import { SpotService } from "../spot/spot.service";
+import { Spot } from "../spot/entities/spot.entity";
+import { Sticker } from "../sticker/entities/sticker.entity";
 
 @Resolver(() => Course)
 export class CourseResolver {
@@ -39,6 +49,20 @@ export class CourseResolver {
       );
     }
     return course;
+  }
+
+  @ResolveField(() => [Sticker], {
+    description: "populate: true 경우 sticker값을 치환하여 반환합니다.",
+  })
+  async stickers(
+    @Parent() course: CourseDocument,
+    @Args({ name: "populate", nullable: true, defaultValue: false })
+    populate: boolean
+  ) {
+    if (populate) {
+      return await this.courseService.populateStickers(course._id);
+    }
+    return course.stickers;
   }
 
   // @Mutation(() => Course)
