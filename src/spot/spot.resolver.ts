@@ -4,13 +4,15 @@ import {
   Query,
   Mutation,
   Args,
-  Int,
-  Float,
   ResolveField,
   Parent,
 } from "@nestjs/graphql";
 import { SpotService } from "../spot/spot.service";
-import { Spot, SpotDocument } from "../spot/entities/spot.entity";
+import {
+  Spot,
+  PaginatedSpot,
+  SpotDocument,
+} from "../spot/entities/spot.entity";
 import { Sticker } from "../sticker/entities/sticker.entity";
 import { CreateCustomSpotInput } from "./dto/create-custom-spot.input";
 import { UpdateCustomSpotInput } from "./dto/update-custom-spot.input";

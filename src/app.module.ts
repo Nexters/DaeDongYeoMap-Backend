@@ -14,7 +14,7 @@ import { SpotModule } from "./spot/spot.module";
 import { UserModule } from "./user/user.module";
 import { CourseModule } from "./course/course.module";
 import { StickerModule } from "./sticker/sticker.module";
-import { ValidationError } from "class-validator";
+import { SharedModule } from "./shared/shared.module";
 
 @Module({
   imports: [
@@ -50,6 +50,7 @@ import { ValidationError } from "class-validator";
     StickerModule,
     CourseModule,
     UserModule,
+    SharedModule,
   ],
   controllers: [AppController],
   providers: [AppService],
