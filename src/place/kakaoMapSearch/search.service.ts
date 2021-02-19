@@ -66,6 +66,8 @@ export class SearchService {
   async getIdenticalPlace(
     createSpotInput: CreateSpotInput
   ): Promise<Place | null> {
+    console.log(createSpotInput);
+
     return this.searchByKeyword({
       query: createSpotInput.place_name,
       x: createSpotInput.x,
@@ -73,7 +75,10 @@ export class SearchService {
       radius: 1,
       sort: SortType.distance,
     })
-      .then(({ places }) => (places.length >= 1 ? places[0] : null))
+      .then(({ places }) => {
+        console.log(places);
+        return places.length >= 1 ? places[0] : null;
+      })
       .catch((error) => {
         throw new HttpException(
           `cannot get identical place cause of ${error.message}`,

@@ -17,6 +17,49 @@ type PageInfo {
   cur_page: Float!
 }
 
+"""Emoji를 포함한 유저데이터를 포함하여, mongodb에 저장시킬 장소 데이터"""
+type Spot {
+  """Spot id"""
+  _id: String!
+
+  """kakao place id"""
+  place_id: String!
+
+  """list of sticker ids"""
+  stickers(populate: Boolean = false): [Sticker!]!
+  place_name: String!
+  category_name: String
+  category_group_code: String
+  category_group_name: String
+  phone: String
+  address_name: String
+  road_address_name: String
+  place_url: String
+  distance: String
+  x: Float
+  y: Float
+  is_custom: Boolean
+  is_custom_share: Boolean
+}
+
+"""'이모지 스티커'로 코스 생성에 기본적으로 사용되는 단위입니다."""
+type Sticker {
+  """Sticker id"""
+  _id: String!
+
+  """스티커 번호, 0~11"""
+  sticker_index: Float!
+
+  """스티커 당도 퍼센트"""
+  sweet_percent: Float!
+
+  """Sticker가 코스 생성에 사용여부"""
+  is_used: Boolean!
+
+  """스티커가 붙여진 Spot id 또는 Spot 객체값"""
+  spot(populate: Boolean!): Spot!
+}
+
 """카카오 지도 api로 부터 받은 위치 정보"""
 type Place {
   """kakao place id"""
@@ -41,49 +84,6 @@ type PaginatedPlace {
 
   """카카오 장소 정보들"""
   places: [Place!]!
-}
-
-"""'이모지 스티커'로 코스 생성에 기본적으로 사용되는 단위입니다."""
-type Sticker {
-  """Sticker id"""
-  _id: String!
-
-  """스티커 번호, 0~11"""
-  sticker_index: Float!
-
-  """스티커 당도 퍼센트"""
-  sweet_percent: Float!
-
-  """Sticker가 코스 생성에 사용여부"""
-  is_used: Boolean!
-
-  """스티커가 붙여진 Spot id 또는 Spot 객체값"""
-  spot(populate: Boolean!): Spot!
-}
-
-"""Emoji를 포함한 유저데이터를 포함하여, mongodb에 저장시킬 장소 데이터"""
-type Spot {
-  """Spot id"""
-  _id: String!
-
-  """kakao place id"""
-  place_id: String!
-
-  """list of sticker ids"""
-  stickers(populate: Boolean = false): [Sticker!]!
-  place_name: String!
-  category_name: String
-  category_group_code: String
-  category_group_name: String
-  phone: String
-  address_name: String
-  road_address_name: String
-  place_url: String
-  distance: String
-  x: Float
-  y: Float
-  is_custom: Boolean
-  is_custom_share: Boolean
 }
 
 type DeleteSpotDto {
@@ -188,6 +188,9 @@ enum ImageThemeType {
 }
 
 type Mutation {
+  """dummy 데이터를 생성합니다."""
+  dummy(keyword: String!): Float!
+
   """(For Debugging) 스팟 하나 삭제"""
   removeSpot(id: String!): DeleteSpotDto!
 

@@ -28,6 +28,7 @@ export class StickerService {
      * 2. save spot or update spot
      * 3. save sticker
      */
+
     const stickerDocument: StickerDocument = new this.stickerModel(
       createStickerInput
     );
@@ -44,6 +45,7 @@ export class StickerService {
       spot = await this.spotService.document(
         createStickerInput as CreateSpotInput
       );
+
       spot.stickers.push(stickerDocument._id);
       await this.spotService.save(spot as SpotDocument);
     } else {

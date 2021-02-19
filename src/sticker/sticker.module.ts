@@ -16,5 +16,6 @@ import { SpotService } from "../spot/spot.service";
     MongooseModule.forFeature([{ name: Spot.name, schema: SpotSchema }]),
   ],
   providers: [StickerResolver, StickerService, SpotService],
+  exports: [StickerService],
 })
 export class StickerModule {}

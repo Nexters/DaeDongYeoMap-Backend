@@ -15,6 +15,7 @@ import { UserModule } from "./user/user.module";
 import { CourseModule } from "./course/course.module";
 import { StickerModule } from "./sticker/sticker.module";
 import { SharedModule } from "./shared/shared.module";
+import { AppResolver } from "./app.resolver";
 
 @Module({
   imports: [
@@ -52,7 +53,7 @@ import { SharedModule } from "./shared/shared.module";
     UserModule,
     SharedModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  // controllers: [AppController],
+  providers: [AppService, AppResolver],
 })
 export class AppModule {}
