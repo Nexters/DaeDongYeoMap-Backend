@@ -5,11 +5,15 @@ import { CreateSpotInput } from "../../spot/dto/create-spot.input";
 import { KeywordSearchDto } from "./search.dto";
 import { PaginatedPlace, Place } from "../place.entity";
 import { PageInfo } from "../../shared/entities/pageinfo.entity";
+import { PageService } from "../../shared/page.service";
 import { SortType } from "../../place/kakaoMapSearch/search.dto";
 
 @Injectable()
 export class SearchService {
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService,
+    private pageService: PageService
+  ) {}
 
   // https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-keyword
   async searchByKeyword(
@@ -44,7 +48,7 @@ export class SearchService {
 
     const { total_count, is_end } = response.meta;
     const { size, page } = keywordSearchDto;
-    const pageInfo: PageInfo = this.getPageInfo(
+    const pageInfo: PageInfo = this.pageService.getPageInfo(
       size,
       page,
       total_count,
@@ -57,17 +61,6 @@ export class SearchService {
     };
 
     return paginatedPlace;
-  }
-
-  getPageInfo(size, page, count, is_end): PageInfo {
-    const maxKakaoItemSize: number = 45;
-    const total_count: number = Math.min(maxKakaoItemSize, count);
-    return {
-      total_count,
-      total_page_count: Math.ceil(total_count / size),
-      is_end,
-      cur_page: page,
-    };
   }
 
   async getIdenticalPlace(
