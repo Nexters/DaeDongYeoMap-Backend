@@ -1,11 +1,11 @@
-import { Module } from "@nestjs/common";
-import { ConfigModule, ConfigService } from "@nestjs/config";
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
-import configuration from "./configuration";
-import { AppConfigService } from "./config.service";
+import configuration from './configuration';
+import { AppConfigService } from './config.service';
 
 const configModuleOptions =
-  process.env.NODE_ENV === "sandbox"
+  process.env.NODE_ENV === 'sandbox'
     ? { isGlobal: true, load: [configuration], ignoreEnvFile: true }
     : { isGlobal: true, load: [configuration] };
 
